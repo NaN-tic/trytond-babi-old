@@ -1,0 +1,12 @@
+<tree string="Internal Measure">
+	 <field name="aggregate"/>
+	 <field name="expression"/>
+	 <field name="internal_name"/>
+	 <field name="measure"/>
+	 <field name="name"/>
+	 <field name="progressbar"/>
+	 <field name="related_model"/>
+	 <field name="report"/>
+	 <field name="sequence"/>
+	 <field name="ttype"/>
+</tree>

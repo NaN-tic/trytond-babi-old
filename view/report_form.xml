@@ -1,0 +1,47 @@
+<?xml version="1.0"?>
+<!--The COPYRIGHT file at the top level of this repository
+contains the full copyright notices and license terms. -->
+<form string="Report">
+    <label name="name"/>
+    <field name="name"/>
+	<label name="model"/>
+	<field name="model"/>
+	<label name="parent_menu"/>
+	<field name="parent_menu" colspan="3"/>
+	<label name="filter"/>
+	<field name="filter" colspan="3"/>
+    <notebook>
+        <page id="general" string="General">
+            <group col="1" colspan="2" id="dimensions" yfill="1" yexpand="1">
+                <field name="dimensions" yfill="1"/>
+                <field name="columns"/>
+                <field name="measures"/>
+            </group>
+            <group col="1" colspan="2" id="order" yfill="1" yexpand="1">
+	            <field name="order"/>
+                <field name="groups"/>
+            </group>
+            <group col="3" colspan="4">
+                <button name="calculate" string="Calculate"/>
+                <button name="create_menus" string="Create Menus"/>
+                <button name="remove_menus" string="Remove Menus"/>
+            </group>
+        </page>
+        <page id="extra" string="Extra Information">
+            <label name="last_update"/>
+            <field name="last_update"/>
+            <label name="last_update_seconds"/>
+            <field name="last_update_seconds"/>
+            <label name="internal_name"/>
+            <field name="internal_name"/>
+            <label name="babi_model"/>
+            <field name="babi_model"/>
+            <group id="internal" colspan="4" col="2" yexpand="1" yfill="1">
+                <field name="actions"/>
+                <field name="keywords"/>
+                <field name="menus"/>
+                <field name="internal_measures"/>
+            </group>
+        </page>
+    </notebook>
+</form>

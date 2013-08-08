@@ -1,0 +1,6 @@
+<tree string="Expression">
+	 <field name="name"/>
+	 <field name="model"/>
+	 <field name="expression"/>
+	 <field name="ttype"/>
+</tree>

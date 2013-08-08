@@ -1,0 +1,7 @@
+<tree string="Dimension" sequence="sequence">
+     <field name="report"/>
+	 <field name="name"/>
+	 <field name="expression"/>
+     <field name="group_by"/>
+	 <field name="sequence" tree_invisible="1"/>
+</tree>

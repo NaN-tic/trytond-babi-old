@@ -1,0 +1,25 @@
+<?xml version="1.0"?>
+<!--The COPYRIGHT file at the top level of this repository             
+contains the full copyright notices and license terms. -->
+<form string="Internal Measure">
+	<label name="aggregate"/>
+	<field name="aggregate"/>
+	<label name="expression"/>
+	<field name="expression"/>
+	<label name="internal_name"/>
+	<field name="internal_name"/>
+	<label name="measure"/>
+	<field name="measure"/>
+	<label name="name"/>
+	<field name="name"/>
+	<label name="progressbar"/>
+	<field name="progressbar"/>
+	<label name="related_model"/>
+	<field name="related_model"/>
+	<label name="report"/>
+	<field name="report"/>
+	<label name="sequence"/>
+	<field name="sequence"/>
+	<label name="ttype"/>
+	<field name="ttype"/>
+</form>

@@ -1,0 +1,11 @@
+- Create report.instance
+- Add last_update timestamp to model's name so it appears in the tab's title.
+- Abort report calculation after a configurable elapsed time
+- Execute report calculation in parallel threads
+- Use UNLOGGED tables
+- Add a scheduler (linked to a calendar)
+- Allow configuring colors in tree view
+- Consider adding dashboards for reports
+- Consider adding relate buttons to related models. For example, seeing sales babi report from party form.
+- Consider adding PKIs
+- Consider triggering notifications

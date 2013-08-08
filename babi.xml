@@ -1,0 +1,392 @@
+<?xml version="1.0" encoding="utf-8"?>
+<tryton>
+    <data>
+
+        <record model="res.group" id="group_babi_admin">
+            <field name="name">Babi Administration</field>
+        </record>
+        <record model="res.user-res.group" id="user_admin_group_babi_admin">
+            <field name="user" ref="res.user_admin"/>
+            <field name="group" ref="group_babi_admin"/>
+        </record>
+        <record model="res.user-res.group" id="user_trigger_group_babi_admin">
+            <field name="user" ref="res.user_trigger"/>
+            <field name="group" ref="group_babi_admin"/>
+        </record>
+        <record model="res.group" id="group_babi">
+            <field name="name">Babi</field>
+        </record>
+        <record model="res.user-res.group" id="user_admin_group_babi">
+            <field name="user" ref="res.user_admin"/>
+            <field name="group" ref="group_babi"/>
+        </record>
+        <record model="res.user-res.group" id="user_trigger_group_babi">
+            <field name="user" ref="res.user_trigger"/>
+            <field name="group" ref="group_babi"/>
+        </record>
+        <record model="ir.ui.view" id="babi_dimension_form_view">
+            <field name="model">babi.dimension</field>
+            <field name="type">form</field>
+            <field name="name">dimension_form</field>
+        </record>
+        <record model="ir.ui.view" id="babi_dimension_tree_view">
+            <field name="model">babi.dimension</field>
+            <field name="type">tree</field>
+            <field name="name">dimension_tree</field>
+        </record>
+        <record model="ir.action.act_window" id="act_babi_dimension">
+            <field name="name">Dimension</field>
+            <field name="res_model">babi.dimension</field>
+            <field name="search_value"></field>
+            <!-- <field name="domain">[]</field> -->
+            <!-- <field name="context">{}</field> -->
+        </record>
+        <record model="ir.action.act_window.view" id="act_babi_dimension_view1">
+            <field name="sequence" eval="10"/>
+            <field name="view" ref="babi_dimension_tree_view"/>
+            <field name="act_window" ref="act_babi_dimension"/>
+        </record>
+        <record model="ir.action.act_window.view" id="act_babi_dimension_view2">
+            <field name="sequence" eval="20"/>
+            <field name="view" ref="babi_dimension_form_view"/>
+            <field name="act_window" ref="act_babi_dimension"/>
+        </record>
+        <record model="ir.model.access" id="access_babi_dimension">
+            <field name="model" search="[('model', '=', 'babi.dimension')]"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="False"/>
+            <field name="perm_create" eval="False"/>
+            <field name="perm_delete" eval="False"/>
+        </record>
+        <record model="ir.model.access" id="access_babi_dimension_admin">
+            <field name="model" search="[('model', '=', 'babi.dimension')]"/>
+            <field name="group" ref="group_babi_admin"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_delete" eval="True"/>
+        </record>
+        <record model="ir.ui.view" id="babi_dimension_column_form_view">
+            <field name="model">babi.dimension.column</field>
+            <field name="type">form</field>
+            <field name="name">dimension_column_form</field>
+        </record>
+        <record model="ir.ui.view" id="babi_dimension_column_tree_view">
+            <field name="model">babi.dimension.column</field>
+            <field name="type">tree</field>
+            <field name="name">dimension_column_tree</field>
+        </record>
+        <record model="ir.action.act_window" id="act_babi_dimension_column">
+            <field name="name">Column Dimension</field>
+            <field name="res_model">babi.dimension.column</field>
+            <field name="search_value"></field>
+            <!-- <field name="domain">[]</field> -->
+            <!-- <field name="context">{}</field> -->
+        </record>
+        <record model="ir.action.act_window.view" id="act_babi_dimension_column_view1">
+            <field name="sequence" eval="10"/>
+            <field name="view" ref="babi_dimension_column_tree_view"/>
+            <field name="act_window" ref="act_babi_dimension_column"/>
+        </record>
+        <record model="ir.action.act_window.view" id="act_babi_dimension_column_view2">
+            <field name="sequence" eval="20"/>
+            <field name="view" ref="babi_dimension_column_form_view"/>
+            <field name="act_window" ref="act_babi_dimension_column"/>
+        </record>
+        <record model="ir.model.access" id="access_babi_dimension_column">
+            <field name="model" search="[('model', '=', 'babi.dimension.column')]"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="False"/>
+            <field name="perm_create" eval="False"/>
+            <field name="perm_delete" eval="False"/>
+        </record>
+        <record model="ir.model.access" id="access_babi_dimension_column_admin">
+            <field name="model" search="[('model', '=', 'babi.dimension.column')]"/>
+            <field name="group" ref="group_babi_admin"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_delete" eval="True"/>
+        </record>
+        <record model="ir.ui.view" id="babi_expression_form_view">
+            <field name="model">babi.expression</field>
+            <field name="type">form</field>
+            <field name="name">expression_form</field>
+        </record>
+        <record model="ir.ui.view" id="babi_expression_tree_view">
+            <field name="model">babi.expression</field>
+            <field name="type">tree</field>
+            <field name="name">expression_tree</field>
+        </record>
+        <record model="ir.action.act_window" id="act_babi_expression">
+            <field name="name">Expression</field>
+            <field name="res_model">babi.expression</field>
+            <field name="search_value"></field>
+            <!-- <field name="domain">[]</field> -->
+            <!-- <field name="context">{}</field> -->
+        </record>
+        <record model="ir.action.act_window.view" id="act_babi_expression_view1">
+            <field name="sequence" eval="10"/>
+            <field name="view" ref="babi_expression_tree_view"/>
+            <field name="act_window" ref="act_babi_expression"/>
+        </record>
+        <record model="ir.action.act_window.view" id="act_babi_expression_view2">
+            <field name="sequence" eval="20"/>
+            <field name="view" ref="babi_expression_form_view"/>
+            <field name="act_window" ref="act_babi_expression"/>
+        </record>
+        <record model="ir.model.access" id="access_babi_expression">
+            <field name="model" search="[('model', '=', 'babi.expression')]"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="False"/>
+            <field name="perm_create" eval="False"/>
+            <field name="perm_delete" eval="False"/>
+        </record>
+        <record model="ir.model.access" id="access_babi_expression_admin">
+            <field name="model" search="[('model', '=', 'babi.expression')]"/>
+            <field name="group" ref="group_babi_admin"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_delete" eval="True"/>
+        </record>
+        <record model="ir.ui.view" id="babi_filter_form_view">
+            <field name="model">babi.filter</field>
+            <field name="type">form</field>
+            <field name="name">filter_form</field>
+        </record>
+        <record model="ir.ui.view" id="babi_filter_tree_view">
+            <field name="model">babi.filter</field>
+            <field name="type">tree</field>
+            <field name="name">filter_tree</field>
+        </record>
+        <record model="ir.action.act_window" id="act_babi_filter">
+            <field name="name">Filter</field>
+            <field name="res_model">babi.filter</field>
+            <field name="search_value"></field>
+            <!-- <field name="domain">[]</field> -->
+            <!-- <field name="context">{}</field> -->
+        </record>
+        <record model="ir.action.act_window.view" id="act_babi_filter_view1">
+            <field name="sequence" eval="10"/>
+            <field name="view" ref="babi_filter_tree_view"/>
+            <field name="act_window" ref="act_babi_filter"/>
+        </record>
+        <record model="ir.action.act_window.view" id="act_babi_filter_view2">
+            <field name="sequence" eval="20"/>
+            <field name="view" ref="babi_filter_form_view"/>
+            <field name="act_window" ref="act_babi_filter"/>
+        </record>
+        <record model="ir.model.access" id="access_babi_filter">
+            <field name="model" search="[('model', '=', 'babi.filter')]"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="False"/>
+            <field name="perm_create" eval="False"/>
+            <field name="perm_delete" eval="False"/>
+        </record>
+        <record model="ir.model.access" id="access_babi_filter_admin">
+            <field name="model" search="[('model', '=', 'babi.filter')]"/>
+            <field name="group" ref="group_babi_admin"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_delete" eval="True"/>
+        </record>
+        <record model="ir.ui.view" id="babi_internal_measure_form_view">
+            <field name="model">babi.internal.measure</field>
+            <field name="type">form</field>
+            <field name="name">internal_measure_form</field>
+        </record>
+        <record model="ir.ui.view" id="babi_internal_measure_tree_view">
+            <field name="model">babi.internal.measure</field>
+            <field name="type">tree</field>
+            <field name="name">internal_measure_tree</field>
+        </record>
+        <record model="ir.action.act_window" id="act_babi_internal_measure">
+            <field name="name">Internal Measure</field>
+            <field name="res_model">babi.internal.measure</field>
+            <field name="search_value"></field>
+            <!-- <field name="domain">[]</field> -->
+            <!-- <field name="context">{}</field> -->
+        </record>
+        <record model="ir.action.act_window.view" id="act_babi_internal_measure_view1">
+            <field name="sequence" eval="10"/>
+            <field name="view" ref="babi_internal_measure_tree_view"/>
+            <field name="act_window" ref="act_babi_internal_measure"/>
+        </record>
+        <record model="ir.action.act_window.view" id="act_babi_internal_measure_view2">
+            <field name="sequence" eval="20"/>
+            <field name="view" ref="babi_internal_measure_form_view"/>
+            <field name="act_window" ref="act_babi_internal_measure"/>
+        </record>
+        <record model="ir.model.access" id="access_babi_internal_measure">
+            <field name="model" search="[('model', '=', 'babi.internal.measure')]"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="False"/>
+            <field name="perm_create" eval="False"/>
+            <field name="perm_delete" eval="False"/>
+        </record>
+        <record model="ir.model.access" id="access_babi_internal_measure_admin">
+            <field name="model" search="[('model', '=', 'babi.internal.measure')]"/>
+            <field name="group" ref="group_babi_admin"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_delete" eval="True"/>
+        </record>
+        <record model="ir.ui.view" id="babi_measure_form_view">
+            <field name="model">babi.measure</field>
+            <field name="type">form</field>
+            <field name="name">measure_form</field>
+        </record>
+        <record model="ir.ui.view" id="babi_measure_tree_view">
+            <field name="model">babi.measure</field>
+            <field name="type">tree</field>
+            <field name="name">measure_tree</field>
+        </record>
+        <record model="ir.action.act_window" id="act_babi_measure">
+            <field name="name">Measure</field>
+            <field name="res_model">babi.measure</field>
+            <field name="search_value"></field>
+            <!-- <field name="domain">[]</field> -->
+            <!-- <field name="context">{}</field> -->
+        </record>
+        <record model="ir.action.act_window.view" id="act_babi_measure_view1">
+            <field name="sequence" eval="10"/>
+            <field name="view" ref="babi_measure_tree_view"/>
+            <field name="act_window" ref="act_babi_measure"/>
+        </record>
+        <record model="ir.action.act_window.view" id="act_babi_measure_view2">
+            <field name="sequence" eval="20"/>
+            <field name="view" ref="babi_measure_form_view"/>
+            <field name="act_window" ref="act_babi_measure"/>
+        </record>
+        <record model="ir.model.access" id="access_babi_measure">
+            <field name="model" search="[('model', '=', 'babi.measure')]"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="False"/>
+            <field name="perm_create" eval="False"/>
+            <field name="perm_delete" eval="False"/>
+        </record>
+        <record model="ir.model.access" id="access_babi_measure_admin">
+            <field name="model" search="[('model', '=', 'babi.measure')]"/>
+            <field name="group" ref="group_babi_admin"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_delete" eval="True"/>
+        </record>
+        <record model="ir.ui.view" id="babi_order_form_view">
+            <field name="model">babi.order</field>
+            <field name="type">form</field>
+            <field name="name">order_form</field>
+        </record>
+        <record model="ir.ui.view" id="babi_order_tree_view">
+            <field name="model">babi.order</field>
+            <field name="type">tree</field>
+            <field name="name">order_tree</field>
+        </record>
+        <record model="ir.action.act_window" id="act_babi_order">
+            <field name="name">Order</field>
+            <field name="res_model">babi.order</field>
+            <field name="search_value"></field>
+            <!-- <field name="domain">[]</field> -->
+            <!-- <field name="context">{}</field> -->
+        </record>
+        <record model="ir.action.act_window.view" id="act_babi_order_view1">
+            <field name="sequence" eval="10"/>
+            <field name="view" ref="babi_order_tree_view"/>
+            <field name="act_window" ref="act_babi_order"/>
+        </record>
+        <record model="ir.action.act_window.view" id="act_babi_order_view2">
+            <field name="sequence" eval="20"/>
+            <field name="view" ref="babi_order_form_view"/>
+            <field name="act_window" ref="act_babi_order"/>
+        </record>
+        <record model="ir.model.access" id="access_babi_order">
+            <field name="model" search="[('model', '=', 'babi.order')]"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="False"/>
+            <field name="perm_create" eval="False"/>
+            <field name="perm_delete" eval="False"/>
+        </record>
+        <record model="ir.model.access" id="access_babi_order_admin">
+            <field name="model" search="[('model', '=', 'babi.order')]"/>
+            <field name="group" ref="group_babi_admin"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_delete" eval="True"/>
+        </record>
+        <record model="ir.ui.view" id="babi_report_form_view">
+            <field name="model">babi.report</field>
+            <field name="type">form</field>
+            <field name="name">report_form</field>
+        </record>
+        <record model="ir.ui.view" id="babi_report_tree_view">
+            <field name="model">babi.report</field>
+            <field name="type">tree</field>
+            <field name="name">report_tree</field>
+        </record>
+        <record model="ir.action.act_window" id="act_babi_report">
+            <field name="name">Report</field>
+            <field name="res_model">babi.report</field>
+            <field name="search_value"></field>
+            <!-- <field name="domain">[]</field> -->
+            <!-- <field name="context">{}</field> -->
+        </record>
+        <record model="ir.action.act_window.view" id="act_babi_report_view1">
+            <field name="sequence" eval="10"/>
+            <field name="view" ref="babi_report_tree_view"/>
+            <field name="act_window" ref="act_babi_report"/>
+        </record>
+        <record model="ir.action.act_window.view" id="act_babi_report_view2">
+            <field name="sequence" eval="20"/>
+            <field name="view" ref="babi_report_form_view"/>
+            <field name="act_window" ref="act_babi_report"/>
+        </record>
+        <record model="ir.model.access" id="access_babi_report">
+            <field name="model" search="[('model', '=', 'babi.report')]"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="False"/>
+            <field name="perm_create" eval="False"/>
+            <field name="perm_delete" eval="False"/>
+        </record>
+        <record model="ir.model.access" id="access_babi_report_admin">
+            <field name="model" search="[('model', '=', 'babi.report')]"/>
+            <field name="group" ref="group_babi_admin"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_delete" eval="True"/>
+        </record>
+
+        <record model="ir.ui.view" id="model_form_view">
+            <field name="model">ir.model</field>
+            <field name="type">form</field>
+            <field name="name">model_form</field>
+            <field name="inherit" ref="ir.model_view_form"/>
+        </record>
+
+        <record model="ir.ui.view" id="open_chart_start_form_view">
+            <field name="model">babi.open_chart.start</field>
+            <field name="type">form</field>
+            <field name="name">open_chart_start_form</field>
+        </record>
+        <record model="ir.action.wizard" id="open_chart_wizard">
+            <field name="name">Open Chart</field>
+            <field name="wiz_name">babi.open_chart</field>
+        </record>
+
+        <!-- Menus -->
+        <menuitem id="menu_babi" name="Babi" sequence="1" />
+        <menuitem id="menu_babi_config" name="Configuration"
+            parent="menu_babi" sequence="10"/>
+        <menuitem action="act_babi_expression" id="menu_babi_expression"
+            parent="menu_babi_config" sequence="10" name="Expression"/>
+        <menuitem action="act_babi_filter" id="menu_babi_filter"
+            parent="menu_babi_config" sequence="20" name="Filter"/>
+        <menuitem action="act_babi_report" id="menu_babi_report"
+            parent="menu_babi" sequence="20" name="Report"/>
+    </data>
+</tryton>

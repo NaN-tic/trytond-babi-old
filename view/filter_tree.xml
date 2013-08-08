@@ -1,0 +1,6 @@
+<tree string="Filter">
+	 <field name="name"/>
+     <field name="model"/>
+	 <field name="domain"/>
+	 <field name="python_expression"/>
+</tree>
