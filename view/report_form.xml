@@ -21,7 +21,7 @@ contains the full copyright notices and license terms. -->
 	            <field name="order"/>
                 <field name="groups"/>
             </group>
-            <group col="3" colspan="4">
+            <group col="3" colspan="4" id="buttons">
                 <button name="calculate" string="Calculate"/>
                 <button name="create_menus" string="Create Menus"/>
                 <button name="remove_menus" string="Remove Menus"/>
