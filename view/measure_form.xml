@@ -4,10 +4,10 @@ contains the full copyright notices and license terms. -->
 <form string="Measure">
 	<label name="report"/>
 	<field name="report" colspan="3"/>
-	<label name="name"/>
-	<field name="name"/>
 	<label name="expression"/>
 	<field name="expression"/>
+	<label name="name"/>
+	<field name="name"/>
 	<label name="aggregate"/>
 	<field name="aggregate"/>
 	<label name="progressbar"/>

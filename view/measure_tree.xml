@@ -1,7 +1,7 @@
-<tree string="Measure" sequence="sequence">
+<tree string="Measure" sequence="sequence" editable="bottom">
 	 <field name="report"/>
-	 <field name="name"/>
 	 <field name="expression"/>
+	 <field name="name"/>
 	 <field name="aggregate"/>
 	 <field name="progressbar"/>
 	 <field name="sequence" tree_invisible="1"/>
