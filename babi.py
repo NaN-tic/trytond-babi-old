@@ -1058,7 +1058,7 @@ class Dimension(ModelSQL, ModelView, DimensionMixin):
                 ('dimension', 'in', [x.id for x in dimensions]),
                 ])
         if orders:
-            with Transaction().set_contet({'babi_order_force': True}):
+            with Transaction().set_context({'babi_order_force': True}):
                 Order.delete(orders)
         return super(Dimension, cls).delete(dimensions)
 
@@ -1205,8 +1205,6 @@ class Order(ModelSQL, ModelView):
                     'automatically'),
                 })
         cls._sql_constraints += [
-            ('report_and_sequence_unique', 'UNIQUE(report, sequence)',
-                'Sequence must be unique per report.'),
             ('report_and_dimension_unique','UNIQUE(report, dimension)',
                 'Dimension must be unique per report.'),
             ('report_and_measure_unique','UNIQUE(report, measure)',
