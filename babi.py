@@ -13,7 +13,7 @@ from trytond.pyson import Eval
 from trytond.pool import Pool, PoolMeta
 from trytond.transaction import Transaction
 from trytond.tools import safe_eval
-from trytond.backend import TableHandler
+from trytond import backend
 from babi_eval import babi_eval
 
 
@@ -985,9 +985,7 @@ class DimensionMixin:
 
     report = fields.Many2One('babi.report', 'Report', required=True,
         ondelete='CASCADE')
-    sequence = fields.Integer('Sequence',
-        order_field='(%(table)s.sequence IS NULL) %(order)s, '
-        '%(table)s.sequence %(order)s')
+    sequence = fields.Integer('Sequence')
     name = fields.Char('Name', required=True, on_change_with=['expression'])
     internal_name = fields.Function(fields.Char('Internal Name'),
         'get_internal_name')
@@ -996,6 +994,11 @@ class DimensionMixin:
 
     def get_internal_name(self, name):
         return '%s_%d' % (unaccent(self.name)[:10], self.id)
+
+    @staticmethod
+    def order_sequence(tables):
+        table, _ = tables[None]
+        return [table.sequence == None, table.sequence]
 
     @staticmethod
     def default_group_by():
@@ -1073,9 +1076,7 @@ class Measure(ModelSQL, ModelView):
     __name__ = 'babi.measure'
     report = fields.Many2One('babi.report', 'Report', required=True,
         ondelete='CASCADE')
-    sequence = fields.Integer('Sequence',
-        order_field='(%(table)s.sequence IS NULL) %(order)s, '
-        '%(table)s.sequence %(order)s')
+    sequence = fields.Integer('Sequence')
     name = fields.Char('Name', required=True, on_change_with=['expression'])
     internal_name = fields.Function(fields.Char('Internal Name'),
         'get_internal_name')
@@ -1094,6 +1095,11 @@ class Measure(ModelSQL, ModelView):
             ('report_and_name_unique', 'unique(report, name)',
                 'Measure name must be unique per report.'),
             ]
+
+    @staticmethod
+    def order_sequence(tables):
+        table, _ = tables[None]
+        return [table.sequence == None, table.sequence]
 
     @staticmethod
     def default_aggregate():
@@ -1254,6 +1260,7 @@ class Model(ModelSQL, ModelView):
         super(Model, cls).__post_setup__()
         Report = Pool().get('babi.report')
         cursor = Transaction().cursor
+        TableHandler = backend.get('TableHandler')
         if TableHandler.table_exist(cursor, Report._table):
             for report in Report.search([]):
                 report.validate_model()
