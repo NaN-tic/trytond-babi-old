@@ -1416,6 +1416,7 @@ class OpenChart(Wizard):
             'type': 'ir.action.act_window',
             'pyson_domain': domain,
             'pyson_context': context,
+            'pyson_order': '[]',
             'pyson_search_value': '[]',
             'domains': [],
             #'act_window_views': [],
