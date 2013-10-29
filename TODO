@@ -9,3 +9,4 @@
 - Consider adding relate buttons to related models. For example, seeing sales babi report from party form.
 - Consider adding PKIs
 - Consider triggering notifications
+- Optimize when no Function fields are used
