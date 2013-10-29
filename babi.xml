@@ -3,7 +3,7 @@
     <data>
 
         <record model="res.group" id="group_babi_admin">
-            <field name="name">Babi Administration</field>
+            <field name="name">Business Intelligence Administration</field>
         </record>
         <record model="res.user-res.group" id="user_admin_group_babi_admin">
             <field name="user" ref="res.user_admin"/>
@@ -14,7 +14,7 @@
             <field name="group" ref="group_babi_admin"/>
         </record>
         <record model="res.group" id="group_babi">
-            <field name="name">Babi</field>
+            <field name="name">Business Intelligence</field>
         </record>
         <record model="res.user-res.group" id="user_admin_group_babi">
             <field name="user" ref="res.user_admin"/>
@@ -379,7 +379,7 @@
         </record>
 
         <!-- Menus -->
-        <menuitem id="menu_babi" name="Babi" sequence="1" />
+        <menuitem id="menu_babi" name="Business Intelligence" sequence="1" />
         <menuitem id="menu_babi_config" name="Configuration"
             parent="menu_babi" sequence="10"/>
         <menuitem action="act_babi_expression" id="menu_babi_expression"
