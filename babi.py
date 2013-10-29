@@ -149,14 +149,14 @@ class Expression(ModelSQL, ModelView):
         help='Python expression that will return the value to be used.\n'
         'The expression can include the following variables:\n\n'
         '- "o": A reference to the current record being processed. For '
-        ' example: "o.partner.name"\n'
+        ' example: "o.party.name"\n'
         '\nAnd the following functions apply to dates and timestamps:\n\n'
         '- "y()": Returns the year (as a string)\n'
         '- "m()": Returns the month (as a string)\n'
         '- "w()": Returns the week (as a string)\n'
         '- "d()": Returns the day (as a string)\n'
         '- "ym()": Returns the year-month (as a string)\n'
-        '- "ymd()": Returns the year-mont-day (as a string).\n'
+        '- "ymd()": Returns the year-month-day (as a string).\n'
         )
     ttype = fields.Selection(FIELD_TYPES, 'Field Type', required=True)
     related_model = fields.Many2One('ir.model', 'Related Model', states={
