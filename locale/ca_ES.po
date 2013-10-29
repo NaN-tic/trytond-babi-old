@@ -1,0 +1,964 @@
+# 
+msgid ""
+msgstr "Content-Type: text/plain; charset=utf-8\n"
+
+msgctxt "error:babi.dimension:"
+msgid "Dimension name must be unique per report."
+msgstr "El nom de les dimensions ha de ser únic per informe."
+
+msgctxt "error:babi.measure:"
+msgid "Measure name must be unique per report."
+msgstr "El nom de les mesures ha de ser únic per informe."
+
+msgctxt "error:babi.open_chart:"
+msgid "Only one measure can be used in pie charts."
+msgstr "Només es pot utilitzar una mesura en les gràfiques de formatge."
+
+msgctxt "error:babi.order:"
+msgid "Dimension must be unique per report."
+msgstr "La dimensió ha de ser única per informe."
+
+msgctxt "error:babi.order:"
+msgid "Measure must be unique per report."
+msgstr "Les mesures han de ser úniques per informe."
+
+msgctxt "error:babi.order:"
+msgid "Only dimension or measure can be set."
+msgstr "Només es pot establir dimensió o mesura."
+
+msgctxt "error:babi.order:"
+msgid "Order entries are created automatically"
+msgstr "Les entrades d'ordre es creen automàticament"
+
+msgctxt "error:babi.order:"
+msgid "Order entries are deleted automatically"
+msgstr "Les entrades d'ordre s'eliminen automàticament"
+
+msgctxt "error:babi.report:"
+msgid "Report \"%s\" has no dimensions. At least one is needed."
+msgstr "L'informe \"%s\" no té cap dimensió. Se'n necessita com a mínim una."
+
+msgctxt "field:babi.configuration,create_date:"
+msgid "Create Date"
+msgstr "Data de creació"
+
+msgctxt "field:babi.configuration,create_uid:"
+msgid "Create User"
+msgstr "Usuari de creació"
+
+msgctxt "field:babi.configuration,default_timeout:"
+msgid "Timeout (s)"
+msgstr "Temps d'espera (s)"
+
+msgctxt "field:babi.configuration,id:"
+msgid "ID"
+msgstr "Identificador"
+
+msgctxt "field:babi.configuration,rec_name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:babi.configuration,write_date:"
+msgid "Write Date"
+msgstr "Data modificació"
+
+msgctxt "field:babi.configuration,write_uid:"
+msgid "Write User"
+msgstr "Usuari modificació"
+
+msgctxt "field:babi.dimension,create_date:"
+msgid "Create Date"
+msgstr "Data de creació"
+
+msgctxt "field:babi.dimension,create_uid:"
+msgid "Create User"
+msgstr "Usuari de creació"
+
+msgctxt "field:babi.dimension,expression:"
+msgid "Expression"
+msgstr "Expressió"
+
+msgctxt "field:babi.dimension,group_by:"
+msgid "Group By This Dimension"
+msgstr "Agrupa per aquesta dimensió"
+
+msgctxt "field:babi.dimension,id:"
+msgid "ID"
+msgstr "Identificador"
+
+msgctxt "field:babi.dimension,internal_name:"
+msgid "Internal Name"
+msgstr "Nom intern"
+
+msgctxt "field:babi.dimension,name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:babi.dimension,rec_name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:babi.dimension,report:"
+msgid "Report"
+msgstr "Informe"
+
+msgctxt "field:babi.dimension,sequence:"
+msgid "Sequence"
+msgstr "Seqüència"
+
+msgctxt "field:babi.dimension,write_date:"
+msgid "Write Date"
+msgstr "Data modificació"
+
+msgctxt "field:babi.dimension,write_uid:"
+msgid "Write User"
+msgstr "Usuari modificació"
+
+msgctxt "field:babi.dimension.column,create_date:"
+msgid "Create Date"
+msgstr "Data de creació"
+
+msgctxt "field:babi.dimension.column,create_uid:"
+msgid "Create User"
+msgstr "Usuari de creació"
+
+msgctxt "field:babi.dimension.column,expression:"
+msgid "Expression"
+msgstr "Expressió"
+
+msgctxt "field:babi.dimension.column,group_by:"
+msgid "Group By This Dimension"
+msgstr "Agrupa per aquesta dimensió"
+
+msgctxt "field:babi.dimension.column,id:"
+msgid "ID"
+msgstr "Identificador"
+
+msgctxt "field:babi.dimension.column,internal_name:"
+msgid "Internal Name"
+msgstr "Nom intern"
+
+msgctxt "field:babi.dimension.column,name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:babi.dimension.column,rec_name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:babi.dimension.column,report:"
+msgid "Report"
+msgstr "Informe"
+
+msgctxt "field:babi.dimension.column,sequence:"
+msgid "Sequence"
+msgstr "Seqüència"
+
+msgctxt "field:babi.dimension.column,write_date:"
+msgid "Write Date"
+msgstr "Data modificació"
+
+msgctxt "field:babi.dimension.column,write_uid:"
+msgid "Write User"
+msgstr "Usuari modificació"
+
+msgctxt "field:babi.expression,create_date:"
+msgid "Create Date"
+msgstr "Data de creació"
+
+msgctxt "field:babi.expression,create_uid:"
+msgid "Create User"
+msgstr "Usuari de creació"
+
+msgctxt "field:babi.expression,expression:"
+msgid "Expression"
+msgstr "Expressió"
+
+msgctxt "field:babi.expression,fields:"
+msgid "Model Fields"
+msgstr "Camps del model"
+
+msgctxt "field:babi.expression,id:"
+msgid "ID"
+msgstr "Identificador"
+
+msgctxt "field:babi.expression,model:"
+msgid "Model"
+msgstr "Model"
+
+msgctxt "field:babi.expression,name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:babi.expression,rec_name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:babi.expression,related_model:"
+msgid "Related Model"
+msgstr "Model relacionat"
+
+msgctxt "field:babi.expression,ttype:"
+msgid "Field Type"
+msgstr "Tipus de camp"
+
+msgctxt "field:babi.expression,write_date:"
+msgid "Write Date"
+msgstr "Data modificació"
+
+msgctxt "field:babi.expression,write_uid:"
+msgid "Write User"
+msgstr "Usuari modificació"
+
+msgctxt "field:babi.filter,create_date:"
+msgid "Create Date"
+msgstr "Data de creació"
+
+msgctxt "field:babi.filter,create_uid:"
+msgid "Create User"
+msgstr "Usuari de creació"
+
+msgctxt "field:babi.filter,domain:"
+msgid "Domain"
+msgstr "Domini"
+
+msgctxt "field:babi.filter,fields:"
+msgid "Model Fields"
+msgstr "Camps del model"
+
+msgctxt "field:babi.filter,id:"
+msgid "ID"
+msgstr "Identificador"
+
+msgctxt "field:babi.filter,model:"
+msgid "Model"
+msgstr "Model"
+
+msgctxt "field:babi.filter,model_name:"
+msgid "Model Name"
+msgstr "Nom model"
+
+msgctxt "field:babi.filter,name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:babi.filter,python_expression:"
+msgid "Python Expression"
+msgstr "Expressió Python"
+
+msgctxt "field:babi.filter,rec_name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:babi.filter,view_search:"
+msgid "Search"
+msgstr "Cerca"
+
+msgctxt "field:babi.filter,write_date:"
+msgid "Write Date"
+msgstr "Data modificació"
+
+msgctxt "field:babi.filter,write_uid:"
+msgid "Write User"
+msgstr "Usuari modificació"
+
+msgctxt "field:babi.internal.measure,aggregate:"
+msgid "Aggregate"
+msgstr "Agregat"
+
+msgctxt "field:babi.internal.measure,create_date:"
+msgid "Create Date"
+msgstr "Data de creació"
+
+msgctxt "field:babi.internal.measure,create_uid:"
+msgid "Create User"
+msgstr "Usuari de creació"
+
+msgctxt "field:babi.internal.measure,expression:"
+msgid "Expression"
+msgstr "Expressió"
+
+msgctxt "field:babi.internal.measure,id:"
+msgid "ID"
+msgstr "Identificador"
+
+msgctxt "field:babi.internal.measure,internal_name:"
+msgid "Internal Name"
+msgstr "Nom intern"
+
+msgctxt "field:babi.internal.measure,measure:"
+msgid "Measure"
+msgstr "Mesura"
+
+msgctxt "field:babi.internal.measure,name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:babi.internal.measure,progressbar:"
+msgid "Progress Bar"
+msgstr "Barra de progrés"
+
+msgctxt "field:babi.internal.measure,rec_name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:babi.internal.measure,related_model:"
+msgid "Related Model"
+msgstr "Model relacionat"
+
+msgctxt "field:babi.internal.measure,report:"
+msgid "Report"
+msgstr "Informe"
+
+msgctxt "field:babi.internal.measure,sequence:"
+msgid "Sequence"
+msgstr "Seqüència"
+
+msgctxt "field:babi.internal.measure,ttype:"
+msgid "Field Type"
+msgstr "Tipus de camp"
+
+msgctxt "field:babi.internal.measure,write_date:"
+msgid "Write Date"
+msgstr "Data modificació"
+
+msgctxt "field:babi.internal.measure,write_uid:"
+msgid "Write User"
+msgstr "Usuari modificació"
+
+msgctxt "field:babi.measure,aggregate:"
+msgid "Aggregate"
+msgstr "Agregat"
+
+msgctxt "field:babi.measure,create_date:"
+msgid "Create Date"
+msgstr "Data de creació"
+
+msgctxt "field:babi.measure,create_uid:"
+msgid "Create User"
+msgstr "Usuari de creació"
+
+msgctxt "field:babi.measure,expression:"
+msgid "Expression"
+msgstr "Expressió"
+
+msgctxt "field:babi.measure,id:"
+msgid "ID"
+msgstr "Identificador"
+
+msgctxt "field:babi.measure,internal_measures:"
+msgid "Internal Measures"
+msgstr "Mesures internes"
+
+msgctxt "field:babi.measure,internal_name:"
+msgid "Internal Name"
+msgstr "Nom intern"
+
+msgctxt "field:babi.measure,name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:babi.measure,progressbar:"
+msgid "Progress Bar"
+msgstr "Barra de progrés"
+
+msgctxt "field:babi.measure,rec_name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:babi.measure,report:"
+msgid "Report"
+msgstr "Informe"
+
+msgctxt "field:babi.measure,sequence:"
+msgid "Sequence"
+msgstr "Seqüència"
+
+msgctxt "field:babi.measure,write_date:"
+msgid "Write Date"
+msgstr "Data modificació"
+
+msgctxt "field:babi.measure,write_uid:"
+msgid "Write User"
+msgstr "Usuari modificació"
+
+msgctxt "field:babi.open_chart.start,dimension:"
+msgid "Dimension"
+msgstr "Dimensió"
+
+msgctxt "field:babi.open_chart.start,graph_type:"
+msgid "Graph"
+msgstr "Gràfica"
+
+msgctxt "field:babi.open_chart.start,id:"
+msgid "ID"
+msgstr "Identificador"
+
+msgctxt "field:babi.open_chart.start,interpolation:"
+msgid "Interpolation"
+msgstr "Interpolació"
+
+msgctxt "field:babi.open_chart.start,measures:"
+msgid "Measures"
+msgstr "Mesures"
+
+msgctxt "field:babi.open_chart.start,show_legend:"
+msgid "Show Legend"
+msgstr "Mostra la llegenda"
+
+msgctxt "field:babi.open_chart.start,valid_dimensions:"
+msgid "Valid Dimensions"
+msgstr "Dimensions vàlides"
+
+msgctxt "field:babi.order,create_date:"
+msgid "Create Date"
+msgstr "Data de creació"
+
+msgctxt "field:babi.order,create_uid:"
+msgid "Create User"
+msgstr "Usuari de creació"
+
+msgctxt "field:babi.order,dimension:"
+msgid "Dimension"
+msgstr "Dimensió"
+
+msgctxt "field:babi.order,id:"
+msgid "ID"
+msgstr "Identificador"
+
+msgctxt "field:babi.order,measure:"
+msgid "Measure"
+msgstr "Mesura"
+
+msgctxt "field:babi.order,order:"
+msgid "Order"
+msgstr "Ordre"
+
+msgctxt "field:babi.order,rec_name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:babi.order,report:"
+msgid "Report"
+msgstr "Informe"
+
+msgctxt "field:babi.order,sequence:"
+msgid "Sequence"
+msgstr "Seqüència"
+
+msgctxt "field:babi.order,write_date:"
+msgid "Write Date"
+msgstr "Data modificació"
+
+msgctxt "field:babi.order,write_uid:"
+msgid "Write User"
+msgstr "Usuari modificació"
+
+msgctxt "field:babi.report,actions:"
+msgid "Actions"
+msgstr "Accions"
+
+msgctxt "field:babi.report,babi_model:"
+msgid "BI Model"
+msgstr "Model BI"
+
+msgctxt "field:babi.report,columns:"
+msgid "Dimensions on Columns"
+msgstr "Dimensions en columnes"
+
+msgctxt "field:babi.report,create_date:"
+msgid "Create Date"
+msgstr "Data de creació"
+
+msgctxt "field:babi.report,create_uid:"
+msgid "Create User"
+msgstr "Usuari de creació"
+
+msgctxt "field:babi.report,dimensions:"
+msgid "Dimensions"
+msgstr "Dimensions"
+
+msgctxt "field:babi.report,filter:"
+msgid "Filter"
+msgstr "Filtre"
+
+msgctxt "field:babi.report,groups:"
+msgid "Groups"
+msgstr "Grups"
+
+msgctxt "field:babi.report,id:"
+msgid "ID"
+msgstr "Identificador"
+
+msgctxt "field:babi.report,internal_measures:"
+msgid "Internal Measures"
+msgstr "Mesures internes"
+
+msgctxt "field:babi.report,internal_name:"
+msgid "Internal Name"
+msgstr "Nom intern"
+
+msgctxt "field:babi.report,keywords:"
+msgid "Keywords"
+msgstr "Accions de teclat"
+
+msgctxt "field:babi.report,last_update:"
+msgid "Last Update"
+msgstr "Última actualització"
+
+msgctxt "field:babi.report,last_update_seconds:"
+msgid "Last Update Duration (s)"
+msgstr "Durada de l'última actualització (s)"
+
+msgctxt "field:babi.report,measures:"
+msgid "Measures"
+msgstr "Mesures"
+
+msgctxt "field:babi.report,menus:"
+msgid "Menus"
+msgstr "Menús"
+
+msgctxt "field:babi.report,model:"
+msgid "Model"
+msgstr "Model"
+
+msgctxt "field:babi.report,model_name:"
+msgid "Model Name"
+msgstr "Nom model"
+
+msgctxt "field:babi.report,name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:babi.report,order:"
+msgid "Order"
+msgstr "Ordre"
+
+msgctxt "field:babi.report,parent_menu:"
+msgid "Parent Menu"
+msgstr "Menú pare"
+
+msgctxt "field:babi.report,rec_name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:babi.report,timeout:"
+msgid "Timeout (s)"
+msgstr "Temps d'espera (s)"
+
+msgctxt "field:babi.report,write_date:"
+msgid "Write Date"
+msgstr "Data modificació"
+
+msgctxt "field:babi.report,write_uid:"
+msgid "Write User"
+msgstr "Usuari modificació"
+
+msgctxt "field:babi.report-res.group,create_date:"
+msgid "Create Date"
+msgstr "Data de creació"
+
+msgctxt "field:babi.report-res.group,create_uid:"
+msgid "Create User"
+msgstr "Usuari de creació"
+
+msgctxt "field:babi.report-res.group,group:"
+msgid "Group"
+msgstr "Grup"
+
+msgctxt "field:babi.report-res.group,id:"
+msgid "ID"
+msgstr "Identificador"
+
+msgctxt "field:babi.report-res.group,rec_name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:babi.report-res.group,report:"
+msgid "Report"
+msgstr "Informe"
+
+msgctxt "field:babi.report-res.group,write_date:"
+msgid "Write Date"
+msgstr "Data modificació"
+
+msgctxt "field:babi.report-res.group,write_uid:"
+msgid "Write User"
+msgstr "Usuari modificació"
+
+msgctxt "field:ir.action.act_window,babi_report:"
+msgid "BABI Report"
+msgstr "Informe BABI"
+
+msgctxt "field:ir.action.keyword,babi_report:"
+msgid "BABI Report"
+msgstr "Informe BABI"
+
+msgctxt "field:ir.model,babi_enabled:"
+msgid "BI Enabled"
+msgstr "Habilitat per BI"
+
+msgctxt "field:ir.ui.menu,babi_report:"
+msgid "BABI Report"
+msgstr "Informe BABI"
+
+msgctxt "help:babi.expression,expression:"
+msgid ""
+"Python expression that will return the value to be used.\n"
+"The expression can include the following variables:\n"
+"\n"
+"- \"o\": A reference to the current record being processed. For  example: \"o.partner.name\"\n"
+"\n"
+"And the following functions apply to dates and timestamps:\n"
+"\n"
+"- \"y()\": Returns the year (as a string)\n"
+"- \"m()\": Returns the month (as a string)\n"
+"- \"w()\": Returns the week (as a string)\n"
+"- \"d()\": Returns the day (as a string)\n"
+"- \"ym()\": Returns the year-month (as a string)\n"
+"- \"ymd()\": Returns the year-mont-day (as a string).\n"
+msgstr "Expressió Python que returnarà el valor  utilitzar."
+
+msgctxt "help:babi.filter,python_expression:"
+msgid ""
+"The python expression introduced will be evaluated. If the result is True "
+"the record will be included, it will be discarded otherwise."
+msgstr ""
+"S'evaluarà l'expressió Python introduïda. Si el resultat és cert el registre"
+" serà inclòs, sinó, serà descartat."
+
+msgctxt "help:babi.measure,progressbar:"
+msgid "Display a progress bar instead of a number."
+msgstr "Mostra una barra de progrés enlloc d'un número."
+
+msgctxt "help:babi.report,babi_model:"
+msgid "Link to new model instance"
+msgstr "Enllaç al nou model"
+
+msgctxt "help:babi.report,groups:"
+msgid "User groups that will be able to see use this report."
+msgstr "Grups d'usuaris que podran veure aquest informe."
+
+msgctxt "help:babi.report,last_update:"
+msgid "Date & time of the last update."
+msgstr "Data i hora de l'última actualització."
+
+msgctxt "help:babi.report,last_update_seconds:"
+msgid "Number of seconds the last update took."
+msgstr "Número de segons que va trigar la darrera actualització."
+
+msgctxt "help:babi.report,model:"
+msgid "Model for data extraction"
+msgstr "Model per l'extracció de dades"
+
+msgctxt "help:babi.report,name:"
+msgid "New virtual model name."
+msgstr "Nom del nou model virtual"
+
+msgctxt "help:babi.report,timeout:"
+msgid ""
+"If report calculation should take more than the specified timeout (in "
+"seconds) the process will be stopped automatically."
+msgstr ""
+"Si el càlcul de l'informe ha de tardar més que el temps d'espera (en segons)"
+" indicat, el procés es pararà automàticament."
+
+msgctxt "help:ir.model,babi_enabled:"
+msgid ""
+"Check if you want this model to be available in Business Intelligence "
+"reports."
+msgstr ""
+"Marqueu-ho si voleu que aquest model estigui disponible pels informes "
+"Business Intelligence."
+
+msgctxt "model:babi.configuration,name:"
+msgid "Business Intelligence Configuration"
+msgstr "Configuració Business Intelligence"
+
+msgctxt "model:babi.dimension,name:"
+msgid "Dimension"
+msgstr "Dimensió"
+
+msgctxt "model:babi.dimension.column,name:"
+msgid "Column Dimension"
+msgstr "Dimensió de columna"
+
+msgctxt "model:babi.expression,name:"
+msgid "Expression"
+msgstr "Expressió"
+
+msgctxt "model:babi.filter,name:"
+msgid "Filter"
+msgstr "Filtre"
+
+msgctxt "model:babi.internal.measure,name:"
+msgid "Internal Measure"
+msgstr "Mesura interna"
+
+msgctxt "model:babi.measure,name:"
+msgid "Measure"
+msgstr "Mesura"
+
+msgctxt "model:babi.open_chart.start,name:"
+msgid "Open Chart Start"
+msgstr "Obre la gràfica: Inici"
+
+msgctxt "model:babi.order,name:"
+msgid "Order"
+msgstr "Ordre"
+
+msgctxt "model:babi.report,name:"
+msgid "Report"
+msgstr "Informe"
+
+msgctxt "model:babi.report-res.group,name:"
+msgid "Report - Group"
+msgstr "Informe - Grup"
+
+msgctxt "model:ir.action,name:act_babi_configuration_form"
+msgid "Business Intelligence Configuration"
+msgstr "Configuració Business Intelligence"
+
+msgctxt "model:ir.action,name:act_babi_dimension"
+msgid "Dimension"
+msgstr "Dimensió"
+
+msgctxt "model:ir.action,name:act_babi_dimension_column"
+msgid "Column Dimension"
+msgstr "Dimensió de columna"
+
+msgctxt "model:ir.action,name:act_babi_expression"
+msgid "Expression"
+msgstr "Expressió"
+
+msgctxt "model:ir.action,name:act_babi_filter"
+msgid "Filter"
+msgstr "Filtre"
+
+msgctxt "model:ir.action,name:act_babi_internal_measure"
+msgid "Internal Measure"
+msgstr "Mesura interna"
+
+msgctxt "model:ir.action,name:act_babi_measure"
+msgid "Measure"
+msgstr "Mesura"
+
+msgctxt "model:ir.action,name:act_babi_order"
+msgid "Order"
+msgstr "Ordre"
+
+msgctxt "model:ir.action,name:act_babi_report"
+msgid "Report"
+msgstr "Informe"
+
+msgctxt "model:ir.action,name:open_chart_wizard"
+msgid "Open Chart"
+msgstr "Obre una gràfica"
+
+msgctxt "model:ir.ui.menu,name:menu_babi"
+msgid "Babi"
+msgstr "Babi"
+
+msgctxt "model:ir.ui.menu,name:menu_babi_configuration"
+msgid "Business Intelligence Configuration"
+msgstr "Configuració Business Intelligence"
+
+msgctxt "model:ir.ui.menu,name:menu_babi_expression"
+msgid "Expressió"
+msgstr "Expressió"
+
+msgctxt "model:ir.ui.menu,name:menu_babi_filter"
+msgid "Filtre"
+msgstr "Filtre"
+
+msgctxt "model:ir.ui.menu,name:menu_babi_report"
+msgid "Informe"
+msgstr "Informe"
+
+msgctxt "model:ir.ui.menu,name:menu_configuration"
+msgid "Configuration"
+msgstr "Configuració"
+
+msgctxt "model:res.group,name:group_babi"
+msgid "Babi"
+msgstr "Babi"
+
+msgctxt "model:res.group,name:group_babi_admin"
+msgid "Babi Administration"
+msgstr "Administració BABI"
+
+msgctxt "selection:babi.expression,ttype:"
+msgid "Boolean"
+msgstr "Booleà"
+
+msgctxt "selection:babi.expression,ttype:"
+msgid "Char"
+msgstr "Caràcter"
+
+msgctxt "selection:babi.expression,ttype:"
+msgid "Float"
+msgstr "Coma flotant"
+
+msgctxt "selection:babi.expression,ttype:"
+msgid "Integer"
+msgstr "Ener"
+
+msgctxt "selection:babi.expression,ttype:"
+msgid "Many To One"
+msgstr "Molts a un"
+
+msgctxt "selection:babi.expression,ttype:"
+msgid "Numeric"
+msgstr "Numèric"
+
+msgctxt "selection:babi.internal.measure,aggregate:"
+msgid "Average"
+msgstr "Mitjana"
+
+msgctxt "selection:babi.internal.measure,aggregate:"
+msgid "Count"
+msgstr "Comptador"
+
+msgctxt "selection:babi.internal.measure,aggregate:"
+msgid "Sum"
+msgstr "Suma"
+
+msgctxt "selection:babi.internal.measure,ttype:"
+msgid "Boolean"
+msgstr "Booleà"
+
+msgctxt "selection:babi.internal.measure,ttype:"
+msgid "Char"
+msgstr "Caràcter"
+
+msgctxt "selection:babi.internal.measure,ttype:"
+msgid "Float"
+msgstr "Coma flotant"
+
+msgctxt "selection:babi.internal.measure,ttype:"
+msgid "Integer"
+msgstr "Enter"
+
+msgctxt "selection:babi.internal.measure,ttype:"
+msgid "Many To One"
+msgstr "Molts a un"
+
+msgctxt "selection:babi.internal.measure,ttype:"
+msgid "Numeric"
+msgstr "Numèric"
+
+msgctxt "selection:babi.measure,aggregate:"
+msgid "Average"
+msgstr "Mitjana"
+
+msgctxt "selection:babi.measure,aggregate:"
+msgid "Count"
+msgstr "Comptador"
+
+msgctxt "selection:babi.measure,aggregate:"
+msgid "Sum"
+msgstr "Suma"
+
+msgctxt "selection:babi.open_chart.start,graph_type:"
+msgid "Horizontal Bars"
+msgstr "Barres horitzontals"
+
+msgctxt "selection:babi.open_chart.start,graph_type:"
+msgid "Line"
+msgstr "Línia"
+
+msgctxt "selection:babi.open_chart.start,graph_type:"
+msgid "Pie"
+msgstr "Formatge"
+
+msgctxt "selection:babi.open_chart.start,graph_type:"
+msgid "Vertical Bars"
+msgstr "Barres verticals"
+
+msgctxt "selection:babi.open_chart.start,interpolation:"
+msgid "Constant Center"
+msgstr "Constant pel centre"
+
+msgctxt "selection:babi.open_chart.start,interpolation:"
+msgid "Constant Left"
+msgstr "Constant per l'esquerra"
+
+msgctxt "selection:babi.open_chart.start,interpolation:"
+msgid "Constant Right"
+msgstr "Constant per la dreta"
+
+msgctxt "selection:babi.open_chart.start,interpolation:"
+msgid "Linear"
+msgstr "De línies"
+
+msgctxt "selection:babi.order,order:"
+msgid "Ascending"
+msgstr "Ascendent"
+
+msgctxt "selection:babi.order,order:"
+msgid "Descending"
+msgstr "Descendent"
+
+msgctxt "view:babi.dimension.column:"
+msgid "Column Dimension"
+msgstr "Dimensió en columnes"
+
+msgctxt "view:babi.dimension:"
+msgid "Dimension"
+msgstr "Dimensió"
+
+msgctxt "view:babi.expression:"
+msgid "Expression"
+msgstr "Expressió"
+
+msgctxt "view:babi.filter:"
+msgid "Filter"
+msgstr "Filtre"
+
+msgctxt "view:babi.internal.measure:"
+msgid "Internal Measure"
+msgstr "Mesura Interna"
+
+msgctxt "view:babi.measure:"
+msgid "Measure"
+msgstr "Mesura"
+
+msgctxt "view:babi.open_chart.start:"
+msgid "Report"
+msgstr "Informe"
+
+msgctxt "view:babi.order:"
+msgid "Order"
+msgstr "Ordre"
+
+msgctxt "view:babi.report:"
+msgid "Calculate"
+msgstr "Calcula"
+
+msgctxt "view:babi.report:"
+msgid "Create Menus"
+msgstr "Crea menús"
+
+msgctxt "view:babi.report:"
+msgid "Extra Information"
+msgstr "Informació extra"
+
+msgctxt "view:babi.report:"
+msgid "General"
+msgstr "General"
+
+msgctxt "view:babi.report:"
+msgid "Remove Menus"
+msgstr "Elimina menús"
+
+msgctxt "view:babi.report:"
+msgid "Report"
+msgstr "Informe"
+
+msgctxt "wizard_button:babi.open_chart,start,end:"
+msgid "Cancel"
+msgstr "Cancel·la"
+
+msgctxt "wizard_button:babi.open_chart,start,open_:"
+msgid "Open"
+msgstr "Obre"

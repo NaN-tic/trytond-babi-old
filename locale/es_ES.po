@@ -1,0 +1,981 @@
+# 
+msgid ""
+msgstr "Content-Type: text/plain; charset=utf-8\n"
+
+msgctxt "error:babi.dimension:"
+msgid "Dimension name must be unique per report."
+msgstr "Los nombres de las dimensiones deben ser únicos por informe."
+
+msgctxt "error:babi.measure:"
+msgid "Measure name must be unique per report."
+msgstr "El nombre de la medida debe ser única por informe."
+
+msgctxt "error:babi.open_chart:"
+msgid "Only one measure can be used in pie charts."
+msgstr "Sólo se puede utilizar una medida en los gráficos de quesos."
+
+msgctxt "error:babi.order:"
+msgid "Dimension must be unique per report."
+msgstr "Las dimensiones deben ser únicas por informe."
+
+msgctxt "error:babi.order:"
+msgid "Measure must be unique per report."
+msgstr "La medida debe ser única por informe."
+
+msgctxt "error:babi.order:"
+msgid "Only dimension or measure can be set."
+msgstr "Sólo se puede establecer una dimensión o medida."
+
+msgctxt "error:babi.order:"
+msgid "Order entries are created automatically"
+msgstr "Las entradas de orden se crean automáticamente"
+
+msgctxt "error:babi.order:"
+msgid "Order entries are deleted automatically"
+msgstr "Las entradas de orden se borran automáticamente"
+
+msgctxt "error:babi.report:"
+msgid "Report \"%s\" has no dimensions. At least one is needed."
+msgstr "El informe \"%s\" no tiene ninguna dimensión. Se requiere almenos una."
+
+msgctxt "field:babi.configuration,create_date:"
+msgid "Create Date"
+msgstr "Fecha de creación"
+
+msgctxt "field:babi.configuration,create_uid:"
+msgid "Create User"
+msgstr "Usuario de creación"
+
+msgctxt "field:babi.configuration,default_timeout:"
+msgid "Timeout (s)"
+msgstr "Tiempo de espera (s)"
+
+msgctxt "field:babi.configuration,id:"
+msgid "ID"
+msgstr "Identificador"
+
+msgctxt "field:babi.configuration,rec_name:"
+msgid "Name"
+msgstr "Nombre"
+
+msgctxt "field:babi.configuration,write_date:"
+msgid "Write Date"
+msgstr "Fecha modificación"
+
+msgctxt "field:babi.configuration,write_uid:"
+msgid "Write User"
+msgstr "Usuario modificación"
+
+msgctxt "field:babi.dimension,create_date:"
+msgid "Create Date"
+msgstr "Fecha de creación"
+
+msgctxt "field:babi.dimension,create_uid:"
+msgid "Create User"
+msgstr "Usuario de creación"
+
+msgctxt "field:babi.dimension,expression:"
+msgid "Expression"
+msgstr "Expressión"
+
+msgctxt "field:babi.dimension,group_by:"
+msgid "Group By This Dimension"
+msgstr "Agrupar por esta dimensión"
+
+msgctxt "field:babi.dimension,id:"
+msgid "ID"
+msgstr "Identificador"
+
+msgctxt "field:babi.dimension,internal_name:"
+msgid "Internal Name"
+msgstr "Nombre interno"
+
+msgctxt "field:babi.dimension,name:"
+msgid "Name"
+msgstr "Nombre"
+
+msgctxt "field:babi.dimension,rec_name:"
+msgid "Name"
+msgstr "Nombre"
+
+msgctxt "field:babi.dimension,report:"
+msgid "Report"
+msgstr "Informe"
+
+msgctxt "field:babi.dimension,sequence:"
+msgid "Sequence"
+msgstr "Secuencia"
+
+msgctxt "field:babi.dimension,write_date:"
+msgid "Write Date"
+msgstr "Fecha modificación"
+
+msgctxt "field:babi.dimension,write_uid:"
+msgid "Write User"
+msgstr "Usuario modificación"
+
+msgctxt "field:babi.dimension.column,create_date:"
+msgid "Create Date"
+msgstr "Fecha de creación"
+
+msgctxt "field:babi.dimension.column,create_uid:"
+msgid "Create User"
+msgstr "Usuario de creación"
+
+msgctxt "field:babi.dimension.column,expression:"
+msgid "Expression"
+msgstr "Expressión"
+
+msgctxt "field:babi.dimension.column,group_by:"
+msgid "Group By This Dimension"
+msgstr "Agrupar por esta dimensión"
+
+msgctxt "field:babi.dimension.column,id:"
+msgid "ID"
+msgstr "Identificador"
+
+msgctxt "field:babi.dimension.column,internal_name:"
+msgid "Internal Name"
+msgstr "Nombre interno"
+
+msgctxt "field:babi.dimension.column,name:"
+msgid "Name"
+msgstr "Nombre"
+
+msgctxt "field:babi.dimension.column,rec_name:"
+msgid "Name"
+msgstr "Nombre"
+
+msgctxt "field:babi.dimension.column,report:"
+msgid "Report"
+msgstr "Informe"
+
+msgctxt "field:babi.dimension.column,sequence:"
+msgid "Sequence"
+msgstr "Secuencia"
+
+msgctxt "field:babi.dimension.column,write_date:"
+msgid "Write Date"
+msgstr "Fecha modificación"
+
+msgctxt "field:babi.dimension.column,write_uid:"
+msgid "Write User"
+msgstr "Usuario modificación"
+
+msgctxt "field:babi.expression,create_date:"
+msgid "Create Date"
+msgstr "Fecha de creación"
+
+msgctxt "field:babi.expression,create_uid:"
+msgid "Create User"
+msgstr "Usuario de creación"
+
+msgctxt "field:babi.expression,expression:"
+msgid "Expression"
+msgstr "Expressión"
+
+msgctxt "field:babi.expression,fields:"
+msgid "Model Fields"
+msgstr "Campos del modelo"
+
+msgctxt "field:babi.expression,id:"
+msgid "ID"
+msgstr "Identificador"
+
+msgctxt "field:babi.expression,model:"
+msgid "Model"
+msgstr "Modelo"
+
+msgctxt "field:babi.expression,name:"
+msgid "Name"
+msgstr "Nombre"
+
+msgctxt "field:babi.expression,rec_name:"
+msgid "Name"
+msgstr "Nombre"
+
+msgctxt "field:babi.expression,related_model:"
+msgid "Related Model"
+msgstr "Modelo relacionado"
+
+msgctxt "field:babi.expression,ttype:"
+msgid "Field Type"
+msgstr "Tipo de campo"
+
+msgctxt "field:babi.expression,write_date:"
+msgid "Write Date"
+msgstr "Fecha modificación"
+
+msgctxt "field:babi.expression,write_uid:"
+msgid "Write User"
+msgstr "Usuario modificación"
+
+msgctxt "field:babi.filter,create_date:"
+msgid "Create Date"
+msgstr "Fecha de creación"
+
+msgctxt "field:babi.filter,create_uid:"
+msgid "Create User"
+msgstr "Usuario de creación"
+
+msgctxt "field:babi.filter,domain:"
+msgid "Domain"
+msgstr "Dominio"
+
+msgctxt "field:babi.filter,fields:"
+msgid "Model Fields"
+msgstr "Campos del modelo"
+
+msgctxt "field:babi.filter,id:"
+msgid "ID"
+msgstr "Identificador"
+
+msgctxt "field:babi.filter,model:"
+msgid "Model"
+msgstr "Modelo"
+
+msgctxt "field:babi.filter,model_name:"
+msgid "Model Name"
+msgstr "Nombre modelo"
+
+msgctxt "field:babi.filter,name:"
+msgid "Name"
+msgstr "Nombre"
+
+msgctxt "field:babi.filter,python_expression:"
+msgid "Python Expression"
+msgstr "Expresión Python"
+
+msgctxt "field:babi.filter,rec_name:"
+msgid "Name"
+msgstr "Nombre"
+
+msgctxt "field:babi.filter,view_search:"
+msgid "Search"
+msgstr "Buscar"
+
+msgctxt "field:babi.filter,write_date:"
+msgid "Write Date"
+msgstr "Fecha modificación"
+
+msgctxt "field:babi.filter,write_uid:"
+msgid "Write User"
+msgstr "Usuario modificación"
+
+msgctxt "field:babi.internal.measure,aggregate:"
+msgid "Aggregate"
+msgstr "Agregado"
+
+msgctxt "field:babi.internal.measure,create_date:"
+msgid "Create Date"
+msgstr "Fecha de creación"
+
+msgctxt "field:babi.internal.measure,create_uid:"
+msgid "Create User"
+msgstr "Usuario de creación"
+
+msgctxt "field:babi.internal.measure,expression:"
+msgid "Expression"
+msgstr "Expressión"
+
+msgctxt "field:babi.internal.measure,id:"
+msgid "ID"
+msgstr "Identificador"
+
+msgctxt "field:babi.internal.measure,internal_name:"
+msgid "Internal Name"
+msgstr "Nombre interno"
+
+msgctxt "field:babi.internal.measure,measure:"
+msgid "Measure"
+msgstr "Medida"
+
+msgctxt "field:babi.internal.measure,name:"
+msgid "Name"
+msgstr "Nombre"
+
+msgctxt "field:babi.internal.measure,progressbar:"
+msgid "Progress Bar"
+msgstr "Barra de progreso"
+
+msgctxt "field:babi.internal.measure,rec_name:"
+msgid "Name"
+msgstr "Nombre"
+
+msgctxt "field:babi.internal.measure,related_model:"
+msgid "Related Model"
+msgstr "Modelo relacionado"
+
+msgctxt "field:babi.internal.measure,report:"
+msgid "Report"
+msgstr "Informe"
+
+msgctxt "field:babi.internal.measure,sequence:"
+msgid "Sequence"
+msgstr "Secuencia"
+
+msgctxt "field:babi.internal.measure,ttype:"
+msgid "Field Type"
+msgstr "Tipo de campo"
+
+msgctxt "field:babi.internal.measure,write_date:"
+msgid "Write Date"
+msgstr "Fecha modificación"
+
+msgctxt "field:babi.internal.measure,write_uid:"
+msgid "Write User"
+msgstr "Usuario modificación"
+
+msgctxt "field:babi.measure,aggregate:"
+msgid "Aggregate"
+msgstr "Agregado"
+
+msgctxt "field:babi.measure,create_date:"
+msgid "Create Date"
+msgstr "Fecha de creación"
+
+msgctxt "field:babi.measure,create_uid:"
+msgid "Create User"
+msgstr "Usuario de creación"
+
+msgctxt "field:babi.measure,expression:"
+msgid "Expression"
+msgstr "Expressión"
+
+msgctxt "field:babi.measure,id:"
+msgid "ID"
+msgstr "Identificador"
+
+msgctxt "field:babi.measure,internal_measures:"
+msgid "Internal Measures"
+msgstr "Medidas internas"
+
+msgctxt "field:babi.measure,internal_name:"
+msgid "Internal Name"
+msgstr "Nombre interno"
+
+msgctxt "field:babi.measure,name:"
+msgid "Name"
+msgstr "Nombre"
+
+msgctxt "field:babi.measure,progressbar:"
+msgid "Progress Bar"
+msgstr "Barra de progreso"
+
+msgctxt "field:babi.measure,rec_name:"
+msgid "Name"
+msgstr "Nombre"
+
+msgctxt "field:babi.measure,report:"
+msgid "Report"
+msgstr "Informe"
+
+msgctxt "field:babi.measure,sequence:"
+msgid "Sequence"
+msgstr "Secuencia"
+
+msgctxt "field:babi.measure,write_date:"
+msgid "Write Date"
+msgstr "Fecha modificación"
+
+msgctxt "field:babi.measure,write_uid:"
+msgid "Write User"
+msgstr "Usuario modificación"
+
+msgctxt "field:babi.open_chart.start,dimension:"
+msgid "Dimension"
+msgstr "Dimensión"
+
+msgctxt "field:babi.open_chart.start,graph_type:"
+msgid "Graph"
+msgstr "Gráfico"
+
+msgctxt "field:babi.open_chart.start,id:"
+msgid "ID"
+msgstr "Identificador"
+
+msgctxt "field:babi.open_chart.start,interpolation:"
+msgid "Interpolation"
+msgstr "Interpolación"
+
+msgctxt "field:babi.open_chart.start,measures:"
+msgid "Measures"
+msgstr "Medidas"
+
+msgctxt "field:babi.open_chart.start,show_legend:"
+msgid "Show Legend"
+msgstr "Mostrar leyenda"
+
+msgctxt "field:babi.open_chart.start,valid_dimensions:"
+msgid "Valid Dimensions"
+msgstr "Dimensiones válidas"
+
+msgctxt "field:babi.order,create_date:"
+msgid "Create Date"
+msgstr "Fecha de creación"
+
+msgctxt "field:babi.order,create_uid:"
+msgid "Create User"
+msgstr "Usuario de creación"
+
+msgctxt "field:babi.order,dimension:"
+msgid "Dimension"
+msgstr "Dimensión"
+
+msgctxt "field:babi.order,id:"
+msgid "ID"
+msgstr "Identificador"
+
+msgctxt "field:babi.order,measure:"
+msgid "Measure"
+msgstr "Medida"
+
+msgctxt "field:babi.order,order:"
+msgid "Order"
+msgstr "Orden"
+
+msgctxt "field:babi.order,rec_name:"
+msgid "Name"
+msgstr "Nombre"
+
+msgctxt "field:babi.order,report:"
+msgid "Report"
+msgstr "Informe"
+
+msgctxt "field:babi.order,sequence:"
+msgid "Sequence"
+msgstr "Secuencia"
+
+msgctxt "field:babi.order,write_date:"
+msgid "Write Date"
+msgstr "Fecha modificación"
+
+msgctxt "field:babi.order,write_uid:"
+msgid "Write User"
+msgstr "Usuario modificación"
+
+msgctxt "field:babi.report,actions:"
+msgid "Actions"
+msgstr "Acciones"
+
+msgctxt "field:babi.report,babi_model:"
+msgid "BI Model"
+msgstr "Modelo BI"
+
+msgctxt "field:babi.report,columns:"
+msgid "Dimensions on Columns"
+msgstr "Dimensiones en columnas"
+
+msgctxt "field:babi.report,create_date:"
+msgid "Create Date"
+msgstr "Fecha de creación"
+
+msgctxt "field:babi.report,create_uid:"
+msgid "Create User"
+msgstr "Usuario de creación"
+
+msgctxt "field:babi.report,dimensions:"
+msgid "Dimensions"
+msgstr "Dimensiones"
+
+msgctxt "field:babi.report,filter:"
+msgid "Filter"
+msgstr "Filtro"
+
+msgctxt "field:babi.report,groups:"
+msgid "Groups"
+msgstr "Grupos"
+
+msgctxt "field:babi.report,id:"
+msgid "ID"
+msgstr "Identificador"
+
+msgctxt "field:babi.report,internal_measures:"
+msgid "Internal Measures"
+msgstr "Medidas internas"
+
+msgctxt "field:babi.report,internal_name:"
+msgid "Internal Name"
+msgstr "Nombre interno"
+
+msgctxt "field:babi.report,keywords:"
+msgid "Keywords"
+msgstr "Acciones de teclado"
+
+msgctxt "field:babi.report,last_update:"
+msgid "Last Update"
+msgstr "Última actualización"
+
+msgctxt "field:babi.report,last_update_seconds:"
+msgid "Last Update Duration (s)"
+msgstr "Duración de la última actualización (s)"
+
+msgctxt "field:babi.report,measures:"
+msgid "Measures"
+msgstr "Medidas"
+
+msgctxt "field:babi.report,menus:"
+msgid "Menus"
+msgstr "Menús"
+
+msgctxt "field:babi.report,model:"
+msgid "Model"
+msgstr "Modelo"
+
+msgctxt "field:babi.report,model_name:"
+msgid "Model Name"
+msgstr "Nombre modelo"
+
+msgctxt "field:babi.report,name:"
+msgid "Name"
+msgstr "Nombre"
+
+msgctxt "field:babi.report,order:"
+msgid "Order"
+msgstr "Orden"
+
+msgctxt "field:babi.report,parent_menu:"
+msgid "Parent Menu"
+msgstr "Menú padre"
+
+msgctxt "field:babi.report,rec_name:"
+msgid "Name"
+msgstr "Nombre"
+
+msgctxt "field:babi.report,timeout:"
+msgid "Timeout (s)"
+msgstr "Tiempo de espera (s)"
+
+msgctxt "field:babi.report,write_date:"
+msgid "Write Date"
+msgstr "Fecha modificación"
+
+msgctxt "field:babi.report,write_uid:"
+msgid "Write User"
+msgstr "Usuario modificación"
+
+msgctxt "field:babi.report-res.group,create_date:"
+msgid "Create Date"
+msgstr "Fecha de creación"
+
+msgctxt "field:babi.report-res.group,create_uid:"
+msgid "Create User"
+msgstr "Usuario de creación"
+
+msgctxt "field:babi.report-res.group,group:"
+msgid "Group"
+msgstr "Grupo"
+
+msgctxt "field:babi.report-res.group,id:"
+msgid "ID"
+msgstr "Identificador"
+
+msgctxt "field:babi.report-res.group,rec_name:"
+msgid "Name"
+msgstr "Nombre"
+
+msgctxt "field:babi.report-res.group,report:"
+msgid "Report"
+msgstr "Informe"
+
+msgctxt "field:babi.report-res.group,write_date:"
+msgid "Write Date"
+msgstr "Fecha modificación"
+
+msgctxt "field:babi.report-res.group,write_uid:"
+msgid "Write User"
+msgstr "Usuario modificación"
+
+msgctxt "field:ir.action.act_window,babi_report:"
+msgid "BABI Report"
+msgstr "Informe BABI"
+
+msgctxt "field:ir.action.keyword,babi_report:"
+msgid "BABI Report"
+msgstr "Informe BABI"
+
+msgctxt "field:ir.model,babi_enabled:"
+msgid "BI Enabled"
+msgstr "Habilitado para BI"
+
+msgctxt "field:ir.ui.menu,babi_report:"
+msgid "BABI Report"
+msgstr "Informe BABI"
+
+msgctxt "help:babi.expression,expression:"
+msgid ""
+"Python expression that will return the value to be used.\n"
+"The expression can include the following variables:\n"
+"\n"
+"- \"o\": A reference to the current record being processed. For  example: \"o.partner.name\"\n"
+"\n"
+"And the following functions apply to dates and timestamps:\n"
+"\n"
+"- \"y()\": Returns the year (as a string)\n"
+"- \"m()\": Returns the month (as a string)\n"
+"- \"w()\": Returns the week (as a string)\n"
+"- \"d()\": Returns the day (as a string)\n"
+"- \"ym()\": Returns the year-month (as a string)\n"
+"- \"ymd()\": Returns the year-mont-day (as a string).\n"
+msgstr ""
+"Expresión Python que devolverá el valor a utilizar.\n"
+"La expresión puede incluir las siguientes variables:\n"
+"Python expression that will return the value to be used.\n"
+"\n"
+"- \"o\": Una referencia al registro al que se tiene acceso actualmente. Por ejemplo: \"o.party.name\"\n"
+"\n"
+"Y las siguientes funciones a aplicar a fechas y marcas de tiempo:\n"
+"\n"
+"- \"y()\": Devuelve el año (como texto)\n"
+"- \"w()\": Devuelve la semana (como texto)\n"
+"- \"d()\": Devuelve el día (como texto)\n"
+"- \"ym()\": Devuelve el año-mes (como texto)\n"
+"- \"ymd()\": Devuelve el año-mes-día (como texto)"
+
+msgctxt "help:babi.filter,python_expression:"
+msgid ""
+"The python expression introduced will be evaluated. If the result is True "
+"the record will be included, it will be discarded otherwise."
+msgstr ""
+"La expresión Python introducida será evaluada. Si e resultado es cierto el "
+"registro será incluido, sinó será descartado."
+
+msgctxt "help:babi.measure,progressbar:"
+msgid "Display a progress bar instead of a number."
+msgstr "Mostrar una barra de progreso en lugar de un número."
+
+msgctxt "help:babi.report,babi_model:"
+msgid "Link to new model instance"
+msgstr "Enlace con la instancia del nuevo modelo"
+
+msgctxt "help:babi.report,groups:"
+msgid "User groups that will be able to see use this report."
+msgstr "Grupos de usuarios que podrán ver este informe."
+
+msgctxt "help:babi.report,last_update:"
+msgid "Date & time of the last update."
+msgstr "Fecha y hora de la última actualización."
+
+msgctxt "help:babi.report,last_update_seconds:"
+msgid "Number of seconds the last update took."
+msgstr "Número de segundos que tardó la última actualización."
+
+msgctxt "help:babi.report,model:"
+msgid "Model for data extraction"
+msgstr "Modelo para la extracción de datos"
+
+msgctxt "help:babi.report,name:"
+msgid "New virtual model name."
+msgstr "Nombre del nuevo modelo virtual."
+
+msgctxt "help:babi.report,timeout:"
+msgid ""
+"If report calculation should take more than the specified timeout (in "
+"seconds) the process will be stopped automatically."
+msgstr ""
+"Si el tiempo de cálculo del informe tiene que durar más del límite (en "
+"segundos) especificado, el proceso se parará automáticamente."
+
+msgctxt "help:ir.model,babi_enabled:"
+msgid ""
+"Check if you want this model to be available in Business Intelligence "
+"reports."
+msgstr ""
+"Marquelo si quiere que el modelo esté disponible para informes Business "
+"Intelligence"
+
+msgctxt "model:babi.configuration,name:"
+msgid "Business Intelligence Configuration"
+msgstr "Configuración Business Intelligence"
+
+msgctxt "model:babi.dimension,name:"
+msgid "Dimension"
+msgstr "Dimensión"
+
+msgctxt "model:babi.dimension.column,name:"
+msgid "Column Dimension"
+msgstr "Dimensión de columna"
+
+msgctxt "model:babi.expression,name:"
+msgid "Expression"
+msgstr "Expressión"
+
+msgctxt "model:babi.filter,name:"
+msgid "Filter"
+msgstr "Filtro"
+
+msgctxt "model:babi.internal.measure,name:"
+msgid "Internal Measure"
+msgstr "Medida interna"
+
+msgctxt "model:babi.measure,name:"
+msgid "Measure"
+msgstr "Medida"
+
+msgctxt "model:babi.open_chart.start,name:"
+msgid "Open Chart Start"
+msgstr "Abrir gráfico"
+
+msgctxt "model:babi.order,name:"
+msgid "Order"
+msgstr "Orden"
+
+msgctxt "model:babi.report,name:"
+msgid "Report"
+msgstr "Informe"
+
+msgctxt "model:babi.report-res.group,name:"
+msgid "Report - Group"
+msgstr "Informe - Grupo"
+
+msgctxt "model:ir.action,name:act_babi_configuration_form"
+msgid "Business Intelligence Configuration"
+msgstr "Configuración Business Intelligence"
+
+msgctxt "model:ir.action,name:act_babi_dimension"
+msgid "Dimension"
+msgstr "Dimensión"
+
+msgctxt "model:ir.action,name:act_babi_dimension_column"
+msgid "Column Dimension"
+msgstr "Dimensión de columna"
+
+msgctxt "model:ir.action,name:act_babi_expression"
+msgid "Expression"
+msgstr "Expressión"
+
+msgctxt "model:ir.action,name:act_babi_filter"
+msgid "Filter"
+msgstr "Filtro"
+
+msgctxt "model:ir.action,name:act_babi_internal_measure"
+msgid "Internal Measure"
+msgstr "Medida interna"
+
+msgctxt "model:ir.action,name:act_babi_measure"
+msgid "Measure"
+msgstr "Medida"
+
+msgctxt "model:ir.action,name:act_babi_order"
+msgid "Order"
+msgstr "Orden"
+
+msgctxt "model:ir.action,name:act_babi_report"
+msgid "Report"
+msgstr "Informe"
+
+msgctxt "model:ir.action,name:open_chart_wizard"
+msgid "Open Chart"
+msgstr "Abrir gráfico"
+
+msgctxt "model:ir.ui.menu,name:menu_babi"
+msgid "Babi"
+msgstr "Babi"
+
+msgctxt "model:ir.ui.menu,name:menu_babi_configuration"
+msgid "Business Intelligence Configuration"
+msgstr "Configuración Business Intelligence"
+
+msgctxt "model:ir.ui.menu,name:menu_babi_expression"
+msgid "Expressió"
+msgstr "Expressión"
+
+msgctxt "model:ir.ui.menu,name:menu_babi_filter"
+msgid "Filtre"
+msgstr "Filtro"
+
+msgctxt "model:ir.ui.menu,name:menu_babi_report"
+msgid "Informe"
+msgstr "Informe"
+
+msgctxt "model:ir.ui.menu,name:menu_configuration"
+msgid "Configuration"
+msgstr "Configuración"
+
+msgctxt "model:res.group,name:group_babi"
+msgid "Babi"
+msgstr "Babi"
+
+msgctxt "model:res.group,name:group_babi_admin"
+msgid "Babi Administration"
+msgstr "Babi Administración"
+
+msgctxt "selection:babi.expression,ttype:"
+msgid "Boolean"
+msgstr "Booleano"
+
+msgctxt "selection:babi.expression,ttype:"
+msgid "Char"
+msgstr "Carácter"
+
+msgctxt "selection:babi.expression,ttype:"
+msgid "Float"
+msgstr "Coma flotante"
+
+msgctxt "selection:babi.expression,ttype:"
+msgid "Integer"
+msgstr "Entero"
+
+msgctxt "selection:babi.expression,ttype:"
+msgid "Many To One"
+msgstr "Muchos a uno"
+
+msgctxt "selection:babi.expression,ttype:"
+msgid "Numeric"
+msgstr "Numérico"
+
+msgctxt "selection:babi.internal.measure,aggregate:"
+msgid "Average"
+msgstr "Promedio"
+
+msgctxt "selection:babi.internal.measure,aggregate:"
+msgid "Count"
+msgstr "Contador"
+
+msgctxt "selection:babi.internal.measure,aggregate:"
+msgid "Sum"
+msgstr "Suma"
+
+msgctxt "selection:babi.internal.measure,ttype:"
+msgid "Boolean"
+msgstr "Booleano"
+
+msgctxt "selection:babi.internal.measure,ttype:"
+msgid "Char"
+msgstr "Carácter"
+
+msgctxt "selection:babi.internal.measure,ttype:"
+msgid "Float"
+msgstr "Coma flotante"
+
+msgctxt "selection:babi.internal.measure,ttype:"
+msgid "Integer"
+msgstr "Entero"
+
+msgctxt "selection:babi.internal.measure,ttype:"
+msgid "Many To One"
+msgstr "Muchos a uno"
+
+msgctxt "selection:babi.internal.measure,ttype:"
+msgid "Numeric"
+msgstr "Numérico"
+
+msgctxt "selection:babi.measure,aggregate:"
+msgid "Average"
+msgstr "Promedio"
+
+msgctxt "selection:babi.measure,aggregate:"
+msgid "Count"
+msgstr "Contador"
+
+msgctxt "selection:babi.measure,aggregate:"
+msgid "Sum"
+msgstr "Suma"
+
+msgctxt "selection:babi.open_chart.start,graph_type:"
+msgid "Horizontal Bars"
+msgstr "Barras horizontales"
+
+msgctxt "selection:babi.open_chart.start,graph_type:"
+msgid "Line"
+msgstr "Línea"
+
+msgctxt "selection:babi.open_chart.start,graph_type:"
+msgid "Pie"
+msgstr "Circular"
+
+msgctxt "selection:babi.open_chart.start,graph_type:"
+msgid "Vertical Bars"
+msgstr "Barras verticales"
+
+msgctxt "selection:babi.open_chart.start,interpolation:"
+msgid "Constant Center"
+msgstr "Constante en el centro"
+
+msgctxt "selection:babi.open_chart.start,interpolation:"
+msgid "Constant Left"
+msgstr "Constante a la izquierda"
+
+msgctxt "selection:babi.open_chart.start,interpolation:"
+msgid "Constant Right"
+msgstr "Constante a la derecha"
+
+msgctxt "selection:babi.open_chart.start,interpolation:"
+msgid "Linear"
+msgstr "Lineal"
+
+msgctxt "selection:babi.order,order:"
+msgid "Ascending"
+msgstr "Ascendiente"
+
+msgctxt "selection:babi.order,order:"
+msgid "Descending"
+msgstr "Descendiente"
+
+msgctxt "view:babi.configuration:"
+msgid "Business Intelligence Configuration"
+msgstr "Configuración Business Intelligence"
+
+msgctxt "view:babi.dimension.column:"
+msgid "Column Dimension"
+msgstr "Dimensión de columna"
+
+msgctxt "view:babi.dimension:"
+msgid "Dimension"
+msgstr "Dimensión"
+
+msgctxt "view:babi.expression:"
+msgid "Expression"
+msgstr "Expressión"
+
+msgctxt "view:babi.filter:"
+msgid "Filter"
+msgstr "Filtro"
+
+msgctxt "view:babi.internal.measure:"
+msgid "Internal Measure"
+msgstr "Medida interna"
+
+msgctxt "view:babi.measure:"
+msgid "Measure"
+msgstr "Medida"
+
+msgctxt "view:babi.open_chart.start:"
+msgid "Report"
+msgstr "Informe"
+
+msgctxt "view:babi.order:"
+msgid "Order"
+msgstr "Orden"
+
+msgctxt "view:babi.report:"
+msgid "Calculate"
+msgstr "Calcular"
+
+msgctxt "view:babi.report:"
+msgid "Create Menus"
+msgstr "Crear menús"
+
+msgctxt "view:babi.report:"
+msgid "Extra Information"
+msgstr "Información extra"
+
+msgctxt "view:babi.report:"
+msgid "General"
+msgstr "General"
+
+msgctxt "view:babi.report:"
+msgid "Remove Menus"
+msgstr "Borrar menús"
+
+msgctxt "view:babi.report:"
+msgid "Report"
+msgstr "Informe"
+
+msgctxt "wizard_button:babi.open_chart,start,end:"
+msgid "Cancel"
+msgstr "Cancelar"
+
+msgctxt "wizard_button:babi.open_chart,start,open_:"
+msgid "Open"
+msgstr "Abrir"
