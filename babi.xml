@@ -380,13 +380,20 @@
 
         <!-- Menus -->
         <menuitem id="menu_babi" name="Business Intelligence" sequence="1" />
-        <menuitem id="menu_babi_config" name="Configuration"
-            parent="menu_babi" sequence="10"/>
+        <menuitem id="menu_configuration" name="Configuration"
+            parent="menu_babi" sequence="10" icon="tryton-preferences"/>
+
+        <record model="ir.ui.menu-res.group"
+            id="menu_configuration_group_babi_admin">
+            <field name="menu" ref="menu_configuration"/>
+            <field name="group" ref="group_babi_admin"/>
+        </record>
+
         <menuitem action="act_babi_expression" id="menu_babi_expression"
-            parent="menu_babi_config" sequence="10" name="Expression"/>
+            parent="menu_configuration" sequence="10" name="Expressions"/>
         <menuitem action="act_babi_filter" id="menu_babi_filter"
-            parent="menu_babi_config" sequence="20" name="Filter"/>
+            parent="menu_configuration" sequence="20" name="Filters"/>
         <menuitem action="act_babi_report" id="menu_babi_report"
-            parent="menu_babi" sequence="20" name="Report"/>
+            parent="menu_babi" sequence="20" name="Reports"/>
     </data>
 </tryton>

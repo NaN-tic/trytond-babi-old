@@ -1,0 +1,25 @@
+<tryton>
+    <data>
+        <record model="ir.ui.view" id="babi_configuration_view_form">
+            <field name="model">babi.configuration</field>
+            <field name="type">form</field>
+            <field name="name">configuration_form</field>
+        </record>
+        <record model="ir.action.act_window" id="act_babi_configuration_form">
+            <field name="name">Business Intelligence Configuration</field>
+            <field name="res_model">babi.configuration</field>
+        </record>
+        <record model="ir.action.act_window.view"
+            id="act_babi_configuration_view1">
+            <field name="sequence" eval="1"/>
+            <field name="view" ref="babi_configuration_view_form"/>
+            <field name="act_window" ref="act_babi_configuration_form"/>
+        </record>
+        <menuitem string="Business Intelligence"
+            parent="menu_configuration"
+            action="act_babi_configuration_form"
+            id="menu_babi_configuration"
+            icon="tryton-list"
+            sequence="0"/>
+    </data>
+</tryton>

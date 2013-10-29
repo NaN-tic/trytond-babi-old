@@ -36,6 +36,8 @@ contains the full copyright notices and license terms. -->
             <field name="internal_name"/>
             <label name="babi_model"/>
             <field name="babi_model"/>
+            <label name="timeout"/>
+            <field name="timeout"/>
             <group id="internal" colspan="4" col="2" yexpand="1" yfill="1">
                 <field name="actions"/>
                 <field name="keywords"/>

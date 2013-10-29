@@ -55,6 +55,18 @@ def unaccent(text):
     return unicodedata.normalize('NFKD', text).encode('ASCII', 'ignore')
 
 
+class TimeoutChecker:
+    def __init__(self, timeout, callback):
+        self._timeout = timeout
+        self._callback = callback
+        self._start = datetime.now()
+
+    def check(self):
+        elapsed = (datetime.now() - self._start).seconds
+        if elapsed > self._timeout:
+            self._callback()
+
+
 class DimensionIterator:
     def __init__(self, values):
         """
@@ -308,19 +320,30 @@ class Report(ModelSQL, ModelView):
         help='Date & time of the last update.')
     last_update_seconds = fields.Float('Last Update Duration (s)',
         readonly=True, help='Number of seconds the last update took.')
+    timeout = fields.Integer('Timeout (s)', required=True, help='If report '
+        'calculation should take more than the specified timeout (in seconds) '
+        'the process will be stopped automatically.')
 
     @classmethod
     def __setup__(cls):
         super(Report, cls).__setup__()
         cls._error_messages.update({
                 'no_dimensions': ('Report "%s" has no dimensions. At least one '
-                    'is needed.')
+                    'is needed.'),
+                'timeout_exception': ('Report calculation exceeded timeout '
+                    'limit.')
                 })
         cls._buttons.update({
                 'calculate': {},
                 'create_menus': {},
                 'remove_menus': {},
                 })
+
+    @staticmethod
+    def default_timeout():
+        Config = Pool().get('babi.configuration')
+        config = Config(1)
+        return config.default_timeout
 
     def on_change_with_model_name(self, name=None):
         return self.model.model if self.model else None
@@ -713,6 +736,9 @@ class Report(ModelSQL, ModelView):
         for report in reports:
             report.single_update_data()
 
+    def timeout_exception(self):
+        self.raise_user_error('timeout_exception')
+
     def single_update_data(self):
         pool = Pool()
         Model = pool.get(self.model.model)
@@ -721,6 +747,8 @@ class Report(ModelSQL, ModelView):
         self.validate_model()
         BIModel = pool.get(self.babi_model.model)
         Menu = pool.get('ir.ui.menu')
+
+        checker = TimeoutChecker(self.timeout, self.timeout_exception)
 
         logger = logging.getLogger()
         logger.info('Updating Data of report: %s' % self.rec_name)
@@ -767,6 +795,7 @@ class Report(ModelSQL, ModelView):
         offset = 2000
         index = 0
         while index * offset < len(records):
+            checker.check()
             logger.info('Calculated %s,  %s records in %s seconds'
                 % (model, index * offset, datetime.today() - start))
 
@@ -792,7 +821,7 @@ class Report(ModelSQL, ModelView):
                     columns=columns)
             index += 1
 
-        self.update_measures()
+        self.update_measures(checker)
 
         logger.info('Calc all %s records in %s seconds'
             % (model, datetime.today() - start))
@@ -813,7 +842,7 @@ class Report(ModelSQL, ModelView):
         self.save()
         logger.info('End Update Data of report: %s' % self.rec_name)
 
-    def update_measures(self):
+    def update_measures(self, checker):
         logger = logging.getLogger(self.__name__)
 
         def query_select(table_name, measures, group):
@@ -913,6 +942,8 @@ class Report(ModelSQL, ModelView):
         current_group = None
 
         while group_by_iterator:
+            checker.check()
+
             #Select
             group = ['"%s"' % x for x in group_by_iterator]
             measures = ['%s("%s") as %s' % (
@@ -1256,13 +1287,17 @@ class Model(ModelSQL, ModelView):
     # TODO: Consider using something smarter than __post_setup__()
     # for the last model of the module
     @classmethod
-    def __post_setup__(cls):
+    def __post_setup__7777(cls):
         super(Model, cls).__post_setup__()
         Report = Pool().get('babi.report')
         cursor = Transaction().cursor
         TableHandler = backend.get('TableHandler')
         if TableHandler.table_exist(cursor, Report._table):
-            for report in Report.search([]):
+            # If new fields were added to babi.report and we're upgrading
+            # the module, search will probably fail with a
+            # psycopg2.ProgrammingError
+            reports = Report.search([])
+            for report in reports:
                 report.validate_model()
 
 
