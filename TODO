@@ -10,3 +10,4 @@
 - Consider adding PKIs
 - Consider triggering notifications
 - Optimize when no Function fields are used
+- Consider using PostgreSQL's tablefunc extension for pivoting
