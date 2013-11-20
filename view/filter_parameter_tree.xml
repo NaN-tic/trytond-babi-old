@@ -1,0 +1,6 @@
+<tree string="Filter Parameter" editable="bottom">
+	 <field name="filter"/>
+	 <field name="name"/>
+	 <field name="ttype"/>
+	 <field name="related_model"/>
+</tree>

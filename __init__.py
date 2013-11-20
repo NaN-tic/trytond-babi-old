@@ -10,8 +10,10 @@ def register():
     Pool.register(
         Configuration,
         Filter,
+        FilterParameter,
         Expression,
         Report,
+        ReportExecution,
         ReportGroup,
         Dimension,
         DimensionColumn,
@@ -23,7 +25,12 @@ def register():
         Keyword,
         Model,
         OpenChartStart,
+        OpenExecutionSelect,
+        UpdateDataWizardStart,
+        UpdateDataWizardUpdated,
         module='babi', type_='model')
     Pool.register(
         OpenChart,
+        OpenExecution,
+        UpdateDataWizard,
         module='babi', type_='wizard')

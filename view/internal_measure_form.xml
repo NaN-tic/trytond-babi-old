@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<!--The COPYRIGHT file at the top level of this repository             
+<!--The COPYRIGHT file at the top level of this repository
 contains the full copyright notices and license terms. -->
 <form string="Internal Measure">
 	<label name="aggregate"/>
@@ -16,8 +16,8 @@ contains the full copyright notices and license terms. -->
 	<field name="progressbar"/>
 	<label name="related_model"/>
 	<field name="related_model"/>
-	<label name="report"/>
-	<field name="report"/>
+	<label name="execution"/>
+	<field name="execution"/>
 	<label name="sequence"/>
 	<field name="sequence"/>
 	<label name="ttype"/>

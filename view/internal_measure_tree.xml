@@ -6,7 +6,7 @@
 	 <field name="name"/>
 	 <field name="progressbar"/>
 	 <field name="related_model"/>
-	 <field name="report"/>
+	 <field name="execution"/>
 	 <field name="sequence"/>
 	 <field name="ttype"/>
 </tree>

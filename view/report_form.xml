@@ -27,22 +27,18 @@ contains the full copyright notices and license terms. -->
                 <button name="remove_menus" string="Remove Menus"/>
             </group>
         </page>
+        <page id="executions" string="Executions">
+            <field name="executions" colspan="4" />
+        </page>
         <page id="extra" string="Extra Information">
-            <label name="last_update"/>
-            <field name="last_update"/>
-            <label name="last_update_seconds"/>
-            <field name="last_update_seconds"/>
             <label name="internal_name"/>
             <field name="internal_name"/>
-            <label name="babi_model"/>
-            <field name="babi_model"/>
             <label name="timeout"/>
             <field name="timeout"/>
             <group id="internal" colspan="4" col="2" yexpand="1" yfill="1">
                 <field name="actions"/>
                 <field name="keywords"/>
                 <field name="menus"/>
-                <field name="internal_measures"/>
             </group>
         </page>
     </notebook>
