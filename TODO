@@ -1,7 +1,3 @@
-- Create report.instance
-- Add last_update timestamp to model's name so it appears in the tab's title.
-- Abort report calculation after a configurable elapsed time
-- Execute report calculation in parallel threads
 - Use UNLOGGED tables
 - Add a scheduler (linked to a calendar)
 - Allow configuring colors in tree view
