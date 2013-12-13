@@ -1,0 +1,10 @@
+<tree string="Execution">
+	<field name="report"/>
+	<field name="date"/>
+	<field name="duration">
+        <suffix string="s"/>
+    </field>
+	<field name="state"/>
+	<field name="filtered"/>
+    <button name="open" string="Open" />
+</tree>

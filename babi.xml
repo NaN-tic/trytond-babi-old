@@ -192,6 +192,48 @@
             <field name="perm_create" eval="True"/>
             <field name="perm_delete" eval="True"/>
         </record>
+        <record model="ir.ui.view" id="babi_filter_parameter_form_view">
+            <field name="model">babi.filter.parameter</field>
+            <field name="type">form</field>
+            <field name="name">filter_parameter_form</field>
+        </record>
+        <record model="ir.ui.view" id="babi_filter_parameter_tree_view">
+            <field name="model">babi.filter.parameter</field>
+            <field name="type">tree</field>
+            <field name="name">filter_parameter_tree</field>
+        </record>
+        <record model="ir.action.act_window" id="act_babi_filter_parameter">
+            <field name="name">Filter Parameters</field>
+            <field name="res_model">babi.filter.parameter</field>
+            <field name="search_value"></field>
+        </record>
+        <record model="ir.action.act_window.view"
+                id="act_babi_filter_parameter_view1">
+            <field name="sequence" eval="10"/>
+            <field name="view" ref="babi_filter_parameter_tree_view"/>
+            <field name="act_window" ref="act_babi_filter_parameter"/>
+        </record>
+        <record model="ir.action.act_window.view"
+                id="act_babi_filter_parameter_view2">
+            <field name="sequence" eval="20"/>
+            <field name="view" ref="babi_filter_parameter_form_view"/>
+            <field name="act_window" ref="act_babi_filter_parameter"/>
+        </record>
+        <record model="ir.model.access" id="access_babi_filter_parameter">
+            <field name="model" search="[('model', '=', 'babi.filter.parameter')]"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="False"/>
+            <field name="perm_create" eval="False"/>
+            <field name="perm_delete" eval="False"/>
+        </record>
+        <record model="ir.model.access" id="access_babi_filter_parameter_admin">
+            <field name="model" search="[('model', '=', 'babi.filter.parameter')]"/>
+            <field name="group" ref="group_babi_admin"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_delete" eval="True"/>
+        </record>
         <record model="ir.ui.view" id="babi_internal_measure_form_view">
             <field name="model">babi.internal.measure</field>
             <field name="type">form</field>
@@ -360,6 +402,36 @@
             <field name="perm_create" eval="True"/>
             <field name="perm_delete" eval="True"/>
         </record>
+        <record model="ir.ui.view" id="babi_execution_form_view">
+            <field name="model">babi.report.execution</field>
+            <field name="type">form</field>
+            <field name="name">execution_form</field>
+        </record>
+        <record model="ir.ui.view" id="babi_execution_tree_view">
+            <field name="model">babi.report.execution</field>
+            <field name="type">tree</field>
+            <field name="name">execution_tree</field>
+        </record>
+        <record model="ir.action.act_window" id="act_babi_execution">
+            <field name="name">Executions</field>
+            <field name="res_model">babi.report.execution</field>
+            <field name="search_value"></field>
+        </record>
+        <record model="ir.model.access" id="access_babi_execution">
+            <field name="model" search="[('model', '=', 'babi.report.execution')]"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="False"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_delete" eval="False"/>
+        </record>
+        <record model="ir.model.access" id="access_babi_execution_admin">
+            <field name="model" search="[('model', '=', 'babi.report.execution')]"/>
+            <field name="group" ref="group_babi_admin"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_delete" eval="True"/>
+        </record>
 
         <record model="ir.ui.view" id="model_form_view">
             <field name="model">ir.model</field>
@@ -374,8 +446,29 @@
             <field name="name">open_chart_start_form</field>
         </record>
         <record model="ir.action.wizard" id="open_chart_wizard">
-            <field name="name">Open Chart</field>
+            <field name="name">open chart</field>
             <field name="wiz_name">babi.open_chart</field>
+        </record>
+
+        <record model="ir.ui.view" id="open_execution_select_view_form">
+            <field name="model">babi.report.execution.open.select</field>
+            <field name="type">form</field>
+            <field name="name">open_execution_select_form</field>
+        </record>
+        <record model="ir.action.wizard" id="open_execution_wizard">
+            <field name="name">Bussiness Inteligence Report</field>
+            <field name="wiz_name">babi.report.execution.open</field>
+        </record>
+
+        <record model="ir.ui.view" id="update_data_wizard_start_form_view">
+            <field name="model">babi.update_data.wizard.start</field>
+            <field name="type">form</field>
+            <field name="name">update_data_wizard_start</field>
+        </record>
+        <record model="ir.ui.view" id="update_data_wizard_done_form_view">
+            <field name="model">babi.update_data.wizard.done</field>
+            <field name="type">form</field>
+            <field name="name">update_data_wizard_done</field>
         </record>
 
         <!-- Menus -->
@@ -395,5 +488,7 @@
             parent="menu_configuration" sequence="20" name="Filters"/>
         <menuitem action="act_babi_report" id="menu_babi_report"
             parent="menu_babi" sequence="20" name="Reports"/>
+        <menuitem action="act_babi_execution" id="menu_babi_execution"
+            parent="menu_babi_report" sequence="10" name="Executions"/>
     </data>
 </tryton>
