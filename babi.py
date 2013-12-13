@@ -204,7 +204,7 @@ def create_columns(name, ffields):
 
     columns['babi_group'] = fields.Char('Group', size=500)
     columns['parent'] = fields.Many2One(name, 'Parent', ondelete='CASCADE',
-        select=True)
+        select=True, left='parent_left', right='parent_right')
     columns['children'] = fields.One2Many(name, 'parent', 'Children')
     columns['parent_left'] = fields.Integer('Parent Left', select=1)
     columns['parent_right'] = fields.Integer('Parent Right', select=1)
@@ -924,7 +924,7 @@ class ReportExecution(ModelSQL, ModelView):
         logger = logging.getLogger()
         logger.info('Updating Data of report: %s' % self.rec_name)
         update_start = time.time()
-        model = 'ANY REPORT'
+        model = self.report.model.model
         if not self.report.dimensions:
             self.raise_user_error('no_dimensions', self.rec_name)
 
@@ -960,7 +960,6 @@ class ReportExecution(ModelSQL, ModelView):
             self.internal_measures]
 
         self.validate_model()
-        logger.info('Table Deleted')
 
         columns = (['create_date', 'create_uid'] + dimension_names +
             measure_names)
@@ -1093,67 +1092,44 @@ class ReportExecution(ModelSQL, ModelView):
     def update_measures(self, checker):
         logger = logging.getLogger(self.__name__)
 
-        def query_select(table_name, measures, group):
-            """Calculate data measures (group by)"""
+        def query_inserts(table_name, measures, select_group, group):
+            """Inserts a group record"""
             cursor = Transaction().cursor
 
-            query = "SELECT %s FROM %s where parent IS NULL" % (
-                measures, table_name)
+            babi_group = ""
+
             if group:
-                query += " GROUP BY %s" % group
+                babi_group = ",MAX('%s') as babi_group" % group
+            local_measures = measures + babi_group
+
+            select_query = "SELECT %s FROM %s where babi_group IS NULL" % (
+                local_measures, table_name)
+
+            if select_group:
+                select_query += " GROUP BY %s" % select_group
+
+            fields = []
+            for measure in local_measures.split(','):
+                if 'as' in measure:
+                    measure = measure.split('as')[-1]
+                measure = measure.replace('"', '').strip()
+                fields.append(unaccent(measure))
+
+            query = "INSERT INTO %s(%s)" % (table_name, ','.join(fields))
+            query += " %s RETURNING id" % select_query
+
             cursor.execute(query)
-            return cursor.dictfetchall()
-
-        def query_insert(table_name, record, group):
-            """Inserts a group record"""
-            cursor = Transaction().cursor
-
-            fields = [unaccent(x) for x in record.keys() + ['babi_group']]
-            query = "INSERT INTO %s(%s)" % (table_name, ','.join(fields))
-            query += "VALUES %s RETURNING id"
-            mogrify_query = cursor.mogrify(query, (tuple(record.values() +
-                        [group]),))
-            cursor.execute(mogrify_query)
-            return cursor.fetchone()[0]
-
-        def query_inserts(table_name, records, group):
-            """Inserts a group record"""
-            cursor = Transaction().cursor
-
-            if not records:
-                return
-            record = records[0]
-            rfields = record.keys()
-            fields = ['"%s"' % unaccent(x) for x in rfields + ['babi_group']]
-
-            sql_values = ('%s,' * (len(rfields) + 1))[:-1]
-            sql_values = '(%s),' % sql_values
-            sql_values = (sql_values * len(records))[:-1]
-
-            query = "INSERT INTO %s(%s)" % (table_name, ','.join(fields))
-            query += "VALUES %s RETURNING id" % sql_values
-
-            # Ensure all record fields are in the same order
-            values = []
-            for record in records:
-                for field in rfields:
-                    values.append(record[field])
-                values.append(group)
-            cursor.execute(query, values)
             return [x[0] for x in cursor.fetchall()]
 
-        def update_parent(table_name, parent_id, row, group, group_by):
+        def update_parent(table_name, parent_id, group, group_by):
             sql_query = []
-            sql_values = []
             for group_item in group_by:
-                sql_query.append('"%s"=%%s' % group_item)
-                sql_values.append(row[group_item])
+                sql_query.append('"%s"=(select %s from %s where id = %d)' %
+                    (group_item, group_item, table_name, parent_id))
 
             sql_query = u' AND '.join(sql_query) or 'TRUE'
 
             parameters = [parent_id, parent_id, group]
-            if sql_values:
-                parameters += sql_values
             cursor.execute(u"""
                 UPDATE %s set parent=%%s
                 WHERE
@@ -1163,9 +1139,8 @@ class ReportExecution(ModelSQL, ModelView):
                     %s""" % (table_name, sql_query),
                 tuple(parameters))
 
-        def delete_rows(table_name, parent_ids):
-            cursor.execute("DELETE FROM %s WHERE id NOT IN %%s" % table_name, (
-                    tuple(parent_ids),))
+        pool = Pool()
+        BIModel = pool.get(self.babi_model.model)
 
         if not self.internal_measures:
             return
@@ -1180,18 +1155,12 @@ class ReportExecution(ModelSQL, ModelView):
 
         group_by_iterator = group_by[:]
 
-        # TODO: Use on Parent levels on Count AGGREGATE!
-        #       Find better solution
-        #       substitude after first level computation COUNT-> SUM
-        #       Because rows with data it's deleted and calculated rows
-        #       contain data.
         aggregate = None
         current_group = None
 
         while group_by_iterator:
             checker.check()
 
-            #Select
             group = ['"%s"' % x for x in group_by_iterator]
             measures = ['%s("%s") as %s' % (
                         x.aggregate == 'count' and aggregate or x.aggregate,
@@ -1204,24 +1173,15 @@ class ReportExecution(ModelSQL, ModelView):
             logger.info('SELECT table_name %s, measures %s, groups %s' % (
                     table_name, measures, group))
 
-            rows = query_select(table_name, measures, group)
-
             child_group = current_group
             current_group = group_by[len(group_by_iterator) - 1]
-            parent_ids = query_inserts(table_name, rows, current_group)
+            parent_ids = query_inserts(table_name, measures, group,
+                current_group)
 
-            if group_by == group_by_iterator:
-                # TODO: Use on Parent levels on Count AGGREGATE!
-                if parent_ids:
-                    aggregate = 'SUM'
-                    delete_rows(table_name, parent_ids)
-            else:
-                for x in xrange(len(rows)):
-                    row = rows[x]
-                    parent_id = parent_ids[x]
-                    if group_by != group_by_iterator:
-                        update_parent(table_name, parent_id, row,
-                            child_group, group_by_iterator)
+            if group_by != group_by_iterator:
+                for parent_id in parent_ids:
+                    update_parent(table_name, parent_id, child_group,
+                        group_by_iterator)
 
             child_group = current_group
             group_by_iterator.pop()
@@ -1232,15 +1192,15 @@ class ReportExecution(ModelSQL, ModelView):
                     x.internal_name, x.internal_name) for x in
                     self.internal_measures])
         group = None
-        rows = query_select(table_name, measures, group)
-        parent_id = query_inserts(table_name, [rows[0]], "root")[0]
+        parent_id = query_inserts(table_name, measures, None, None)[0]
         # TODO: Translate '(all)'
         if group_by_types[group_by[0]] != 'many2one':
             cursor.execute("UPDATE " + table_name + " SET \"" + group_by[0] +
                 "\"='" + '(all)' + "' WHERE id=%s", (parent_id,))
-        update_parent(table_name, parent_id, rows[0], child_group,
-            group_by_iterator)
+        update_parent(table_name, parent_id, child_group, group_by_iterator)
+        cursor.execute("DELETE FROM %s WHERE babi_group IS NULL" % table_name)
         # Update parent_left, parent_right
+        BIModel._rebuild_tree('parent', None, 0)
 
 
 class OpenExecutionSelect(ModelView):
