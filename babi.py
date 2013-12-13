@@ -1066,9 +1066,9 @@ class ReportExecution(ModelSQL, ModelView):
                             unaccent(value))
                         # Zero will always be the '(all)' entry added above
                         if index > 0:
-                            expression = '(%s) if (%s) == """%s""" else 0' % (
-                                expression, dimension.expression.expression,
-                                value)
+                            expression = ('(%s) if (%s) == """%s""" '
+                                'else \'\'') % (expression,
+                                    dimension.expression.expression, value)
 
                 name.append(measure.name)
                 internal_name.append(measure.internal_name)
@@ -1110,8 +1110,8 @@ class ReportExecution(ModelSQL, ModelView):
 
             fields = []
             for measure in local_measures.split(','):
-                if 'as' in measure:
-                    measure = measure.split('as')[-1]
+                if ' as ' in measure:
+                    measure = measure.split(' as ')[-1]
                 measure = measure.replace('"', '').strip()
                 fields.append(unaccent(measure))
 
@@ -1198,7 +1198,8 @@ class ReportExecution(ModelSQL, ModelView):
             cursor.execute("UPDATE " + table_name + " SET \"" + group_by[0] +
                 "\"='" + '(all)' + "' WHERE id=%s", (parent_id,))
         update_parent(table_name, parent_id, child_group, group_by_iterator)
-        cursor.execute("DELETE FROM %s WHERE babi_group IS NULL" % table_name)
+        delete = 'DELETE FROM %s WHERE babi_group IS NULL' % (table_name)
+        cursor.execute(delete + ' and id != %s ', [parent_id])
         # Update parent_left, parent_right
         BIModel._rebuild_tree('parent', None, 0)
 
