@@ -692,10 +692,14 @@ class Report(ModelSQL, ModelView):
             report.create_update_wizard_menu(menu)
             report.create_history_menu(menu)
 
-    def get_dimensions(self):
+    def get_dimensions(self, with_columns=False):
         dimensions = []
         for dimension in self.dimensions:
             dimensions.append(dimension.get_dimension_data())
+        if with_columns:
+            for dimension in self.columns:
+                dimensions.append(dimension.get_dimension_data())
+
         return dimensions
 
 
@@ -844,9 +848,9 @@ class ReportExecution(ModelSQL, ModelView):
             #    cursor.execute("DROP SEQUENCE IF EXISTS %s_id_seq" %
             #        Model._table)
 
-    def validate_model(self):
+    def validate_model(self, with_columns=False):
         "makes model available on Tryton and pool instance"
-        dimensions = self.report.get_dimensions()
+        dimensions = self.report.get_dimensions(with_columns)
         measures = self.get_measures()
         order = self.report.get_orders()
 
@@ -922,6 +926,7 @@ class ReportExecution(ModelSQL, ModelView):
         checker = TimeoutChecker(self.timeout, self.timeout_exception)
 
         logger = logging.getLogger()
+
         logger.info('Updating Data of report: %s' % self.rec_name)
         update_start = time.time()
         model = self.report.model.model
@@ -949,7 +954,9 @@ class ReportExecution(ModelSQL, ModelView):
         logger.info('Search %s records (%s) in %s seconds'
            % (model, str(len(records)), datetime.today() - start))
 
-        self.update_internal_measures(records)
+        self.update_internal_measures()
+        with_columns = len(self.report.columns) > 0
+        self.validate_model(with_columns=with_columns)
 
         dimension_names = [x.internal_name for x in self.report.dimensions]
         dimension_expressions = [x.expression.expression for x in
@@ -958,8 +965,11 @@ class ReportExecution(ModelSQL, ModelView):
             self.internal_measures]
         measure_expressions = [x.expression for x in
             self.internal_measures]
-
-        self.validate_model()
+        if self.report.columns:
+            dimension_names.extend([x.internal_name for x in
+                    self.report.columns])
+            dimension_expressions.extend([x.expression.expression for x in
+                    self.report.columns])
 
         columns = (['create_date', 'create_uid'] + dimension_names +
             measure_names)
@@ -970,6 +980,13 @@ class ReportExecution(ModelSQL, ModelView):
 
         uid = Transaction().user
         python_filter = self.get_python_filter()
+
+        table = BIModel._table
+        if self.report.columns:
+            table = BIModel._table + '_tmp'
+            #Save data to a temporally table:
+            cursor.execute('CREATE TEMP TABLE %s AS SELECT * FROM %s WHERE '
+                ' false' % (table, BIModel._table))
 
         #Process records
         offset = 2000
@@ -997,9 +1014,24 @@ class ReportExecution(ModelSQL, ModelView):
 
             if to_create:
                 data = StringIO(to_create)
-                cursor.copy_from(data, BIModel._table, sep='|', null='',
+                cursor.copy_from(data, table, sep='|', null='',
                     columns=columns)
             index += 1
+        if self.report.columns:
+            distincts = self.distinct_dimension_columns(cursor, table)
+            self.update_internal_measures(distincts)
+            self.validate_model()
+            query = 'INSERT INTO %s ('
+            query += ','.join([unicode(x) for x in columns])
+            query += ',' + ','.join([unicode(x.internal_name) for x in
+                    self.internal_measures])
+            query += ') SELECT '
+            query += ','.join([unicode(x) for x in columns])
+            query += ',' + ','.join([unicode(x.expression) for x in
+                    self.internal_measures])
+            query += ' FROM %s '
+            cursor.execute(query % (BIModel._table, table))
+            cursor.execute('DROP TABLE %s ' % (table))
 
         self.update_measures(checker)
 
@@ -1011,28 +1043,22 @@ class ReportExecution(ModelSQL, ModelView):
         self.save()
         logger.info('End Update Data of report: %s' % self.rec_name)
 
-    def distinct_dimension_columns(self, records):
-        if not self.report.columns:
-            return []
-        python_filter = self.get_python_filter()
+    def distinct_dimension_columns(self, cursor, tablename):
         distincts = {}
-        for record in records:
-            if python_filter:
-                if not babi_eval(python_filter, record, convert_none=False):
-                    continue
-            for dimension in self.report.columns:
-                value = babi_eval(dimension.expression.expression, record)
-                if not dimension.id in distincts:
-                    distincts[dimension.id] = set()
-                distincts[dimension.id].add(unicode(value))
+        for dimension in self.report.columns:
+            cursor.execute('SELECT %s from %s group by 1 order by 1' % (
+                    dimension.internal_name, tablename))
+            distincts[dimension.id] = [unicode(x[0]) for x in
+                cursor.fetchall()]
         return distincts
 
-    def update_internal_measures(self, records):
+    def update_internal_measures(self, distincts=None):
         InternalMeasure = Pool().get('babi.internal.measure')
 
-        distincts = self.distinct_dimension_columns(records)
-        if not distincts:
+        to_create = []
+        if distincts is None:
             distincts = {}
+
         for key in distincts.keys():
             # TODO: Make translatable
             distincts[key] = ['(all)'] + sorted(list(distincts[key]))
@@ -1042,7 +1068,6 @@ class ReportExecution(ModelSQL, ModelView):
             columns[column.id] = column
 
         InternalMeasure.delete(self.internal_measures)
-        to_create = []
         sequence = 0
         for measure in self.report.measures:
             sequence += 1
@@ -1066,9 +1091,11 @@ class ReportExecution(ModelSQL, ModelView):
                             unaccent(value))
                         # Zero will always be the '(all)' entry added above
                         if index > 0:
-                            expression = ('(%s) if (%s) == """%s""" '
-                                'else \'\'') % (expression,
-                                    dimension.expression.expression, value)
+                            expression = ('CASE WHEN "%s" = \'%s\' THEN "%s"'
+                                'END') % (dimension.internal_name,
+                                    value, measure.internal_name)
+                        else:
+                            expression = "%s" % (measure.internal_name)
 
                 name.append(measure.name)
                 internal_name.append(measure.internal_name)
@@ -1117,7 +1144,6 @@ class ReportExecution(ModelSQL, ModelView):
 
             query = "INSERT INTO %s(%s)" % (table_name, ','.join(fields))
             query += " %s RETURNING id" % select_query
-
             cursor.execute(query)
             return [x[0] for x in cursor.fetchall()]
 
@@ -1621,6 +1647,16 @@ class DimensionMixin:
     def on_change_with_name(self):
         return self.expression.name if self.expression else None
 
+    def get_dimension_data(self):
+        return {
+                    'name': self.name,
+                    'internal_name': self.internal_name,
+                    'expression': self.expression.expression,
+                    'ttype': self.expression.ttype,
+                    'related_model': (self.expression.related_model
+                        and self.expression.related_model.model),
+                }
+
 
 class Dimension(ModelSQL, ModelView, DimensionMixin):
     "Dimension"
@@ -1678,16 +1714,6 @@ class Dimension(ModelSQL, ModelView, DimensionMixin):
             with Transaction().set_context({'babi_order_force': True}):
                 Order.delete(orders)
         return super(Dimension, cls).delete(dimensions)
-
-    def get_dimension_data(self):
-        return {
-                    'name': self.name,
-                    'internal_name': self.internal_name,
-                    'expression': self.expression.expression,
-                    'ttype': self.expression.ttype,
-                    'related_model': (self.expression.related_model
-                        and self.expression.related_model.model),
-                }
 
 
 class DimensionColumn(ModelSQL, ModelView, DimensionMixin):
@@ -1945,7 +1971,6 @@ class OpenChartStart(ModelView):
 
     @classmethod
     def default_get(cls, fields, with_rec_name=True):
-        print 'defaults_get'
         pool = Pool()
         Execution = pool.get('babi.report.execution')
         model_name = Transaction().context.get('active_model')
@@ -2015,7 +2040,6 @@ class OpenChart(Wizard):
                 })
 
     def do_open_(self, action):
-        print 'do_open'
         pool = Pool()
         model_name = Transaction().context.get('active_model')
         Model = pool.get(model_name)
