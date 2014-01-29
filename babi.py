@@ -487,11 +487,10 @@ class Report(ModelSQL, ModelView):
     filter = fields.Many2One('babi.filter', 'Filter',
         domain=[('model', '=', Eval('model'))], depends=['model'])
     dimensions = fields.One2Many('babi.dimension', 'report',
-        'Dimensions', required=True)
+        'Dimensions')
     columns = fields.One2Many('babi.dimension.column', 'report',
         'Dimensions on Columns')
-    measures = fields.One2Many('babi.measure', 'report', 'Measures',
-        required=True)
+    measures = fields.One2Many('babi.measure', 'report', 'Measures')
     order = fields.One2Many('babi.order', 'report', 'Order', order=[
             ('sequence', 'ASC')
             ])
@@ -518,6 +517,8 @@ class Report(ModelSQL, ModelView):
         super(Report, cls).__setup__()
         cls._error_messages.update({
                 'no_dimensions': ('Report "%s" has no dimensions. At least one '
+                    'is needed.'),
+                'no_measures': ('Report "%s" has no measures. At least one '
                     'is needed.'),
                 'timeout_exception': ('Report calculation exceeded timeout '
                     'limit.')
@@ -727,6 +728,10 @@ class Report(ModelSQL, ModelView):
         Execution = pool.get('babi.report.execution')
 
         for report in reports:
+            if not report.measures:
+                cls.raise_user_error('no_measures', report.rec_name)
+            if not report.dimensions:
+                cls.raise_user_error('no_dimensions', report.rec_name)
             executions = Execution.create([report.get_execution_data()])
             Transaction().cursor.commit()
             for execution in executions:
@@ -775,7 +780,11 @@ class ReportExecution(ModelSQL, ModelView):
         cls._error_messages.update({
                 'filter_parameters': ('Execution "%s" has filter parameters '
                     ' and you did not provide any of them. Please execute it '
-                    ' from the menu.')
+                    ' from the menu.'),
+                'no_dimensions': ('Execution "%s" has no dimensions. At least '
+                    'one is needed.'),
+                'no_measures': ('Execution "%s" has no measures. At least one '
+                    'is needed.'),
                 })
         cls._buttons.update({
                 'open': {
@@ -930,6 +939,8 @@ class ReportExecution(ModelSQL, ModelView):
         logger.info('Updating Data of report: %s' % self.rec_name)
         update_start = time.time()
         model = self.report.model.model
+        if not self.report.measures:
+            self.raise_user_error('no_measures', self.rec_name)
         if not self.report.dimensions:
             self.raise_user_error('no_dimensions', self.rec_name)
 
