@@ -4,6 +4,7 @@
 from trytond.pool import Pool
 from .configuration import *
 from .babi import *
+from .test_model import *
 
 
 def register():
@@ -28,6 +29,7 @@ def register():
         OpenExecutionSelect,
         UpdateDataWizardStart,
         UpdateDataWizardUpdated,
+        TestBabiModel,
         module='babi', type_='model')
     Pool.register(
         OpenChart,

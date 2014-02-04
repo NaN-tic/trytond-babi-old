@@ -87,7 +87,7 @@ class DynamicModel(ModelSQL, ModelView):
             cls.raise_user_error('report_not_exists', cls.__name__)
         context = Transaction().context
         execution, = executions
-        with Transaction().set_context(_datetime=execution.date):
+        with Transaction().set_context(_datetime=execution.create_date):
             report = execution.report
 
             view_type = context.get('view_type', view_type)
@@ -206,14 +206,13 @@ def create_columns(name, ffields):
     columns['parent'] = fields.Many2One(name, 'Parent', ondelete='CASCADE',
         select=True, left='parent_left', right='parent_right')
     columns['children'] = fields.One2Many(name, 'parent', 'Children')
-    columns['parent_left'] = fields.Integer('Parent Left', select=1)
-    columns['parent_right'] = fields.Integer('Parent Right', select=1)
+    columns['parent_left'] = fields.Integer('Parent Left', select=True)
+    columns['parent_right'] = fields.Integer('Parent Right', select=True)
     return columns
 
 
 def create_class(name, description, dimensions, measures, order):
     "Create class, and make instance"
-    # TODO: Implement parent_left / parent_right
     body = {
         '__doc__': description,
         '__name__': name,
@@ -556,7 +555,6 @@ class Report(ModelSQL, ModelView):
                     to_update.append(report)
             if to_update:
                 cls.remove_menus(to_update)
-                cls.remove_data(to_update)
         return super(Report, cls).write(reports, values)
 
     @classmethod
@@ -579,7 +577,7 @@ class Report(ModelSQL, ModelView):
             result = []
             for report in reports:
                 default['name'] = '%s (2)' % report.name
-                super(Report, cls).copy([report], default)
+                result.extend(super(Report, cls).copy([report], default))
             return result
         return super(Report, cls).copy(reports, default)
 
@@ -703,7 +701,6 @@ class Report(ModelSQL, ModelView):
 
         return dimensions
 
-
     def get_orders(self):
         order = []
         for record in self.order:
@@ -748,7 +745,7 @@ class ReportExecution(ModelSQL, ModelView):
     _order = [('date', 'DESC')]
 
     report = fields.Many2One('babi.report', 'Report', required=True,
-        readonly=True)
+        readonly=True, ondelete='CASCADE')
     date = fields.DateTime('Execution Date', required=True, readonly=True)
     internal_name = fields.Function(fields.Char('Internal Name'),
         'get_internal_name')
@@ -833,10 +830,11 @@ class ReportExecution(ModelSQL, ModelView):
 
     @classmethod
     def delete(cls, executions):
-        super(ReportExecution, cls).delete(executions)
         cls.remove_data(executions)
-        cls.remove_keywors(executions)
+        cls.remove_keywords(executions)
+        super(ReportExecution, cls).delete(executions)
 
+    @classmethod
     def remove_keywords(cls, executions):
         pool = Pool()
         Keyword = pool.get('ir.action.keyword')
@@ -850,12 +848,16 @@ class ReportExecution(ModelSQL, ModelView):
         pool = Pool()
         cursor = Transaction().cursor
         for execution in executions:
+            execution.validate_model()
             Model = pool.get(execution.babi_model.model)
             if Model:
                 cursor.execute("DROP TABLE IF EXISTS %s " % Model._table)
-            #TODO: Drop sequences also
-            #    cursor.execute("DROP SEQUENCE IF EXISTS %s_id_seq" %
-            #        Model._table)
+                try:
+                    #SQLite doesn't have sequences
+                    cursor.execute("DROP SEQUENCE IF EXISTS %s_id_seq" %
+                        Model._table)
+                except:
+                    pass
 
     def validate_model(self, with_columns=False):
         "makes model available on Tryton and pool instance"
@@ -892,7 +894,7 @@ class ReportExecution(ModelSQL, ModelView):
     @classmethod
     def calculate(cls, executions):
         for execution in executions:
-            date = execution.date
+            date = execution.create_date
             with Transaction().set_context(_datetime=date):
                 execution.validate_model()
                 execution.create_keywords()
@@ -997,7 +999,7 @@ class ReportExecution(ModelSQL, ModelView):
             table = BIModel._table + '_tmp'
             #Save data to a temporally table:
             cursor.execute('CREATE TEMP TABLE %s AS SELECT * FROM %s WHERE '
-                ' false' % (table, BIModel._table))
+                ' 0 = 1' % (table, BIModel._table))
 
         #Process records
         offset = 2000
@@ -1024,9 +1026,23 @@ class ReportExecution(ModelSQL, ModelView):
                 to_create += record.encode('utf-8') + '\n'
 
             if to_create:
-                data = StringIO(to_create)
-                cursor.copy_from(data, table, sep='|', null='',
-                    columns=columns)
+                if hasattr(cursor, 'copy_from'):
+                    data = StringIO(to_create)
+                    cursor.copy_from(data, table, sep='|', null='',
+                        columns=columns)
+                else:
+                    base_query = 'INSERT INTO %s (' % table
+                    base_query += ','.join([unicode(x) for x in columns])
+                    base_query += ' ) VALUES '
+                    for line in to_create.split('\n'):
+                        if len(line) == 0:
+                            continue
+                        query = base_query + '(now(),'
+                        query += ','.join(["'%s'" % unicode(x)
+                                for x in line.split('|')[1:]])
+                        query += ')'
+                        cursor.execute(query)
+
             index += 1
         if self.report.columns:
             distincts = self.distinct_dimension_columns(cursor, table)
@@ -1154,8 +1170,20 @@ class ReportExecution(ModelSQL, ModelView):
                 fields.append(unaccent(measure))
 
             query = "INSERT INTO %s(%s)" % (table_name, ','.join(fields))
-            query += " %s RETURNING id" % select_query
-            cursor.execute(query)
+
+            if not cursor.has_returning():
+                previous_id = 0
+                cursor.execute('SELECT MAX(id) FROM %s' % table_name)
+                row = cursor.fetchone()
+                if row:
+                    previous_id = row[0]
+                query += select_query
+                cursor.execute(query)
+                cursor.execute('SELECT id from %s WHERE id > %s ' % (
+                        table_name, previous_id))
+            else:
+                query += " %s RETURNING id" % select_query
+                cursor.execute(query)
             return [x[0] for x in cursor.fetchall()]
 
         def update_parent(table_name, parent_id, group, group_by):
@@ -1164,17 +1192,19 @@ class ReportExecution(ModelSQL, ModelView):
                 sql_query.append('"%s"=(select %s from %s where id = %d)' %
                     (group_item, group_item, table_name, parent_id))
 
-            sql_query = u' AND '.join(sql_query) or 'TRUE'
+            sql_query = u' AND '.join(sql_query)
+            sql_query[:-5]
 
-            parameters = [parent_id, parent_id, group]
-            cursor.execute(u"""
-                UPDATE %s set parent=%%s
+            query = """
+                UPDATE """ + table_name + """ set parent=%s
                 WHERE
                     parent IS NULL AND
-                    id != %%s AND
-                    babi_group = %%s AND
-                    %s""" % (table_name, sql_query),
-                tuple(parameters))
+                    id != %s AND
+                    babi_group = '%s'
+                    """ % (parent_id, parent_id, group)
+            if sql_query:
+                query += 'AND %s' % sql_query
+            cursor.execute(query)
 
         pool = Pool()
         BIModel = pool.get(self.babi_model.model)
@@ -1233,10 +1263,10 @@ class ReportExecution(ModelSQL, ModelView):
         # TODO: Translate '(all)'
         if group_by_types[group_by[0]] != 'many2one':
             cursor.execute("UPDATE " + table_name + " SET \"" + group_by[0] +
-                "\"='" + '(all)' + "' WHERE id=%s", (parent_id,))
+                "\"='" + '(all)' + "' WHERE id=%s" % parent_id)
         update_parent(table_name, parent_id, child_group, group_by_iterator)
         delete = 'DELETE FROM %s WHERE babi_group IS NULL' % (table_name)
-        cursor.execute(delete + ' and id != %s ', [parent_id])
+        cursor.execute(delete + ' and id != %s ' % parent_id)
         # Update parent_left, parent_right
         BIModel._rebuild_tree('parent', None, 0)
 
@@ -1465,8 +1495,6 @@ class UpdateDataWizard(Wizard):
     __name__ = 'babi.update_data.wizard'
 
 
-
-
 class OpenExecution(Wizard):
     'Open Report Execution'
     __name__ = 'babi.report.execution.open'
@@ -1498,6 +1526,8 @@ class OpenExecution(Wizard):
                 'no_menus': ('No menus found for report %s. In order to view '
                     'it\'s data you must create menu entries.'),
                 'no_report': ('No report found for current execution'),
+                'no_execution': ('No execution found for current record. '
+                    'Execute the update data wizard in order to create one.'),
                 'no_filter_parameter': ('No parameter found for model %s.'
                     'In order to view filtered data, parameter should be'
                     ' defined on the report filter.'),
@@ -1593,6 +1623,9 @@ class OpenExecution(Wizard):
             execution = self.select.execution
             view_type = self.select.view_type
 
+        if not execution:
+            self.raise_user_error('no_execution', report.rec_name)
+
         execution.validate_model()
         domain = [
                 ('babi_report', '=', report.id),
@@ -1615,7 +1648,8 @@ class ReportGroup(ModelSQL):
     "Report - Group"
     __name__ = 'babi.report-res.group'
 
-    report = fields.Many2One('babi.report', 'Report', required=True)
+    report = fields.Many2One('babi.report', 'Report', required=True,
+        ondelete='CASCADE')
     group = fields.Many2One('res.group', 'Group', required=True)
 
     @classmethod
@@ -1694,7 +1728,7 @@ class Dimension(ModelSQL, ModelView, DimensionMixin):
         to_create = []
         for dimension in cls.browse(list(missing)):
             cursor.execute('SELECT MAX(sequence) FROM babi_order WHERE '
-                'report=%s', (dimension.report.id,))
+                'report=%s' % dimension.report.id)
             sequence = cursor.fetchone()[0] or 0
             to_create.append({
                     'report': dimension.report.id,
@@ -1802,7 +1836,7 @@ class Measure(ModelSQL, ModelView):
         to_create = []
         for measure in cls.browse(list(missing_ids)):
             cursor.execute('SELECT MAX(sequence) FROM babi_order WHERE '
-                'report=%s', (measure.report.id,))
+                'report=%s' % measure.report.id)
             sequence = cursor.fetchone()[0] or 0
             to_create.append({
                     'report': measure.report.id,
@@ -1998,7 +2032,7 @@ class OpenChartStart(ModelView):
         active_id, = Transaction().context.get('active_ids')
         record = Model(active_id)
 
-        with Transaction().set_context(_datetime=execution.date):
+        with Transaction().set_context(_datetime=execution.create_date):
             fields = []
             found = False
             for x in report.dimensions:

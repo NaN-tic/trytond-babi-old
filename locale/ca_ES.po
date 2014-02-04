@@ -1,4 +1,4 @@
-# 
+#
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
@@ -41,6 +41,14 @@ msgstr "Les entrades d'ordre s'eliminen automàticament"
 msgctxt "error:babi.report-res.group:"
 msgid "Report and Group must be unique."
 msgstr "El grup ha de ser únic per informe"
+
+msgctxt "error:babi.report.execution.open:"
+msgid ""
+"No execution found for current record. Execute the update data wizard in "
+"order to create one."
+msgstr ""
+"No s'ha trobat cap execució per l'informe actual. Executeu el assistent "
+"d'actualitzar informació per a crear-n'he una."
 
 msgctxt "error:babi.report.execution.open:"
 msgid ""
