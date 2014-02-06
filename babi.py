@@ -962,11 +962,6 @@ class ReportExecution(ModelSQL, ModelView):
         domain = safe_eval(domain)
 
         start = datetime.today()
-        logger.info('Starting search on %s' % model)
-        records = Model.search(domain)
-        logger.info('Search %s records (%s) in %s seconds'
-           % (model, str(len(records)), datetime.today() - start))
-
         self.update_internal_measures()
         with_columns = len(self.report.columns) > 0
         self.validate_model(with_columns=with_columns)
@@ -1004,7 +999,8 @@ class ReportExecution(ModelSQL, ModelView):
         #Process records
         offset = 2000
         index = 0
-        while index * offset < len(records):
+        records = Model.search(domain, offset=index*offset, limit=offset)
+        while records:
             checker.check()
             logger.info('Calculated %s,  %s records in %s seconds'
                 % (model, index * offset, datetime.today() - start))
@@ -1044,6 +1040,8 @@ class ReportExecution(ModelSQL, ModelView):
                         cursor.execute(query)
 
             index += 1
+            records = Model.search(domain, offset=index*offset, limit=offset)
+
         if self.report.columns:
             distincts = self.distinct_dimension_columns(cursor, table)
             self.update_internal_measures(distincts)
