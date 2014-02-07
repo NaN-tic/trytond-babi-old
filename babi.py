@@ -17,9 +17,11 @@ from trytond.pyson import Eval, Bool, PYSONEncoder, In, Not
 from trytond.pool import Pool, PoolMeta
 from trytond.transaction import Transaction
 from trytond.tools import safe_eval
+from trytond.config import CONFIG
 from trytond import backend
 from babi_eval import babi_eval
 from trytond.protocols.jsonrpc import object_hook, JSONEncoder
+import subprocess
 
 
 __all__ = ['Filter', 'Expression', 'Report', 'ReportGroup', 'Dimension',
@@ -61,6 +63,14 @@ def unaccent(text):
             break
         text = text.replace(SRC_CHARS[c], DST_CHARS[c])
     return unicodedata.normalize('NFKD', text).encode('ASCII', 'ignore')
+
+def start_celery():
+    env = {
+        'TRYTON_DATABASE': CONFIG.get('db_name'),
+        'TRYTON_CONFIG':''
+    }
+    call = 'celery worker --app=tasks --workdir=./modules/babi'
+    os.spawnlpe(os.P_NOWAIT, call, env)
 
 
 class DynamicModel(ModelSQL, ModelView):
@@ -528,6 +538,9 @@ class Report(ModelSQL, ModelView):
                 'remove_menus': {},
                 })
 
+        start_celery()
+
+
     @staticmethod
     def default_timeout():
         Config = Pool().get('babi.configuration')
@@ -723,7 +736,6 @@ class Report(ModelSQL, ModelView):
     def calculate(cls, reports):
         pool = Pool()
         Execution = pool.get('babi.report.execution')
-
         for report in reports:
             if not report.measures:
                 cls.raise_user_error('no_measures', report.rec_name)

@@ -4,8 +4,6 @@ from trytond.pool import Pool
 from trytond.transaction import Transaction
 
 celery = Celery()
-celery.config_from_object('celeryconfig')
-
 
 @celery.task(base=TrytonTask)
 def calculate_execution(execution_id, user_id=None):

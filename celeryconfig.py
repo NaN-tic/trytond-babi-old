@@ -1,6 +1,7 @@
+import os
 
-TRYTON_DATABASE = 'xarxafarma_tryton'
-TRYTON_CONFIG = '/home/angel/projectes/tryton/xarxafarma/trytond/etc/trytond.conf'
+TRYTON_DATABASE = os.environ['TRYTON_DATABASE']
+TRYTON_CONFIG = os.environ['TRYTON_CONFIG']
 
 #Enable this options to debug. More info in celery page.
 CELERY_ALWAYS_EAGER = False
