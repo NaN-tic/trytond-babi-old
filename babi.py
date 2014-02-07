@@ -22,6 +22,7 @@ from trytond import backend
 from babi_eval import babi_eval
 from trytond.protocols.jsonrpc import object_hook, JSONEncoder
 import subprocess
+import tempfile
 
 
 __all__ = ['Filter', 'Expression', 'Report', 'ReportGroup', 'Dimension',
@@ -66,17 +67,19 @@ def unaccent(text):
 
 
 def start_celery():
+    db = CONFIG.get('db_name') or Transaction().cursor.database_name
     env = {
-        'TRYTON_DATABASE': (CONFIG.get('db_name') or
-            Transaction().cursor.database_name),
+        'TRYTON_DATABASE': db,
         'TRYTON_CONFIG': CONFIG.configfile
     }
     #Copy environment variables in order to get virtualenvs working
     for key, value in os.environ.iteritems():
         env[key] = value
     call = ['celery', 'worker', '--app=tasks', '--loglevel=info',
-        '--workdir=./modules/babi']
-    pid = subprocess.Popen(call, env=env).pid
+        '--workdir=./modules/babi', '--queues=' + db,
+        '--hostname=' + db + '.%h',
+        '--pidfile=' + os.path.join(tempfile.gettempdir(), db)]
+    subprocess.Popen(call, env=env)
 
 
 class DynamicModel(ModelSQL, ModelView):
@@ -741,6 +744,8 @@ class Report(ModelSQL, ModelView):
     @classmethod
     def calculate(cls, reports):
         pool = Pool()
+        transaction = Transaction()
+        cursor = transaction.cursor
         Execution = pool.get('babi.report.execution')
         for report in reports:
             if not report.measures:
@@ -748,12 +753,13 @@ class Report(ModelSQL, ModelView):
             if not report.dimensions:
                 cls.raise_user_error('no_dimensions', report.rec_name)
             executions = Execution.create([report.get_execution_data()])
-            Transaction().cursor.commit()
+            cursor.commit()
             for execution in executions:
                 result = os.system('celery call tasks.calculate_execution '
                     '--args=[%d,%d] '
-                    '--config="trytond.modules.babi.celeryconfig"' % (
-                        execution.id, Transaction().user))
+                    '--config="trytond.modules.babi.celeryconfig" '
+                    '--queue=%s' % (
+                        execution.id, transaction.user, cursor.database_name))
                 if result != 0:
                     #Fallback to concurrent mode if celery is not available
                     Execution.calculate([execution])
