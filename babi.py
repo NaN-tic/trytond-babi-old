@@ -64,13 +64,19 @@ def unaccent(text):
         text = text.replace(SRC_CHARS[c], DST_CHARS[c])
     return unicodedata.normalize('NFKD', text).encode('ASCII', 'ignore')
 
+
 def start_celery():
     env = {
-        'TRYTON_DATABASE': CONFIG.get('db_name'),
-        'TRYTON_CONFIG':''
+        'TRYTON_DATABASE': (CONFIG.get('db_name') or
+            Transaction().cursor.database_name),
+        'TRYTON_CONFIG': CONFIG.configfile
     }
-    call = 'celery worker --app=tasks --workdir=./modules/babi'
-    os.spawnlpe(os.P_NOWAIT, call, env)
+    #Copy environment variables in order to get virtualenvs working
+    for key, value in os.environ.iteritems():
+        env[key] = value
+    call = ['celery', 'worker', '--app=tasks', '--loglevel=info',
+        '--workdir=./modules/babi']
+    pid = subprocess.Popen(call, env=env).pid
 
 
 class DynamicModel(ModelSQL, ModelView):
@@ -745,7 +751,9 @@ class Report(ModelSQL, ModelView):
             Transaction().cursor.commit()
             for execution in executions:
                 result = os.system('celery call tasks.calculate_execution '
-                    '--args=[%d,%d]' % (execution.id, Transaction().user))
+                    '--args=[%d,%d] '
+                    '--config="trytond.modules.babi.celeryconfig"' % (
+                        execution.id, Transaction().user))
                 if result != 0:
                     #Fallback to concurrent mode if celery is not available
                     Execution.calculate([execution])

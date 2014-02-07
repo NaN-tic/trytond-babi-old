@@ -26,14 +26,17 @@
 # SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 from celery import Task
+import os
 
 
 class TrytonTask(Task):
     abstract = True
 
     def __call__(self, *args, **kwargs):
-        database = self.app.conf.TRYTON_DATABASE
-        config_file = self.app.conf.get('TRYTON_CONFIG')
+        database = os.environ.get('TRYTON_DATABASE',
+            self.app.conf.TRYTON_DATABASE)
+        config_file = os.environ.get('TRYTON_CONFIG',
+            self.app.conf.get('TRYTON_CONFIG'))
 
         from trytond.config import CONFIG
         if CONFIG.configfile != config_file:
