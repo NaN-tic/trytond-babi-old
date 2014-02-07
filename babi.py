@@ -67,7 +67,11 @@ def unaccent(text):
 
 
 def start_celery():
-    db = CONFIG.get('db_name') or Transaction().cursor.database_name
+    try:
+        import celery
+    except ImportError:
+        return
+    db = Transaction().cursor.database_name
     env = {
         'TRYTON_DATABASE': db,
         'TRYTON_CONFIG': CONFIG.configfile
