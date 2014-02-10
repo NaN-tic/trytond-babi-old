@@ -1,4 +1,4 @@
-from trytond_celery import TrytonTask
+from celery_tryton import TrytonTask
 from celery import Celery
 from trytond.pool import Pool
 from trytond.transaction import Transaction
