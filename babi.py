@@ -82,7 +82,8 @@ def start_celery():
     call = ['celery', 'worker', '--app=tasks', '--loglevel=info',
         '--workdir=./modules/babi', '--queues=' + db,
         '--hostname=' + db + '.%h',
-        '--pidfile=' + os.path.join(tempfile.gettempdir(), db)]
+        '--pidfile=' + os.path.join(tempfile.gettempdir(), 'trytond_celery_' +
+            db + '.pid')]
     subprocess.Popen(call, env=env)
 
 
