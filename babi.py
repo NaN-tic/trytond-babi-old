@@ -1920,6 +1920,17 @@ class InternalMeasure(ModelSQL, ModelView):
     related_model = fields.Many2One('ir.model', 'Related Model')
     progressbar = fields.Boolean('Progress Bar')
 
+    @classmethod
+    def __register__(cls, module_name):
+        TableHandler = backend.get('TableHandler')
+        cursor = Transaction().cursor
+        super(InternalMeasure, cls).__register__(module_name)
+
+        #Migration from 3.0: no more relation with reports.
+        table = TableHandler(cursor, cls, module_name)
+        if table.column_exist('report'):
+            table.not_null_action('report', action='remove')
+
     def get_measure_data(self):
         return {
                 'name': self.name,
