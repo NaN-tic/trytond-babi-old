@@ -601,6 +601,7 @@ class Report(ModelSQL, ModelView):
             default['order'] = None
         default['actions'] = None
         default['menus'] = None
+        default['executions'] = None
         default['internal_measures'] = None
         if not 'name' in default:
             result = []
@@ -966,7 +967,8 @@ class ReportExecution(ModelSQL, ModelView):
         "Creates data for this execution"
         pool = Pool()
         Model = pool.get(self.report.model.model)
-        cursor = Transaction().cursor
+        transaction = Transaction()
+        cursor = transaction.cursor
 
         BIModel = pool.get(self.babi_model.model)
         checker = TimeoutChecker(self.timeout, self.timeout_exception)
@@ -1021,7 +1023,7 @@ class ReportExecution(ModelSQL, ModelView):
         # to be of type unicode
         columns = [str(x) for x in columns]
 
-        uid = Transaction().user
+        uid = transaction.user
         python_filter = self.get_python_filter()
 
         table = BIModel._table
@@ -1034,7 +1036,9 @@ class ReportExecution(ModelSQL, ModelView):
         #Process records
         offset = 2000
         index = 0
-        records = Model.search(domain, offset=index*offset, limit=offset)
+
+        with transaction.set_context(_datetime=None):
+            records = Model.search(domain, offset=index*offset, limit=offset)
         while records:
             checker.check()
             logger.info('Calculated %s,  %s records in %s seconds'
@@ -1075,7 +1079,9 @@ class ReportExecution(ModelSQL, ModelView):
                         cursor.execute(query)
 
             index += 1
-            records = Model.search(domain, offset=index*offset, limit=offset)
+            with transaction.set_context(_datetime=None):
+                records = Model.search(domain, offset=index * offset,
+                    limit=offset)
 
         if self.report.columns:
             distincts = self.distinct_dimension_columns(cursor, table)
