@@ -152,6 +152,8 @@ class DynamicModel(ModelSQL, ModelView):
                 xml += '</form>\n'
                 result['arch'] = xml
             elif view_type == 'graph':
+                colors = ['#FF0000', '#0000FF', '#008000', '#FFFF00',
+                    '#800080', '#FF00FF', '#FFA500', '#C0C0C0', '#000000']
                 model_name = context.get('model_name')
                 graph_type = context.get('graph_type')
                 measure_ids = context.get('measures')
@@ -163,14 +165,17 @@ class DynamicModel(ModelSQL, ModelView):
                 fields.append(dimension.internal_name)
 
                 y_xml = ''
-                for measure in InternalMeasure.browse(measure_ids):
-                    y_xml += '<field name="%s" interpolation="%s"/>\n' % (
-                        measure.internal_name, interpolation)
+                for i, measure in enumerate(InternalMeasure.browse(
+                            measure_ids)):
+                    color = colors[i % len(colors)]
+                    y_xml += ('<field name="%s" interpolation="%s" '
+                        'color="%s"/> \n') % (measure.internal_name,
+                            interpolation, color)
                     fields.append(measure.internal_name)
 
                 xml = '''<?xml version="1.0"?>
                     <graph string="%(graph_name)s" type="%(graph_type)s"
-                        legend="%(legend)s">
+                        legend="%(legend)s" background="#FFFFFF">
                         <x>
                             %(x_fields)s
                         </x>
@@ -1702,7 +1707,6 @@ class ReportGroup(ModelSQL):
 
 class DimensionMixin:
     _order = [('sequence', 'ASC')]
-    _history = True
 
     report = fields.Many2One('babi.report', 'Report', required=True,
         ondelete='CASCADE')
@@ -1745,6 +1749,7 @@ class DimensionMixin:
 class Dimension(ModelSQL, ModelView, DimensionMixin):
     "Dimension"
     __name__ = 'babi.dimension'
+    _history = True
 
     @classmethod
     def __setup__(cls):
@@ -1803,6 +1808,7 @@ class Dimension(ModelSQL, ModelView, DimensionMixin):
 class DimensionColumn(ModelSQL, ModelView, DimensionMixin):
     "Column Dimension"
     __name__ = 'babi.dimension.column'
+    _history = True
 
 
 class Measure(ModelSQL, ModelView):
@@ -2057,12 +2063,24 @@ class OpenChartStart(ModelView):
                 'invisible': Eval('graph_type') != 'line',
             }, sort=False)
     show_legend = fields.Boolean('Show Legend')
-    valid_dimensions = fields.Many2Many('babi.dimension', None, None,
-        'Valid Dimensions')
+    report = fields.Many2One('babi.report', 'Report')
+    execution = fields.Many2One('babi.report.execution', 'Execution')
+    execution_date = fields.DateTime('Execution Time')
     dimension = fields.Many2One('babi.dimension', 'Dimension',
-        required=True)
+        required=True,
+        domain=[
+            ('report', '=', Eval('report')),
+            ],
+        context={
+            '_datetime': Eval('execution_date'),
+            },
+        depends=['report', 'execution_date'])
     measures = fields.Many2Many('babi.internal.measure', None, None,
-        'Measures', required=True)
+        'Measures', required=True,
+        domain=[
+            ('execution', '=', Eval('execution')),
+            ],
+        depends=['execution'])
 
     @classmethod
     def default_get(cls, fields, with_rec_name=True):
@@ -2098,9 +2116,11 @@ class OpenChartStart(ModelView):
                 fields = [x.id for x in report.dimensions]
 
         return {
+            'report': execution.report.id,
+            'execution': execution.id,
+            'execution_date': execution.date,
             'model': execution.babi_model.id,
             'dimension': fields[0] if fields else None,
-            'valid_dimensions': fields,
             'measures': [x.id for x in execution.internal_measures],
             'graph_type': 'vbar',
             'show_legend': True,
@@ -2161,7 +2181,8 @@ class OpenChart(Wizard):
         context['model_name'] = model_name
         context = json.dumps(context)
         return {
-            'name': 'Open Chart',
+            'name': '%s - %s Chart' % (self.start.execution.rec_name,
+                self.start.dimension.rec_name),
             'model': model_name,
             'res_model': model_name,
             'type': 'ir.action.act_window',

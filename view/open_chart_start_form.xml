@@ -11,4 +11,6 @@ contains the full copyright notices and license terms. -->
     <label name="dimension"/>
     <field name="dimension" colspan="3" widget="selection"/>
 	<field name="measures" colspan="4"/>
+    <field name="execution" invisible="1" />
+    <field name="execution_date" invisible="1" />
 </form>
