@@ -81,7 +81,6 @@ def start_celery():
         env[key] = value
     call = ['celery', 'worker', '--app=tasks', '--loglevel=info',
         '--workdir=./modules/babi', '--queues=' + db,
-        '--purge',
         '--time-limit=7400',
         '--concurrency=1',
         '--hostname=' + db + '.%h',
@@ -906,6 +905,8 @@ class ReportExecution(ModelSQL, ModelView):
         self.save()
 
         create_groups_access(model, self.report.groups)
+        #Commit transaction to avoid locks
+        Transaction().cursor.commit()
 
     def timeout_exception(self):
         raise TimeoutException
