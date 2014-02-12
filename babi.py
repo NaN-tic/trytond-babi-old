@@ -1058,7 +1058,7 @@ class ReportExecution(ModelSQL, ModelView):
                 vals += [unicode(babi_eval(x, record, convert_none='zero'))
                     for x in measure_expressions]
                 record = u'|'.join(vals).replace('\n', ' ')
-                to_create += record.encode('utf-8') + '\n'
+                to_create += record.replace('\\|', '|').encode('utf-8') + '\n'
 
             if to_create:
                 if hasattr(cursor, 'copy_from'):
