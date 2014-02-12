@@ -1058,12 +1058,13 @@ class ReportExecution(ModelSQL, ModelView):
                     if not babi_eval(python_filter, record, convert_none=False):
                         continue
                 vals = ['now()', str(uid)]
-                vals += [unicode(babi_eval(x, record))
+                vals += [unicode(babi_eval(x, record).replace('|', '-'))
                     for x in dimension_expressions]
-                vals += [unicode(babi_eval(x, record, convert_none='zero'))
+                vals += [unicode(babi_eval(x, record,
+                            convert_none='zero')).replace('|', '-')
                     for x in measure_expressions]
                 record = u'|'.join(vals).replace('\n', ' ')
-                to_create += record.replace('\\|', '|').encode('utf-8') + '\n'
+                to_create += record.replace('\\', '').encode('utf-8') + '\n'
 
             if to_create:
                 if hasattr(cursor, 'copy_from'):
