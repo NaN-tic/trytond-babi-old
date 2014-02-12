@@ -81,6 +81,9 @@ def start_celery():
         env[key] = value
     call = ['celery', 'worker', '--app=tasks', '--loglevel=info',
         '--workdir=./modules/babi', '--queues=' + db,
+        '--purge',
+        '--time-limit=7400',
+        '--concurrency=1',
         '--hostname=' + db + '.%h',
         '--pidfile=' + os.path.join(tempfile.gettempdir(), 'trytond_celery_' +
             db + '.pid')]
@@ -1039,8 +1042,8 @@ class ReportExecution(ModelSQL, ModelView):
             to_create = ''
             # var o it's used on expression!!
             # Don't rename var
-            chunk = records[index * offset:(index + 1) * offset]
-            for record in chunk:
+            #chunk = records[index * offset:(index + 1) * offset]
+            for record in records:
                 if python_filter:
                     if not babi_eval(python_filter, record, convert_none=False):
                         continue
