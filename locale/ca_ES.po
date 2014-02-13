@@ -1,4 +1,4 @@
-#
+# 
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
@@ -490,6 +490,14 @@ msgctxt "field:babi.open_chart.start,dimension:"
 msgid "Dimension"
 msgstr "Dimensió"
 
+msgctxt "field:babi.open_chart.start,execution:"
+msgid "Execution"
+msgstr "Execució"
+
+msgctxt "field:babi.open_chart.start,execution_date:"
+msgid "Execution Time"
+msgstr "Data d'execució"
+
 msgctxt "field:babi.open_chart.start,graph_type:"
 msgid "Graph"
 msgstr "Gràfica"
@@ -506,13 +514,13 @@ msgctxt "field:babi.open_chart.start,measures:"
 msgid "Measures"
 msgstr "Mesures"
 
+msgctxt "field:babi.open_chart.start,report:"
+msgid "Report"
+msgstr "Informe"
+
 msgctxt "field:babi.open_chart.start,show_legend:"
 msgid "Show Legend"
 msgstr "Mostra la llegenda"
-
-msgctxt "field:babi.open_chart.start,valid_dimensions:"
-msgid "Valid Dimensions"
-msgstr "Dimensions vàlides"
 
 msgctxt "field:babi.order,create_date:"
 msgid "Create Date"
@@ -722,6 +730,10 @@ msgctxt "field:babi.report.execution,internal_name:"
 msgid "Internal Name"
 msgstr "Nom intern"
 
+msgctxt "field:babi.report.execution,pid:"
+msgid "Pid"
+msgstr "Pid"
+
 msgctxt "field:babi.report.execution,rec_name:"
 msgid "Name"
 msgstr "Nom"
@@ -773,6 +785,42 @@ msgstr "Informe"
 msgctxt "field:babi.report.execution.open.select,view_type:"
 msgid "View type"
 msgstr "Tipus de vista"
+
+msgctxt "field:babi.test,amount:"
+msgid "Amount"
+msgstr "Import"
+
+msgctxt "field:babi.test,category:"
+msgid "Category"
+msgstr "Categoría"
+
+msgctxt "field:babi.test,create_date:"
+msgid "Create Date"
+msgstr "Data de creació"
+
+msgctxt "field:babi.test,create_uid:"
+msgid "Create User"
+msgstr "Usuari de creació"
+
+msgctxt "field:babi.test,date:"
+msgid "Date"
+msgstr "Data"
+
+msgctxt "field:babi.test,id:"
+msgid "ID"
+msgstr "Identificador"
+
+msgctxt "field:babi.test,rec_name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:babi.test,write_date:"
+msgid "Write Date"
+msgstr "Data modificació"
+
+msgctxt "field:babi.test,write_uid:"
+msgid "Write User"
+msgstr "Usuari modificació"
 
 msgctxt "field:babi.update_data.wizard.done,id:"
 msgid "ID"
@@ -956,6 +1004,10 @@ msgctxt "model:babi.report.execution.open.select,name:"
 msgid "Open Report Execution - Select Values"
 msgstr "Obre execució - Selecció de valors"
 
+msgctxt "model:babi.test,name:"
+msgid "Test BABI Model"
+msgstr "Model de proves BABI"
+
 msgctxt "model:babi.update_data.wizard.done,name:"
 msgid "Update Data Wizard Done"
 msgstr "Final Actualitza la informació d'un informe"
@@ -977,8 +1029,8 @@ msgid "Column Dimension"
 msgstr "Dimensió de columna"
 
 msgctxt "model:ir.action,name:act_babi_execution"
-msgid "execution"
-msgstr "Execució"
+msgid "Executions"
+msgstr "Execucions"
 
 msgctxt "model:ir.action,name:act_babi_expression"
 msgid "Expression"
@@ -989,7 +1041,7 @@ msgid "Filter"
 msgstr "Filtre"
 
 msgctxt "model:ir.action,name:act_babi_filter_parameter"
-msgid "Filters Parameters"
+msgid "Filter Parameters"
 msgstr "Paràmetres del filtre"
 
 msgctxt "model:ir.action,name:act_babi_internal_measure"
@@ -1009,12 +1061,12 @@ msgid "Report"
 msgstr "Informe"
 
 msgctxt "model:ir.action,name:open_chart_wizard"
-msgid "Open Chart"
-msgstr "Obre una gràfica"
+msgid "Abrir gráfico"
+msgstr "Obre gràfica"
 
 msgctxt "model:ir.action,name:open_execution_wizard"
-msgid "Open Execution"
-msgstr "Obre execució"
+msgid "Bussiness Inteligence Report"
+msgstr "Informe de Bussiness Inteligence"
 
 msgctxt "model:ir.ui.menu,name:menu_babi"
 msgid "Business Intelligence"
@@ -1197,6 +1249,10 @@ msgid "Calculated"
 msgstr "Calcul·lat"
 
 msgctxt "selection:babi.report.execution,state:"
+msgid "Canceled"
+msgstr "Cancelado"
+
+msgctxt "selection:babi.report.execution,state:"
 msgid "Failed"
 msgstr "Fallada"
 
@@ -1283,6 +1339,10 @@ msgstr "Ordre"
 msgctxt "view:babi.report.execution.open.select:"
 msgid "Open Execution"
 msgstr "Obre execució"
+
+msgctxt "view:babi.report.execution:"
+msgid "Cancel"
+msgstr "Cancel·la"
 
 msgctxt "view:babi.report.execution:"
 msgid "Execution"
