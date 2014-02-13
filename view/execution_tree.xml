@@ -7,4 +7,5 @@
 	<field name="state"/>
 	<field name="filtered"/>
     <button name="open" string="Open" />
+    <button name="cancel" string="Cancel" />
 </tree>

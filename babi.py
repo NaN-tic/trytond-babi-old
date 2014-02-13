@@ -798,6 +798,7 @@ class ReportExecution(ModelSQL, ModelView):
             ('calculated', 'Calculated'),
             ('timeout', 'Timeout'),
             ('failed', 'Failed'),
+            ('canceled', 'Canceled'),
         ], 'State', required=True, readonly=True)
     timeout = fields.Integer('Timeout', required=True, readonly=True,
         help='If report calculation should take more than the specified '
@@ -809,6 +810,7 @@ class ReportExecution(ModelSQL, ModelView):
     filter_values = fields.Text('Filter Values', readonly=True)
     internal_measures = fields.One2Many('babi.internal.measure',
         'execution', 'Internal Measures', readonly=True)
+    pid = fields.Integer('Pid', readonly=True)
 
     @classmethod
     def __setup__(cls):
@@ -825,6 +827,10 @@ class ReportExecution(ModelSQL, ModelView):
         cls._buttons.update({
                 'open': {
                     'invisible': Eval('state') != 'calculated',
+                    },
+                'cancel': {
+                    'invisible': ((Eval('state') != 'in_progress') &
+                        ~Eval('pid', False)),
                     },
                 })
 
@@ -866,6 +872,18 @@ class ReportExecution(ModelSQL, ModelView):
     @ModelView.button_action('babi.open_execution_wizard')
     def open(cls, executions):
         pass
+
+    @classmethod
+    @ModelView.button
+    def cancel(cls, executions):
+        for execution in executions:
+            if execution.state != 'in_progress':
+                continue
+            if not execution.pid:
+                continue
+            os.kill(execution.pid, 15)
+            execution.state = 'canceled'
+            execution.save()
 
     @classmethod
     def delete(cls, executions):
@@ -927,7 +945,10 @@ class ReportExecution(ModelSQL, ModelView):
                 pool = Pool()
                 Execution = pool.get('babi.report.execution')
                 new_instances = Execution.browse([execution_id])
-                Execution.write(new_instances, {'state': state})
+                to_write = {'state': state}
+                if state == 'in_progress':
+                    to_write['pid'] = os.getpid()
+                Execution.write(new_instances, to_write)
                 new_transaction.cursor.commit()
             except DatabaseOperationalError:
                 new_transaction.cursor.rollback()
@@ -935,6 +956,7 @@ class ReportExecution(ModelSQL, ModelView):
     @classmethod
     def calculate(cls, executions):
         for execution in executions:
+            execution.save_state(execution.id, 'in_progress')
             date = execution.create_date
             with Transaction().set_context(_datetime=date):
                 execution.validate_model()
