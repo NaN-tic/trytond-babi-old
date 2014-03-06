@@ -1064,8 +1064,9 @@ msgctxt "model:ir.action,name:act_babi_report"
 msgid "Report"
 msgstr "Informe"
 
+#, fuzzy
 msgctxt "model:ir.action,name:open_chart_wizard"
-msgid "Abrir gráfico"
+msgid "open chart"
 msgstr "Abrir gráfico"
 
 msgctxt "model:ir.action,name:open_execution_wizard"
@@ -1099,6 +1100,14 @@ msgstr "Informe"
 msgctxt "model:ir.ui.menu,name:menu_configuration"
 msgid "Configuration"
 msgstr "Configuración"
+
+msgctxt "model:ir.ui.menu,name:menu_historical_data"
+msgid "View historical data"
+msgstr "Ver información historica"
+
+msgctxt "model:ir.ui.menu,name:menu_update_data"
+msgid "Update data"
+msgstr "Actualitzar información"
 
 msgctxt "model:res.group,name:group_babi"
 msgid "Business Intelligence"

@@ -55,8 +55,8 @@ msgid ""
 "No menus found for report %s. In order to view it's data you must create "
 "menu entries."
 msgstr ""
-"No s'han menús per l'informe %s. Per veure la informació d'un informe heu de"
-" crear les seves entrades de menú. "
+"No s'han trobat menús per l'informe %s. Per veure la informació d'un informe"
+" heu de crear les seves entrades de menú. "
 
 msgctxt "error:babi.report.execution.open:"
 msgid ""
@@ -1060,8 +1060,9 @@ msgctxt "model:ir.action,name:act_babi_report"
 msgid "Report"
 msgstr "Informe"
 
+#, fuzzy
 msgctxt "model:ir.action,name:open_chart_wizard"
-msgid "Abrir gráfico"
+msgid "open chart"
 msgstr "Obre gràfica"
 
 msgctxt "model:ir.action,name:open_execution_wizard"
@@ -1096,6 +1097,14 @@ msgctxt "model:ir.ui.menu,name:menu_configuration"
 msgid "Configuration"
 msgstr "Configuració"
 
+msgctxt "model:ir.ui.menu,name:menu_historical_data"
+msgid "View historical data"
+msgstr "Veure informació històrica"
+
+msgctxt "model:ir.ui.menu,name:menu_update_data"
+msgid "Update data"
+msgstr "Actualitza informació"
+
 msgctxt "model:res.group,name:group_babi"
 msgid "Business Intelligence"
 msgstr "Business Intelligence"
@@ -1118,7 +1127,7 @@ msgstr "Coma flotant"
 
 msgctxt "selection:babi.expression,ttype:"
 msgid "Integer"
-msgstr "Ener"
+msgstr "Enter"
 
 msgctxt "selection:babi.expression,ttype:"
 msgid "Many To One"

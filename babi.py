@@ -244,6 +244,7 @@ def create_columns(name, ffields):
 
 def create_class(name, description, dimensions, measures, order):
     "Create class, and make instance"
+    print order
     body = {
         '__doc__': description,
         '__name__': name,
@@ -346,7 +347,7 @@ class Filter(ModelSQL, ModelView):
     __name__ = 'babi.filter'
     _history = True
 
-    name = fields.Char('Name', required=True)
+    name = fields.Char('Name', required=True, translate=True)
     model = fields.Many2One('ir.model', 'Model', required=True,
         domain=[('babi_enabled', '=', True)])
     model_name = fields.Function(fields.Char('Model Name',
@@ -413,8 +414,8 @@ class FilterParameter(ModelSQL, ModelView):
     _history = True
 
     filter = fields.Many2One('babi.filter', 'Filter', required=True)
-    name = fields.Char('Name', required=True, help='Name used on the domain '
-        'substitution')
+    name = fields.Char('Name', required=True, translate=True, help='Name used '
+        'on the domain substitution')
     ttype = fields.Selection(FIELD_TYPES + [('many2many', 'Many To Many')],
         'Field Type', required=True)
     related_model = fields.Many2One('ir.model', 'Related Model', states={
@@ -472,7 +473,7 @@ class Expression(ModelSQL, ModelView):
     __name__ = 'babi.expression'
     _history = True
 
-    name = fields.Char('Name', required=True)
+    name = fields.Char('Name', required=True, translate=True)
     model = fields.Many2One('ir.model', 'Model', required=True,
         domain=[('babi_enabled', '=', True)])
     expression = fields.Char('Expression', required=True,
@@ -507,7 +508,8 @@ class Report(ModelSQL, ModelView):
     __name__ = 'babi.report'
     _history = True
 
-    name = fields.Char('Name', required=True, help='New virtual model name.')
+    name = fields.Char('Name', required=True, translate=True,
+        help='New virtual model name.')
     model = fields.Many2One('ir.model', 'Model', required=True,
         domain=[('babi_enabled', '=', True)], help='Model for data extraction')
     model_name = fields.Function(fields.Char('Model Name',
@@ -560,7 +562,6 @@ class Report(ModelSQL, ModelView):
                 })
 
         start_celery()
-
 
     @staticmethod
     def default_timeout():
@@ -630,7 +631,7 @@ class Report(ModelSQL, ModelView):
         ActWindow.delete(actions)
         Menu.delete(menus)
 
-    def create_tree_view_menu(self):
+    def create_tree_view_menu(self, langs):
         pool = Pool()
         ActWindow = pool.get('ir.action.act_window')
         Action = pool.get('ir.action.wizard')
@@ -655,9 +656,15 @@ class Report(ModelSQL, ModelView):
         menu.groups = self.groups
         menu.babi_type = 'tree'
         menu.save()
+        if langs:
+            for lang in langs:
+                with Transaction().set_context(language=lang.code,
+                        fuzzy_translation=False):
+                    data, = self.read([self], fields_names=['name'])
+                    Menu.write([menu], data)
         return menu.id
 
-    def create_list_view_menu(self, parent):
+    def create_list_view_menu(self, parent, langs):
         "Create list view and action to open"
         pool = Pool()
         ActWindow = pool.get('ir.action.act_window')
@@ -681,6 +688,13 @@ class Report(ModelSQL, ModelView):
         menu.groups = self.groups
         menu.babi_type = 'list'
         menu.save()
+        if langs:
+            for lang in langs:
+                with Transaction().set_context(language=lang.code,
+                        fuzzy_translation=False):
+                    data, = self.read([self], fields_names=['name'])
+                    Menu.write([menu], data)
+        return menu.id
 
     def create_update_wizard_menu(self, parent):
         pool = Pool()
@@ -688,16 +702,16 @@ class Report(ModelSQL, ModelView):
         Action = pool.get('ir.action.wizard')
         ModelData = pool.get('ir.model.data')
         action = Action(ModelData.get_id('babi', 'open_execution_wizard'))
-        menu = Menu()
-        # TODO: Translate
-        menu.name = 'Update data'
-        menu.parent = parent
-        menu.babi_report = self
-        menu.action = str(action)
-        menu.icon = 'tryton-executable'
-        menu.groups = self.groups
-        menu.babi_type = 'wizard'
-        menu.save()
+        menu = Menu(ModelData.get_id('babi', 'menu_update_data'))
+        Menu.copy([menu], {
+                'parent': parent,
+                'babi_report': self.id,
+                'action': str(action),
+                'icon': 'tryton-executable',
+                'groups': [('set', [x.id for x in self.groups])],
+                'babi_type': 'wizard',
+                'active': True,
+                })
 
     def create_history_menu(self, parent):
         pool = Pool()
@@ -705,24 +719,29 @@ class Report(ModelSQL, ModelView):
         ModelData = pool.get('ir.model.data')
         Menu = pool.get('ir.ui.menu')
         wizard = Action(ModelData.get_id('babi', 'open_execution_wizard'))
-        menu = Menu()
-        # TODO: Translate
-        menu.name = 'View Historical data'
-        menu.parent = parent
-        menu.babi_report = self
-        menu.action = str(wizard)
-        menu.icon = 'tryton-executable'
-        menu.groups = self.groups
-        menu.babi_type = 'history'
-        menu.save()
+        menu = Menu(ModelData.get_id('babi', 'menu_historical_data'))
+        Menu.copy([menu], {
+                'parent': parent,
+                'babi_report': self.id,
+                'action': str(wizard),
+                'icon': 'tryton-executable',
+                'groups': [('set', [x.id for x in self.groups])],
+                'babi_type': 'history',
+                'active': True,
+                })
 
     @classmethod
     def create_menus(cls, reports):
         """Regenerates all actions and menu entries"""
+        pool = Pool()
+        Lang = pool.get('ir.lang')
+        langs = Lang.search([
+            ('translatable', '=', True),
+            ])
+        cls.remove_menus(reports)
         for report in reports:
-            report.__class__.remove_menus([report])
-            menu = report.create_tree_view_menu()
-            report.create_list_view_menu(menu)
+            menu = report.create_tree_view_menu(langs)
+            report.create_list_view_menu(menu, langs)
             report.create_update_wizard_menu(menu)
             report.create_history_menu(menu)
 
@@ -1734,7 +1753,8 @@ class DimensionMixin:
     report = fields.Many2One('babi.report', 'Report', required=True,
         ondelete='CASCADE')
     sequence = fields.Integer('Sequence')
-    name = fields.Char('Name', required=True, on_change_with=['expression'])
+    name = fields.Char('Name', required=True, translate=True,
+        on_change_with=['expression'])
     internal_name = fields.Function(fields.Char('Internal Name'),
         'get_internal_name')
     expression = fields.Many2One('babi.expression', 'Expression',
@@ -1842,7 +1862,8 @@ class Measure(ModelSQL, ModelView):
     report = fields.Many2One('babi.report', 'Report', required=True,
         ondelete='CASCADE')
     sequence = fields.Integer('Sequence')
-    name = fields.Char('Name', required=True, on_change_with=['expression'])
+    name = fields.Char('Name', required=True, translate=True,
+        on_change_with=['expression'])
     internal_name = fields.Function(fields.Char('Internal Name'),
         'get_internal_name')
     expression = fields.Many2One('babi.expression', 'Expression',
