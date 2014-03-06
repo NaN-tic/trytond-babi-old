@@ -1080,10 +1080,10 @@ class ReportExecution(ModelSQL, ModelView):
                     if not babi_eval(python_filter, record, convert_none=False):
                         continue
                 vals = ['now()', str(uid)]
-                vals += [unicode(babi_eval(x, record).replace('|', '-'))
+                vals += [unicode(str(babi_eval(x, record)).replace('|', '-'))
                     for x in dimension_expressions]
-                vals += [unicode(babi_eval(x, record,
-                            convert_none='zero')).replace('|', '-')
+                vals += [unicode(str(babi_eval(x, record,
+                                convert_none='zero')).replace('|', '-'))
                     for x in measure_expressions]
                 record = u'|'.join(vals).replace('\n', ' ')
                 to_create += record.replace('\\', '').encode('utf-8') + '\n'
