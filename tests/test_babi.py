@@ -523,7 +523,8 @@ class BaBITestCase(unittest.TestCase):
             self.assertEqual(babi_eval(expression, obj), result)
 
         self.assertEqual(babi_eval('o', None, convert_none='zero'), '0')
-        self.assertEqual(babi_eval('o', None, convert_none=False), None)
+        self.assertEqual(babi_eval('o', None, convert_none=''), '')
+        self.assertEqual(babi_eval('o', None, convert_none=None), None)
 
     def test0070_basic_operations(self):
         'Test basic operations'

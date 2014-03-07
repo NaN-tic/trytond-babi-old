@@ -51,6 +51,11 @@ AGGREGATE_TYPES = [
 
 SRC_CHARS = u""" .'"()/*-+?¿!&$[]{}@#`'^:;<>=~%,|\\"""
 DST_CHARS = u"""__________________________________"""
+celery_available = None
+try:
+    import celery as celery_available
+except ImportError:
+    pass
 
 
 def unaccent(text):
@@ -67,9 +72,7 @@ def unaccent(text):
 
 
 def start_celery():
-    try:
-        import celery
-    except ImportError:
+    if celery_available is None:
         return
     db = Transaction().cursor.database_name
     env = {
@@ -97,6 +100,15 @@ class DynamicModel(ModelSQL, ModelView):
                 'report_not_exists': ('Report "%s" no longer exists or you do '
                     'not have the rights to access it.'),
                 })
+        pool = Pool()
+        Execution = pool.get('babi.report.execution')
+        executions = Execution.search([
+                ('babi_model.model', '=', cls.__name__),
+                ])
+        if not executions or len(executions) > 1:
+            return
+        execution, = executions
+        cls._order = execution.get_orders()
 
     @classmethod
     def fields_view_get(cls, view_id=None, view_type='form'):
@@ -242,28 +254,25 @@ def create_columns(name, ffields):
     return columns
 
 
-def create_class(name, description, dimensions, measures, order):
+def create_class(name, description, dimensions, measures):
     "Create class, and make instance"
-    print order
     body = {
         '__doc__': description,
         '__name__': name,
         # Used in get_rec_name()
         '_defaults': {},
-        '_order': order,
         '_babi_dimensions': [x['internal_name'] for x in dimensions],
         }
     body.update(create_columns(name, dimensions + measures))
     return type(name, (DynamicModel, ), body)
 
 
-def register_class(internal_name, name, dimensions, measures, order):
+def register_class(internal_name, name, dimensions, measures):
     "Register class an return model"
     pool = Pool()
     Model = pool.get('ir.model')
 
-    Class = create_class(internal_name, name, dimensions, measures,
-        order)
+    Class = create_class(internal_name, name, dimensions, measures)
     Pool.register(Class, module='babi', type_='model')
     Class.__setup__()
     pool.add(Class, type='model')
@@ -573,7 +582,7 @@ class Report(ModelSQL, ModelView):
         return self.model.model if self.model else None
 
     def get_internal_name(self, name):
-        return '%s_%d' % (unaccent(self.name)[:10], self.id)
+        return 'babi_report_%d' % self.id
 
     def get_last_execution(self, name):
         if self.executions:
@@ -703,32 +712,34 @@ class Report(ModelSQL, ModelView):
         ModelData = pool.get('ir.model.data')
         action = Action(ModelData.get_id('babi', 'open_execution_wizard'))
         menu = Menu(ModelData.get_id('babi', 'menu_update_data'))
-        Menu.copy([menu], {
+        menu, = Menu.copy([menu], {
                 'parent': parent,
                 'babi_report': self.id,
-                'action': str(action),
                 'icon': 'tryton-executable',
                 'groups': [('set', [x.id for x in self.groups])],
                 'babi_type': 'wizard',
                 'active': True,
                 })
+        menu.action = str(action)
+        menu.save()
 
     def create_history_menu(self, parent):
         pool = Pool()
         Action = pool.get('ir.action.wizard')
         ModelData = pool.get('ir.model.data')
         Menu = pool.get('ir.ui.menu')
-        wizard = Action(ModelData.get_id('babi', 'open_execution_wizard'))
+        action = Action(ModelData.get_id('babi', 'open_execution_wizard'))
         menu = Menu(ModelData.get_id('babi', 'menu_historical_data'))
-        Menu.copy([menu], {
+        menu, = Menu.copy([menu], {
                 'parent': parent,
                 'babi_report': self.id,
-                'action': str(wizard),
                 'icon': 'tryton-executable',
                 'groups': [('set', [x.id for x in self.groups])],
                 'babi_type': 'history',
                 'active': True,
                 })
+        menu.action = str(action)
+        menu.save()
 
     @classmethod
     def create_menus(cls, reports):
@@ -754,18 +765,6 @@ class Report(ModelSQL, ModelView):
                 dimensions.append(dimension.get_dimension_data())
 
         return dimensions
-
-    def get_orders(self):
-        order = []
-        for record in self.order:
-            if record.dimension:
-                field = record.dimension.internal_name
-                order.append((field, record.order))
-            else:
-                for measure in record.measure.internal_measures:
-                    field = measure.internal_name
-                    order.append((field, record.order))
-        return order
 
     def get_execution_data(self):
         return {
@@ -875,13 +874,27 @@ class ReportExecution(ModelSQL, ModelView):
         return '%s (%s)' % (self.report.rec_name, self.date)
 
     def get_internal_name(self, name):
-        return '%s_%d' % (self.report.internal_name, self.id)
+        return 'babi_execution_%d' % self.id
 
     def get_measures(self):
         measures = []
         for measure in self.internal_measures:
             measures.append(measure.get_measure_data())
         return measures
+
+    def get_orders(self):
+        order = []
+        with Transaction().set_context(_datetime=self.date):
+            for record in self.report.order:
+                if record.dimension:
+                    field = record.dimension.internal_name
+                    order.append((field, record.order))
+                else:
+                    for measure in record.measure.internal_measures:
+                        if measure.execution == self:
+                            field = measure.internal_name
+                            order.append((field, record.order))
+        return order
 
     def on_change_with_report_model(self, name=None):
         if self.report:
@@ -937,15 +950,16 @@ class ReportExecution(ModelSQL, ModelView):
 
     def validate_model(self, with_columns=False):
         "makes model available on Tryton and pool instance"
+
         dimensions = self.report.get_dimensions(with_columns)
         measures = self.get_measures()
-        order = self.report.get_orders()
 
         model = register_class(self.internal_name, self.report.name,
-            dimensions, measures, order)
+            dimensions, measures)
 
-        self.babi_model = model
-        self.save()
+        if not self.babi_model:
+            self.babi_model = model
+            self.save()
 
         create_groups_access(model, self.report.groups)
         #Commit transaction to avoid locks
@@ -1050,7 +1064,9 @@ class ReportExecution(ModelSQL, ModelView):
         self.validate_model(with_columns=with_columns)
 
         dimension_names = [x.internal_name for x in self.report.dimensions]
-        dimension_expressions = [x.expression.expression for x in
+        dimension_expressions = [(x.expression.expression,
+                        '' if x.expression.ttype == 'many2one'
+                        else 'empty') for x in
             self.report.dimensions]
         measure_names = [x.internal_name for x in
             self.internal_measures]
@@ -1059,8 +1075,9 @@ class ReportExecution(ModelSQL, ModelView):
         if self.report.columns:
             dimension_names.extend([x.internal_name for x in
                     self.report.columns])
-            dimension_expressions.extend([x.expression.expression for x in
-                    self.report.columns])
+            dimension_expressions.extend([(x.expression.expression,
+                        '' if x.expression.ttype == 'many2one'
+                        else 'empty') for x in self.report.columns])
 
         columns = (['create_date', 'create_uid'] + dimension_names +
             measure_names)
@@ -1083,6 +1100,15 @@ class ReportExecution(ModelSQL, ModelView):
         offset = 2000
         index = 0
 
+        def sanitanize(x):
+            if (isinstance(x,  basestring) or isinstance(x, str)
+                    or isinstance(x, unicode)):
+                x = x.replace('|', '-')
+            if not isinstance(x, unicode):
+                return unicode(x)
+            else:
+                return unicode(x)
+
         with transaction.set_context(_datetime=None):
             records = Model.search(domain, offset=index*offset, limit=offset)
         while records:
@@ -1099,10 +1125,9 @@ class ReportExecution(ModelSQL, ModelView):
                     if not babi_eval(python_filter, record, convert_none=False):
                         continue
                 vals = ['now()', str(uid)]
-                vals += [unicode(str(babi_eval(x, record)).replace('|', '-'))
+                vals += [sanitanize(babi_eval(x[0], record, convert_none=x[1]))
                     for x in dimension_expressions]
-                vals += [unicode(str(babi_eval(x, record,
-                                convert_none='zero')).replace('|', '-'))
+                vals += [sanitanize(babi_eval(x, record, convert_none='zero'))
                     for x in measure_expressions]
                 record = u'|'.join(vals).replace('\n', ' ')
                 to_create += record.replace('\\', '').encode('utf-8') + '\n'
@@ -1666,6 +1691,7 @@ class OpenExecution(Wizard):
         execution['filter_values'] = data
         execution['filtered'] = True
         execution, = Execution.create([execution])
+        Transaction().cursor.commit()
         Execution.calculate([execution])
 
         context = Transaction().context
@@ -1764,7 +1790,7 @@ class DimensionMixin:
     group_by = fields.Boolean('Group By This Dimension')
 
     def get_internal_name(self, name):
-        return '%s_%d' % (unaccent(self.name)[:10], self.id)
+        return 'babi_dimension_%d' % self.id
 
     @staticmethod
     def order_sequence(tables):
@@ -1898,7 +1924,7 @@ class Measure(ModelSQL, ModelView):
         return self.expression.name if self.expression else None
 
     def get_internal_name(self, name):
-        return '%s_%d' % (unaccent(self.name)[:10], self.id)
+        return 'babi_measure_%d' % (self.id)
 
     def get_measure_data(self):
         return {

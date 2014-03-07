@@ -1,4 +1,4 @@
-<tree string="Order" sequence="sequence">
+<tree string="Order" sequence="sequence" editable="bottom">
 	 <field name="report"/>
 	 <field name="dimension"/>
 	 <field name="measure"/>
