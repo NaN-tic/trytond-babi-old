@@ -19,6 +19,7 @@ from trytond.tests.test_tryton import POOL, DB_NAME, USER, CONTEXT, test_view,\
 from trytond.transaction import Transaction
 from trytond.exceptions import UserError
 from trytond.modules.babi.babi_eval import babi_eval
+from dateutil.relativedelta import relativedelta
 
 
 class BaBITestCase(unittest.TestCase):
@@ -94,6 +95,13 @@ class BaBITestCase(unittest.TestCase):
                         'model': model.id,
                         'ttype': 'numeric',
                         'expression': 'o.amount',
+                        }, {
+                        'name': 'Amount this month',
+                        'model': model.id,
+                        'ttype': 'numeric',
+                        'expression': 'o.amount if o.date >= '
+                            'today() - relativedelta(days=today().day - 1) '
+                            'else 0.0',
                         }])
 
             self.filter.create([{
@@ -137,12 +145,25 @@ class BaBITestCase(unittest.TestCase):
                         'name': 'Amount',
                         'aggregate': 'sum',
                         }])
+            amount_this_month, = self.expression.search([
+                    ('name', '=', 'Amount this month'),
+                    ])
+            amount_this_month, = self.measure.create([{
+                        'report': report.id,
+                        'expression': amount_this_month.id,
+                        'name': 'Amount this month',
+                        'aggregate': 'sum',
+                        }])
             report, = self.report.search([])
+            (category_order, amount_order,
+                amount_this_month_order) = report.order
             category_order, amount_order = report.order
             self.assertIsNotNone(category_order.dimension)
             self.assertIsNone(category_order.measure)
             self.assertIsNone(amount_order.dimension)
             self.assertIsNotNone(amount_order.measure)
+            self.assertIsNone(amount_this_month_order.dimension)
+            self.assertIsNotNone(amount_this_month_order.measure)
 
             self.report.calculate([report])
             report, = self.report.search([])
@@ -155,12 +176,27 @@ class BaBITestCase(unittest.TestCase):
             total_amount = 0
             odd_amount = 0
             even_amount = 0
+            total_amount_this_month = 0
+            odd_amount_this_month = 0
+            even_amount_this_month = 0
+            today = datetime.date.today()
             for record in DataModel.search([]):
                 total_amount += record.amount
+                total_amount_this_month += (record.amount
+                    if record.date >= today - relativedelta(days=today.day - 1)
+                    else Decimal(0.0))
                 if record.category == 'odd':
                     odd_amount += record.amount
+                    odd_amount_this_month += (record.amount
+                        if record.date >= today - relativedelta(days=today.day
+                            - 1)
+                        else Decimal(0.0))
                 elif record.category == 'even':
                     even_amount += record.amount
+                    even_amount_this_month += (record.amount
+                        if record.date >= today - relativedelta(days=today.day
+                            - 1)
+                        else Decimal(0.0))
 
             self.assertEqual(len(ReportModel.search([])), 3)
             root, = ReportModel.search([('parent', '=', None)])
@@ -168,12 +204,18 @@ class BaBITestCase(unittest.TestCase):
             self.assertEqual(getattr(root, category.internal_name), '(all)')
             self.assertEqual(getattr(root, amount.internal_name),
                 total_amount)
+            self.assertEqual(getattr(root, amount_this_month.internal_name),
+                total_amount_this_month)
             odd, = ReportModel.search([(category.internal_name, '=', 'odd')])
             self.assertEqual(getattr(odd, amount.internal_name),
                 odd_amount)
+            self.assertEqual(getattr(odd, amount_this_month.internal_name),
+                odd_amount_this_month)
             even, = ReportModel.search([(category.internal_name, '=', 'even')])
             self.assertEqual(getattr(even, amount.internal_name),
                 even_amount)
+            self.assertEqual(getattr(even, amount_this_month.internal_name),
+                even_amount_this_month)
 
             month, = self.expression.search([('name', '=', 'Month')])
             month, = self.dimension.create([{
