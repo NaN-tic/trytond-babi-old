@@ -29,6 +29,7 @@
 
 import datetime
 from trytond.tools import safe_eval
+from dateutil.relativedelta import relativedelta
 
 
 def year(text):
@@ -96,6 +97,7 @@ def babi_eval(expression, obj, convert_none='empty'):
         'max': max,
         'now': datetime.datetime.now,
         'today': datetime.date.today,
+        'relativedelta': relativedelta,
         }
     value = safe_eval(expression, objects)
     if (value is False or value is None):
