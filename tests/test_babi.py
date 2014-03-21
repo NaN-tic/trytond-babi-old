@@ -157,7 +157,6 @@ class BaBITestCase(unittest.TestCase):
             report, = self.report.search([])
             (category_order, amount_order,
                 amount_this_month_order) = report.order
-            category_order, amount_order = report.order
             self.assertIsNotNone(category_order.dimension)
             self.assertIsNone(category_order.measure)
             self.assertIsNone(amount_order.dimension)
@@ -560,6 +559,8 @@ class BaBITestCase(unittest.TestCase):
             ('max(o[0], o[1])', (date, other_date,), date),
             ('min(o[0], o[1])', (date, other_date,), other_date),
             ('today()', None, datetime.date.today()),
+            ('o - relativedelta(days=1)', date, datetime.date(2014, 10, 9)),
+            ('o - relativedelta(months=1)', date, datetime.date(2014, 9, 10)),
             ]
         for expression, obj, result in tests:
             self.assertEqual(babi_eval(expression, obj), result)
@@ -572,6 +573,11 @@ class BaBITestCase(unittest.TestCase):
         'Test basic operations'
         with Transaction().start(DB_NAME, USER, context=CONTEXT):
             report, = self.report.search([], limit=1)
+            #Delete one dimension as SQlite test fails with two dimensions.
+            dimension, _ = report.dimensions
+            self.dimension.delete([dimension])
+            measure, _ = report.measures
+            self.measure.delete([measure])
             new_report, = self.report.copy([report])
             self.assertEqual(new_report.name, '%s (2)' % (report.name))
             menus = self.menu.search([
