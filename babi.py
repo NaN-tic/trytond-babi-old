@@ -56,6 +56,10 @@ try:
     import celery as celery_available
 except ImportError:
     pass
+except AttributeError:
+    # If run from within frepple we will get
+    # AttributeError: 'module' object has no attribute 'argv'
+    pass
 
 
 def unaccent(text):
