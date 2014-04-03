@@ -4,12 +4,12 @@ contains the full copyright notices and license terms. -->
 <form string="Report">
     <label name="name"/>
     <field name="name"/>
-	<label name="model"/>
-	<field name="model"/>
-	<label name="parent_menu"/>
-	<field name="parent_menu" colspan="3"/>
-	<label name="filter"/>
-	<field name="filter" colspan="3"/>
+    <label name="model"/>
+    <field name="model"/>
+    <label name="parent_menu"/>
+    <field name="parent_menu" colspan="3"/>
+    <label name="filter"/>
+    <field name="filter" colspan="3"/>
     <notebook>
         <page id="general" string="General">
             <group col="1" colspan="2" id="dimensions" yfill="1" yexpand="1">
@@ -18,7 +18,7 @@ contains the full copyright notices and license terms. -->
                 <field name="measures"/>
             </group>
             <group col="1" colspan="2" id="order" yfill="1" yexpand="1">
-	            <field name="order"/>
+                <field name="order"/>
                 <field name="groups"/>
             </group>
             <group col="3" colspan="4" id="buttons">

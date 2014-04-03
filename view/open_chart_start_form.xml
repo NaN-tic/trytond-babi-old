@@ -2,15 +2,15 @@
 <!--The COPYRIGHT file at the top level of this repository
 contains the full copyright notices and license terms. -->
 <form string="Report">
-	<label name="graph_type"/>
-	<field name="graph_type" colspan="3"/>
+    <label name="graph_type"/>
+    <field name="graph_type" colspan="3"/>
     <label name="interpolation"/>
     <field name="interpolation" colspan="3"/>
     <label name="show_legend"/>
     <field name="show_legend" colspan="3"/>
     <label name="dimension"/>
     <field name="dimension" colspan="3" widget="selection"/>
-	<field name="measures" colspan="4"/>
+    <field name="measures" colspan="4"/>
     <field name="execution" invisible="1" />
     <field name="execution_date" invisible="1" />
 </form>

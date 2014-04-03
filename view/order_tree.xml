@@ -1,7 +1,7 @@
 <tree string="Order" sequence="sequence" editable="bottom">
-	 <field name="report"/>
-	 <field name="dimension"/>
-	 <field name="measure"/>
-	 <field name="order"/>
-	 <field name="sequence" tree_invisible="1"/>
+    <field name="report"/>
+    <field name="dimension"/>
+    <field name="measure"/>
+    <field name="order"/>
+    <field name="sequence" tree_invisible="1"/>
 </tree>

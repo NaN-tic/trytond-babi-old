@@ -2,17 +2,17 @@
 <!--The COPYRIGHT file at the top level of this repository
 contains the full copyright notices and license terms. -->
 <form string="Filter">
-	<label name="name"/>
-	<field name="name"/>
-	<label name="model"/>
-	<field name="model"/>
-	<label name="view_search"/>
-	<field name="view_search"/>
+    <label name="name"/>
+    <field name="name"/>
+    <label name="model"/>
+    <field name="model"/>
+    <label name="view_search"/>
+    <field name="view_search"/>
     <newline/>
-	<label name="domain"/>
-	<field name="domain" colspan="3"/>
+    <label name="domain"/>
+    <field name="domain" colspan="3"/>
     <label name="python_expression"/>
     <field name="python_expression" colspan="3"/>
-	<field name="parameters" colspan="4"/>
-	<field name="fields" colspan="4"/>
+    <field name="parameters" colspan="4"/>
+    <field name="fields" colspan="4"/>
 </form>

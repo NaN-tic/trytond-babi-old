@@ -2,12 +2,12 @@
 <!--The COPYRIGHT file at the top level of this repository
 contains the full copyright notices and license terms. -->
 <form string="Filter Parameter">
-	<label name="name"/>
-	<field name="name"/>
-	<label name="filter"/>
-	<field name="filter"/>
-	<label name="ttype"/>
-	<field name="ttype"/>
-	<label name="related_model"/>
-	<field name="related_model"/>
+    <label name="name"/>
+    <field name="name"/>
+    <label name="filter"/>
+    <field name="filter"/>
+    <label name="ttype"/>
+    <field name="ttype"/>
+    <label name="related_model"/>
+    <field name="related_model"/>
 </form>
