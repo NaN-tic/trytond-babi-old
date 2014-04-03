@@ -3,6 +3,7 @@
 
 from trytond.pool import Pool
 from .configuration import *
+from .cron import *
 from .babi import *
 from .test_model import *
 
@@ -10,6 +11,7 @@ from .test_model import *
 def register():
     Pool.register(
         Configuration,
+        Cron,
         Filter,
         FilterParameter,
         Expression,

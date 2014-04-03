@@ -556,6 +556,8 @@ class Report(ModelSQL, ModelView):
         'Executions', readonly=True, order=[('date', 'DESC')])
     last_execution = fields.Function(fields.Many2One('babi.report.execution',
         'Last Executions', readonly=True), 'get_last_execution')
+    crons = fields.One2Many('ir.cron', 'babi_report', 'Schedulers',
+        context={'babi_report': Eval('id')})
 
     @classmethod
     def __setup__(cls):
@@ -608,6 +610,7 @@ class Report(ModelSQL, ModelView):
     @classmethod
     def delete(cls, reports):
         cls.remove_menus(reports)
+        cls.remove_crons(reports)
         with Transaction().set_context(babi_order_force=True):
             return super(Report, cls).delete(reports)
 
@@ -629,6 +632,12 @@ class Report(ModelSQL, ModelView):
                 result.extend(super(Report, cls).copy([report], default))
             return result
         return super(Report, cls).copy(reports, default)
+
+    @classmethod
+    def remove_crons(cls, reports):
+        pool = Pool()
+        Cron = pool.get('ir.cron')
+        Cron.delete([c for r in reports for c in r.crons])
 
     @classmethod
     def remove_menus(cls, reports):
@@ -775,6 +784,14 @@ class Report(ModelSQL, ModelView):
                 'report': self.id,
                 'timeout': self.timeout,
             }
+
+    @classmethod
+    def calculate_babi_report(cls, args=None):
+        """This method is intended to be called from ir.cron"""
+        if not args:
+            args = []
+        reports = cls.search([('id', '=', args)])
+        return cls.calculate(reports)
 
     @classmethod
     def calculate(cls, reports):
