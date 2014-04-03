@@ -27,9 +27,11 @@
 #
 ##############################################################################
 
-import datetime
-from trytond.tools import safe_eval
 from dateutil.relativedelta import relativedelta
+from trytond.pool import Pool
+from trytond.tools import safe_eval
+from trytond.transaction import Transaction
+import datetime
 
 
 def year(text):
@@ -83,6 +85,8 @@ def date(text):
 def babi_eval(expression, obj, convert_none='empty'):
     objects = {
         'o': obj,
+        'pool': Pool,
+        'transaction': Transaction(),
         'y': year,
         'm': month,
         'd': day,
