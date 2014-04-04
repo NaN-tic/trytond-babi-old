@@ -41,5 +41,8 @@ contains the full copyright notices and license terms. -->
                 <field name="menus"/>
             </group>
         </page>
+        <page id="crons" string="Schedulers">
+            <field name="crons" colspan="4" mode="form,tree"/>
+        </page>
     </notebook>
 </form>
