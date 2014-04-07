@@ -85,8 +85,8 @@ def date(text):
 def babi_eval(expression, obj, convert_none='empty'):
     objects = {
         'o': obj,
-        'pool': Pool,
-        'transaction': Transaction(),
+        'Pool': Pool,
+        'Transaction': Transaction,
         'y': year,
         'm': month,
         'd': day,
