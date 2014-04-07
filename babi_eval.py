@@ -27,11 +27,11 @@
 #
 ##############################################################################
 
+import datetime
 from dateutil.relativedelta import relativedelta
 from trytond.pool import Pool
 from trytond.tools import safe_eval
 from trytond.transaction import Transaction
-import datetime
 
 
 def year(text):
