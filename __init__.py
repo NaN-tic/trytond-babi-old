@@ -11,7 +11,6 @@ from .test_model import *
 def register():
     Pool.register(
         Configuration,
-        Cron,
         Filter,
         FilterParameter,
         Expression,
@@ -27,6 +26,7 @@ def register():
         Menu,
         Keyword,
         Model,
+        Cron,
         OpenChartStart,
         OpenExecutionSelect,
         UpdateDataWizardStart,
