@@ -76,7 +76,8 @@ def unaccent(text):
 
 
 def start_celery():
-    if celery_available is None:
+    celery_start = CONFIG.get('celery_start', True)
+    if celery_available is None or not celery_start:
         return
     db = Transaction().cursor.database_name
     env = {
