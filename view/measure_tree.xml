@@ -1,8 +1,11 @@
+<?xml version="1.0"?>
+<!--The COPYRIGHT file at the top level of this repository
+contains the full copyright notices and license terms. -->
 <tree string="Measure" sequence="sequence" editable="bottom">
-	 <field name="report"/>
-	 <field name="expression"/>
-	 <field name="name"/>
-	 <field name="aggregate"/>
-	 <field name="progressbar"/>
-	 <field name="sequence" tree_invisible="1"/>
+     <field name="report"/>
+     <field name="expression"/>
+     <field name="name"/>
+     <field name="aggregate"/>
+     <field name="progressbar"/>
+     <field name="sequence" tree_invisible="1"/>
 </tree>

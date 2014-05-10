@@ -1,9 +1,9 @@
 <?xml version="1.0"?>
 <!--The COPYRIGHT file at the top level of this repository
 contains the full copyright notices and license terms. -->
-<tree string="Filter">
+<tree string="Filter Parameter" editable="bottom">
+    <field name="filter"/>
     <field name="name"/>
-    <field name="model"/>
-    <field name="domain"/>
-    <field name="python_expression"/>
+    <field name="ttype"/>
+    <field name="related_model"/>
 </tree>

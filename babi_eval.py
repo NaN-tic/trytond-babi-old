@@ -28,7 +28,11 @@
 ##############################################################################
 
 import datetime
+from dateutil.relativedelta import relativedelta
+from trytond.pool import Pool
 from trytond.tools import safe_eval
+from trytond.transaction import Transaction
+
 
 def year(text):
     if not text:
@@ -36,11 +40,13 @@ def year(text):
     text = str(text)
     return text[0:4]
 
+
 def year_month(text):
     if not text:
         return None
     text = str(text)
     return text[0:4] + '-' + text[5:7]
+
 
 def year_month_day(text):
     if not text:
@@ -48,11 +54,13 @@ def year_month_day(text):
     text = str(text)
     return text[0:10]
 
+
 def month(text):
     if not text:
         return None
     text = str(text)
     return text[5:7]
+
 
 def day(text):
     if not text:
@@ -60,20 +68,25 @@ def day(text):
     text = str(text)
     return text[8:10]
 
+
 def week(text):
     if not text:
         return None
     return datetime.datetime.strptime(year_month_day(text),
         '%Y-%M-%d').strftime('%W')
 
+
 def date(text):
     if not text:
         return None
     return datetime.datetime.strptime(year_month_day(text), '%Y-%m-%d').date()
 
+
 def babi_eval(expression, obj, convert_none='empty'):
     objects = {
         'o': obj,
+        'Pool': Pool,
+        'Transaction': Transaction,
         'y': year,
         'm': month,
         'd': day,
@@ -88,12 +101,15 @@ def babi_eval(expression, obj, convert_none='empty'):
         'max': max,
         'now': datetime.datetime.now,
         'today': datetime.date.today,
-	    }
+        'relativedelta': relativedelta,
+        }
     value = safe_eval(expression, objects)
-    if convert_none and (value is False or value is None):
+    if (value is False or value is None):
         if convert_none == 'empty':
-            # TODO: Make translatable	
+            # TODO: Make translatable
             value = '(empty)'
         elif convert_none == 'zero':
             value = '0'
+        else:
+            value = convert_none
     return value

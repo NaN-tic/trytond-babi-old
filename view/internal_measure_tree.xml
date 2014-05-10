@@ -1,12 +1,11 @@
+<?xml version="1.0"?>
+<!--The COPYRIGHT file at the top level of this repository
+contains the full copyright notices and license terms. -->
 <tree string="Internal Measure">
-	 <field name="aggregate"/>
-	 <field name="expression"/>
-	 <field name="internal_name"/>
-	 <field name="measure"/>
-	 <field name="name"/>
-	 <field name="progressbar"/>
-	 <field name="related_model"/>
-	 <field name="report"/>
-	 <field name="sequence"/>
-	 <field name="ttype"/>
+    <field name="measure"/>
+    <field name="name"/>
+    <field name="aggregate"/>
+    <field name="progressbar"/>
+    <field name="ttype"/>
+    <field name="related_model"/>
 </tree>

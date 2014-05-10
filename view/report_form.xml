@@ -4,12 +4,12 @@ contains the full copyright notices and license terms. -->
 <form string="Report">
     <label name="name"/>
     <field name="name"/>
-	<label name="model"/>
-	<field name="model"/>
-	<label name="parent_menu"/>
-	<field name="parent_menu" colspan="3"/>
-	<label name="filter"/>
-	<field name="filter" colspan="3"/>
+    <label name="model"/>
+    <field name="model"/>
+    <label name="parent_menu"/>
+    <field name="parent_menu" colspan="3"/>
+    <label name="filter"/>
+    <field name="filter" colspan="3"/>
     <notebook>
         <page id="general" string="General">
             <group col="1" colspan="2" id="dimensions" yfill="1" yexpand="1">
@@ -18,7 +18,7 @@ contains the full copyright notices and license terms. -->
                 <field name="measures"/>
             </group>
             <group col="1" colspan="2" id="order" yfill="1" yexpand="1">
-	            <field name="order"/>
+                <field name="order"/>
                 <field name="groups"/>
             </group>
             <group col="3" colspan="4" id="buttons">
@@ -27,23 +27,22 @@ contains the full copyright notices and license terms. -->
                 <button name="remove_menus" string="Remove Menus"/>
             </group>
         </page>
+        <page id="executions" string="Executions">
+            <field name="executions" colspan="4" />
+        </page>
         <page id="extra" string="Extra Information">
-            <label name="last_update"/>
-            <field name="last_update"/>
-            <label name="last_update_seconds"/>
-            <field name="last_update_seconds"/>
             <label name="internal_name"/>
             <field name="internal_name"/>
-            <label name="babi_model"/>
-            <field name="babi_model"/>
             <label name="timeout"/>
             <field name="timeout"/>
             <group id="internal" colspan="4" col="2" yexpand="1" yfill="1">
                 <field name="actions"/>
                 <field name="keywords"/>
                 <field name="menus"/>
-                <field name="internal_measures"/>
             </group>
+        </page>
+        <page id="crons" string="Schedulers">
+            <field name="crons" colspan="4" mode="form,tree"/>
         </page>
     </notebook>
 </form>

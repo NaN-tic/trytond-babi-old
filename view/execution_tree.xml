@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+<!--The COPYRIGHT file at the top level of this repository
+contains the full copyright notices and license terms. -->
+<tree string="Execution">
+    <field name="report"/>
+    <field name="date"/>
+    <field name="duration">
+        <suffix string="s"/>
+    </field>
+    <field name="state"/>
+    <field name="filtered"/>
+    <button name="open" string="Open" />
+    <button name="cancel" string="Cancel" />
+</tree>

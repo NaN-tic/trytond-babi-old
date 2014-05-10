@@ -1,0 +1,11 @@
+<?xml version="1.0"?>
+<!--The COPYRIGHT file at the top level of this repository
+contains the full copyright notices and license terms. -->
+<form string="Open Execution" col="2">
+    <label name="report"/>
+    <field name="report"/>
+    <label name="execution"/>
+    <field name="execution"/>
+    <label name="view_type"/>
+    <field name="view_type"/>
+</form>

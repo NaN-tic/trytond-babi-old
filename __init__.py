@@ -3,15 +3,19 @@
 
 from trytond.pool import Pool
 from .configuration import *
+from .cron import *
 from .babi import *
+from .test_model import *
 
 
 def register():
     Pool.register(
         Configuration,
         Filter,
+        FilterParameter,
         Expression,
         Report,
+        ReportExecution,
         ReportGroup,
         Dimension,
         DimensionColumn,
@@ -22,8 +26,15 @@ def register():
         Menu,
         Keyword,
         Model,
+        Cron,
         OpenChartStart,
+        OpenExecutionSelect,
+        UpdateDataWizardStart,
+        UpdateDataWizardUpdated,
+        TestBabiModel,
         module='babi', type_='model')
     Pool.register(
         OpenChart,
+        OpenExecution,
+        UpdateDataWizard,
         module='babi', type_='wizard')

@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<!--The COPYRIGHT file at the top level of this repository
+contains the full copyright notices and license terms. -->
+<form string="Execution">
+    <label name="report"/>
+    <field name="report" colspan="3"/>
+    <label name="date"/>
+    <field name="date"/>
+    <label name="duration"/>
+    <field name="duration"/>
+    <label name="timeout"/>
+    <field name="timeout"/>
+    <label name="filtered"/>
+    <field name="filtered"/>
+    <label name="state"/>
+    <field name="state"/>
+    <button name="open" string="Open" />
+</form>

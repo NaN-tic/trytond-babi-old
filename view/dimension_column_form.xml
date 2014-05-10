@@ -2,12 +2,12 @@
 <!--The COPYRIGHT file at the top level of this repository
 contains the full copyright notices and license terms. -->
 <form string="Column Dimension">
-	<label name="report"/>
-	<field name="report"/>
-	<label name="expression"/>
-	<field name="expression"/>
-	<label name="name"/>
-	<field name="name"/>
-	<label name="group_by"/>
-	<field name="group_by"/>
+    <label name="report"/>
+    <field name="report"/>
+    <label name="expression"/>
+    <field name="expression"/>
+    <label name="name"/>
+    <field name="name"/>
+    <label name="group_by"/>
+    <field name="group_by"/>
 </form>

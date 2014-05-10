@@ -1,5 +1,5 @@
 <tree string="Report">
      <field name="name"/>
-	 <field name="model"/>
-	 <field name="filter"/>
+     <field name="model"/>
+     <field name="filter"/>
 </tree>
