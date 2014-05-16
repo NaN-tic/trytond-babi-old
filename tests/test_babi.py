@@ -540,7 +540,6 @@ class BaBITestCase(unittest.TestCase):
         'Test babi_eval'
         date = datetime.date(2014, 10, 10)
         other_date = datetime.date(2014, 1, 1)
-        CONTEXT['date'] = date
         tests = [
             ('o', None, '(empty)'),
             ('y(o)', date, str(date.year)),
@@ -562,9 +561,8 @@ class BaBITestCase(unittest.TestCase):
             ('today()', None, datetime.date.today()),
             ('o - relativedelta(days=1)', date, datetime.date(2014, 10, 9)),
             ('o - relativedelta(months=1)', date, datetime.date(2014, 9, 10)),
-            ('Transaction().context.get(\'date\')', None, date),
         ]
-        with Transaction().start(DB_NAME, USER, context=CONTEXT):
+        with Transaction().start(DB_NAME, USER, context=CONTEXT) as trans:
             models = self.model.search([('model', '=', 'babi.test')])
             tests.append(
                 ('Pool().get(\'ir.model\').search(['
@@ -572,6 +570,9 @@ class BaBITestCase(unittest.TestCase):
                 )
             for expression, obj, result in tests:
                 self.assertEqual(babi_eval(expression, obj), result)
+            with trans.set_context(date=date):
+                self.assertEqual(babi_eval(
+                        'Transaction().context.get(\'date\')', None), date)
 
         self.assertEqual(babi_eval('o', None, convert_none='zero'), '0')
         self.assertEqual(babi_eval('o', None, convert_none=''), '')
