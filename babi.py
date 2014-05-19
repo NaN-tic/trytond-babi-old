@@ -821,7 +821,6 @@ class Report(ModelSQL, ModelView):
 class ReportExecution(ModelSQL, ModelView):
     "Report Execution"
     __name__ = 'babi.report.execution'
-    _order = [('date', 'DESC')]
 
     report = fields.Many2One('babi.report', 'Report', required=True,
         readonly=True, ondelete='CASCADE')
@@ -855,6 +854,7 @@ class ReportExecution(ModelSQL, ModelView):
     @classmethod
     def __setup__(cls):
         super(ReportExecution, cls).__setup__()
+        cls._order.insert(0, ('date', 'DESC'))
         cls._error_messages.update({
                 'filter_parameters': ('Execution "%s" has filter parameters '
                     ' and you did not provide any of them. Please execute it '
@@ -1796,7 +1796,6 @@ class ReportGroup(ModelSQL):
 
 
 class DimensionMixin:
-    _order = [('sequence', 'ASC')]
 
     report = fields.Many2One('babi.report', 'Report', required=True,
         ondelete='CASCADE')
@@ -1845,6 +1844,7 @@ class Dimension(ModelSQL, ModelView, DimensionMixin):
     @classmethod
     def __setup__(cls):
         super(Dimension, cls).__setup__()
+        cls._order.insert(0, ('sequence', 'ASC'))
         cls._sql_constraints += [
             ('report_and_name_unique', 'unique(report, name)',
                 'Dimension name must be unique per report.'),
@@ -1900,6 +1900,11 @@ class DimensionColumn(ModelSQL, ModelView, DimensionMixin):
     "Column Dimension"
     __name__ = 'babi.dimension.column'
     _history = True
+
+    @classmethod
+    def __setup__(cls):
+        super(DimensionColumn, cls).__setup__()
+        cls._order.insert(0, ('sequence', 'ASC'))
 
 
 class Measure(ModelSQL, ModelView):
@@ -2012,7 +2017,6 @@ class Measure(ModelSQL, ModelView):
 class InternalMeasure(ModelSQL, ModelView):
     "Internal Measure"
     __name__ = 'babi.internal.measure'
-    _order = [('sequence', 'ASC')]
 
     execution = fields.Many2One('babi.report.execution', 'Report Execution',
         required=True, ondelete='CASCADE')
@@ -2027,6 +2031,11 @@ class InternalMeasure(ModelSQL, ModelView):
         required=True)
     related_model = fields.Many2One('ir.model', 'Related Model')
     progressbar = fields.Boolean('Progress Bar')
+
+    @classmethod
+    def __setup__(cls):
+        super(InternalMeasure, cls).__setup__()
+        cls._order.insert(0, ('sequence', 'ASC'))
 
     @classmethod
     def __register__(cls, module_name):
@@ -2053,7 +2062,6 @@ class InternalMeasure(ModelSQL, ModelView):
 class Order(ModelSQL, ModelView):
     "Order"
     __name__ = 'babi.order'
-    _order = [('sequence', 'ASC')]
 
     report = fields.Many2One('babi.report', 'Report', required=True,
         ondelete='CASCADE')
@@ -2072,6 +2080,7 @@ class Order(ModelSQL, ModelView):
     @classmethod
     def __setup__(cls):
         super(Order, cls).__setup__()
+        cls._order.insert(0, ('sequence', 'ASC'))
         cls._error_messages.update({
                 'cannot_create_order_entry': ('Order entries are created '
                     'automatically'),
