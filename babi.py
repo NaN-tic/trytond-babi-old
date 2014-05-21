@@ -460,18 +460,19 @@ class FilterParameter(ModelSQL, ModelView):
         return filters
 
     @classmethod
-    def write(cls, filters, values):
+    def write(cls, *args):
         pool = Pool()
         Keyword = pool.get('ir.action.keyword')
-        super(FilterParameter, cls).write(filters, values)
-        if 'related_model' in values:
-            filter_ids = [f.id for f in filters]
-            Keyword.delete(Keyword.search([
-                        ('babi_filter_parameter', 'in', filter_ids),
-                    ]))
-            filters = cls.browse(filter_ids)
-            for filter in filters:
-                filter.create_keyword()
+        super(FilterParameter, cls).write(*args)
+        actions = iter(args)
+        for filters, values in zip(actions, actions):
+            if 'related_model' in values:
+                filter_ids = [f.id for f in filters]
+                Keyword.delete(Keyword.search([
+                            ('babi_filter_parameter', 'in', filter_ids),
+                        ]))
+                for filter in filters:
+                    filter.create_keyword()
 
     @classmethod
     def delete(cls, filters):
@@ -598,15 +599,17 @@ class Report(ModelSQL, ModelView):
                     return execution.id
 
     @classmethod
-    def write(cls, reports, values):
-        if 'name' in values:
-            to_update = []
-            for report in reports:
-                if report.name != values['name']:
-                    to_update.append(report)
-            if to_update:
-                cls.remove_menus(to_update)
-        return super(Report, cls).write(reports, values)
+    def write(cls, *args):
+        actions = iter(args)
+        for reports, values in zip(actions, actions):
+            if 'name' in values:
+                to_update = []
+                for report in reports:
+                    if report.name != values['name']:
+                        to_update.append(report)
+                if to_update:
+                    cls.remove_menus(to_update)
+        return super(Report, cls).write(*args)
 
     @classmethod
     def delete(cls, reports):
@@ -1880,9 +1883,11 @@ class Dimension(ModelSQL, ModelView, DimensionMixin):
         return dimensions
 
     @classmethod
-    def write(cls, dimensions, values):
-        cls.update_order(dimensions)
-        return super(Dimension, cls).write(dimensions, values)
+    def write(cls, *args):
+        actions = iter(args)
+        for dimensions, _ in zip(actions, actions):
+            cls.update_order(dimensions)
+        return super(Dimension, cls).write(*args)
 
     @classmethod
     def delete(cls, dimensions):
@@ -1995,9 +2000,11 @@ class Measure(ModelSQL, ModelView):
         return measures
 
     @classmethod
-    def write(cls, measures, values):
-        cls.update_order(measures)
-        return super(Measure, cls).write(measures, values)
+    def write(cls, *args):
+        actions = iter(args)
+        for measures, _ in zip(actions, actions):
+            cls.update_order(measures)
+        return super(Measure, cls).write(*args)
 
     @classmethod
     def delete(cls, measures):
