@@ -361,15 +361,40 @@ class Filter(ModelSQL, ModelView):
     __name__ = 'babi.filter'
     _history = True
 
+    @fields.depends('model')
+    def on_change_with_model_name(self, name=None):
+        return self.model.model if self.model else None
+
+    @fields.depends('model')
+    def on_change_with_fields(self, name=None):
+        if not self.model:
+            return []
+        return [x.id for x in self.model.fields]
+
+    @fields.depends('view_search')
+    def on_change_with_domain(self):
+        return self.view_search.domain if self.view_search else None
+
+    @fields.depends('model_name', 'domain')
+    def on_change_with_view_search(self):
+        ViewSearch = Pool().get('ir.ui.view_search')
+        searches = ViewSearch.search([
+                ('model', '=', self.model_name),
+                ('domain', '=', self.domain),
+                ])
+        if not searches:
+            return None
+        return searches[0].id
+
     name = fields.Char('Name', required=True, translate=True)
     model = fields.Many2One('ir.model', 'Model', required=True,
         domain=[('babi_enabled', '=', True)])
-    model_name = fields.Function(fields.Char('Model Name',
-            on_change_with=['model']), 'on_change_with_model_name')
+    model_name = fields.Function(fields.Char('Model Name'),
+        'on_change_with_model_name')
     view_search = fields.Many2One('ir.ui.view_search', 'Search',
         domain=[('model', '=', Eval('model_name'))],
-        depends=['model_name'], on_change_with=['model_name', 'domain'])
-    domain = fields.Char('Domain', on_change_with=['view_search'])
+        depends=['model_name'])
+    domain = fields.Char('Domain')
     python_expression = fields.Char('Python Expression',
         help='The python expression introduced will be evaluated. If the '
         'result is True the record will be included, it will be discarded '
@@ -377,7 +402,7 @@ class Filter(ModelSQL, ModelView):
     parameters = fields.One2Many('babi.filter.parameter', 'filter',
         'Parameters')
     fields = fields.Function(fields.Many2Many('ir.model.field', None, None,
-            'Model Fields', on_change_with=['model'], depends=['model']),
+            'Model Fields', depends=['model']),
         'on_change_with_fields')
 
     @classmethod
@@ -399,27 +424,6 @@ class Filter(ModelSQL, ModelView):
             if placeholder not in self.domain and \
                     placeholder not in self.python_expression:
                 self.raise_user_error('parameter_not_found', filter.name)
-
-    def on_change_with_model_name(self, name=None):
-        return self.model.model if self.model else None
-
-    def on_change_with_fields(self, name=None):
-        if not self.model:
-            return []
-        return [x.id for x in self.model.fields]
-
-    def on_change_with_domain(self):
-        return self.view_search.domain if self.view_search else None
-
-    def on_change_with_view_search(self):
-        ViewSearch = Pool().get('ir.ui.view_search')
-        searches = ViewSearch.search([
-                ('model', '=', self.model_name),
-                ('domain', '=', self.domain),
-                ])
-        if not searches:
-            return None
-        return searches[0].id
 
 
 class FilterParameter(ModelSQL, ModelView):
@@ -488,6 +492,12 @@ class Expression(ModelSQL, ModelView):
     __name__ = 'babi.expression'
     _history = True
 
+    @fields.depends('model')
+    def on_change_with_fields(self, name=None):
+        if not self.model:
+            return []
+        return [x.id for x in self.model.fields]
+
     name = fields.Char('Name', required=True, translate=True)
     model = fields.Many2One('ir.model', 'Model', required=True,
         domain=[('babi_enabled', '=', True)])
@@ -510,12 +520,7 @@ class Expression(ModelSQL, ModelView):
             'readonly': Eval('ttype') != 'many2one',
             }, depends=['ttype'])
     fields = fields.Function(fields.Many2Many('ir.model.field', None, None,
-            'Model Fields', on_change_with=['model']), 'on_change_with_fields')
-
-    def on_change_with_fields(self, name=None):
-        if not self.model:
-            return []
-        return [x.id for x in self.model.fields]
+            'Model Fields'), 'on_change_with_fields')
 
 
 class Report(ModelSQL, ModelView):
@@ -527,8 +532,8 @@ class Report(ModelSQL, ModelView):
         help='New virtual model name.')
     model = fields.Many2One('ir.model', 'Model', required=True,
         domain=[('babi_enabled', '=', True)], help='Model for data extraction')
-    model_name = fields.Function(fields.Char('Model Name',
-            on_change_with=['model']), 'on_change_with_model_name')
+    model_name = fields.Function(fields.Char('Model Name'),
+        'on_change_with_model_name')
     internal_name = fields.Function(fields.Char('Internal Name'),
         'get_internal_name')
     filter = fields.Many2One('babi.filter', 'Filter',
@@ -586,6 +591,7 @@ class Report(ModelSQL, ModelView):
         config = Config(1)
         return config.default_timeout
 
+    @fields.depends('model')
     def on_change_with_model_name(self, name=None):
         return self.model.model if self.model else None
 
@@ -830,8 +836,8 @@ class ReportExecution(ModelSQL, ModelView):
     date = fields.DateTime('Execution Date', required=True, readonly=True)
     internal_name = fields.Function(fields.Char('Internal Name'),
         'get_internal_name')
-    report_model = fields.Function(fields.Many2One('ir.model', 'Report Model',
-            on_change_with=['report']), 'on_change_with_report_model')
+    report_model = fields.Function(fields.Many2One('ir.model', 'Report Model'),
+        'on_change_with_report_model')
     babi_model = fields.Many2One('ir.model', 'BI Model', readonly=True,
             help='Link to new model instance')
     state = fields.Selection([
@@ -921,6 +927,7 @@ class ReportExecution(ModelSQL, ModelView):
                             order.append((field, record.order))
         return order
 
+    @fields.depends('report')
     def on_change_with_report_model(self, name=None):
         if self.report:
             return self.report.model.id
@@ -1413,7 +1420,7 @@ class OpenExecutionSelect(ModelView):
 
     #TODO: Add domain for validating report permisions
     report = fields.Many2One('babi.report', 'Report', required=True,
-        on_change=['report'], states={
+        states={
                 'readonly': Bool(Eval('report_readonly')),
             }, depends=['report_readonly'])
     execution = fields.Many2One('babi.report.execution', 'Execution',
@@ -1466,6 +1473,7 @@ class OpenExecutionSelect(ModelView):
 
         return result
 
+    @fields.depends('report')
     def on_change_report(self):
         if not self.report:
             return {'execution': None}
@@ -1803,8 +1811,7 @@ class DimensionMixin:
     report = fields.Many2One('babi.report', 'Report', required=True,
         ondelete='CASCADE')
     sequence = fields.Integer('Sequence')
-    name = fields.Char('Name', required=True, translate=True,
-        on_change_with=['expression'])
+    name = fields.Char('Name', required=True, translate=True)
     internal_name = fields.Function(fields.Char('Internal Name'),
         'get_internal_name')
     expression = fields.Many2One('babi.expression', 'Expression',
@@ -1825,6 +1832,7 @@ class DimensionMixin:
     def default_group_by():
         return True
 
+    @fields.depends('expression')
     def on_change_with_name(self):
         return self.expression.name if self.expression else None
 
@@ -1920,8 +1928,7 @@ class Measure(ModelSQL, ModelView):
     report = fields.Many2One('babi.report', 'Report', required=True,
         ondelete='CASCADE')
     sequence = fields.Integer('Sequence')
-    name = fields.Char('Name', required=True, translate=True,
-        on_change_with=['expression'])
+    name = fields.Char('Name', required=True, translate=True)
     internal_name = fields.Function(fields.Char('Internal Name'),
         'get_internal_name')
     expression = fields.Many2One('babi.expression', 'Expression',
@@ -1952,6 +1959,7 @@ class Measure(ModelSQL, ModelView):
     def default_aggregate():
         return 'sum'
 
+    @fields.depends('expression')
     def on_change_with_name(self):
         return self.expression.name if self.expression else None
 
