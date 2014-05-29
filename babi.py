@@ -13,6 +13,7 @@ except ImportError:
 from trytond.wizard import Wizard, StateView, StateAction, StateTransition, \
     Button
 from trytond.model import ModelSQL, ModelView, fields
+from trytond.model.fields import depends
 from trytond.pyson import Eval, Bool, PYSONEncoder, In, Not
 from trytond.pool import Pool, PoolMeta
 from trytond.transaction import Transaction
@@ -361,31 +362,6 @@ class Filter(ModelSQL, ModelView):
     __name__ = 'babi.filter'
     _history = True
 
-    @fields.depends('model')
-    def on_change_with_model_name(self, name=None):
-        return self.model.model if self.model else None
-
-    @fields.depends('model')
-    def on_change_with_fields(self, name=None):
-        if not self.model:
-            return []
-        return [x.id for x in self.model.fields]
-
-    @fields.depends('view_search')
-    def on_change_with_domain(self):
-        return self.view_search.domain if self.view_search else None
-
-    @fields.depends('model_name', 'domain')
-    def on_change_with_view_search(self):
-        ViewSearch = Pool().get('ir.ui.view_search')
-        searches = ViewSearch.search([
-                ('model', '=', self.model_name),
-                ('domain', '=', self.domain),
-                ])
-        if not searches:
-            return None
-        return searches[0].id
-
     name = fields.Char('Name', required=True, translate=True)
     model = fields.Many2One('ir.model', 'Model', required=True,
         domain=[('babi_enabled', '=', True)])
@@ -424,6 +400,31 @@ class Filter(ModelSQL, ModelView):
             if placeholder not in self.domain and \
                     placeholder not in self.python_expression:
                 self.raise_user_error('parameter_not_found', filter.name)
+
+    @depends('model')
+    def on_change_with_model_name(self, name=None):
+        return self.model.model if self.model else None
+
+    @depends('model')
+    def on_change_with_fields(self, name=None):
+        if not self.model:
+            return []
+        return [x.id for x in self.model.fields]
+
+    @depends('view_search')
+    def on_change_with_domain(self):
+        return self.view_search.domain if self.view_search else None
+
+    @depends('model_name', 'domain')
+    def on_change_with_view_search(self):
+        ViewSearch = Pool().get('ir.ui.view_search')
+        searches = ViewSearch.search([
+                ('model', '=', self.model_name),
+                ('domain', '=', self.domain),
+                ])
+        if not searches:
+            return None
+        return searches[0].id
 
 
 class FilterParameter(ModelSQL, ModelView):
@@ -492,12 +493,6 @@ class Expression(ModelSQL, ModelView):
     __name__ = 'babi.expression'
     _history = True
 
-    @fields.depends('model')
-    def on_change_with_fields(self, name=None):
-        if not self.model:
-            return []
-        return [x.id for x in self.model.fields]
-
     name = fields.Char('Name', required=True, translate=True)
     model = fields.Many2One('ir.model', 'Model', required=True,
         domain=[('babi_enabled', '=', True)])
@@ -521,6 +516,13 @@ class Expression(ModelSQL, ModelView):
             }, depends=['ttype'])
     fields = fields.Function(fields.Many2Many('ir.model.field', None, None,
             'Model Fields'), 'on_change_with_fields')
+
+
+    @depends('model')
+    def on_change_with_fields(self, name=None):
+        if not self.model:
+            return []
+        return [x.id for x in self.model.fields]
 
 
 class Report(ModelSQL, ModelView):
@@ -591,7 +593,7 @@ class Report(ModelSQL, ModelView):
         config = Config(1)
         return config.default_timeout
 
-    @fields.depends('model')
+    @depends('model')
     def on_change_with_model_name(self, name=None):
         return self.model.model if self.model else None
 
@@ -927,7 +929,7 @@ class ReportExecution(ModelSQL, ModelView):
                             order.append((field, record.order))
         return order
 
-    @fields.depends('report')
+    @depends('report')
     def on_change_with_report_model(self, name=None):
         if self.report:
             return self.report.model.id
@@ -1473,7 +1475,7 @@ class OpenExecutionSelect(ModelView):
 
         return result
 
-    @fields.depends('report')
+    @depends('report')
     def on_change_report(self):
         if not self.report:
             return {'execution': None}
@@ -1832,7 +1834,7 @@ class DimensionMixin:
     def default_group_by():
         return True
 
-    @fields.depends('expression')
+    @depends('expression')
     def on_change_with_name(self):
         return self.expression.name if self.expression else None
 
@@ -1959,7 +1961,7 @@ class Measure(ModelSQL, ModelView):
     def default_aggregate():
         return 'sum'
 
-    @fields.depends('expression')
+    @depends('expression')
     def on_change_with_name(self):
         return self.expression.name if self.expression else None
 
