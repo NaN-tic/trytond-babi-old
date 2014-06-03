@@ -1,10 +1,14 @@
 # encoding: utf-8
+# The COPYRIGHT file at the top level of this repository contains the full
+# copyright notices and license terms.
 from datetime import datetime
 from StringIO import StringIO
 import logging
+import os
+import subprocess
+import tempfile
 import time
 import unicodedata
-import os
 try:
     import simplejson as json
 except ImportError:
@@ -20,10 +24,9 @@ from trytond.transaction import Transaction
 from trytond.tools import safe_eval
 from trytond.config import CONFIG
 from trytond import backend
-from babi_eval import babi_eval
 from trytond.protocols.jsonrpc import object_hook, JSONEncoder
-import subprocess
-import tempfile
+
+from .babi_eval import babi_eval
 
 
 __all__ = ['Filter', 'Expression', 'Report', 'ReportGroup', 'Dimension',
@@ -85,7 +88,7 @@ def start_celery():
         'TRYTON_DATABASE': db,
         'TRYTON_CONFIG': CONFIG.configfile
     }
-    #Copy environment variables in order to get virtualenvs working
+    # Copy environment variables in order to get virtualenvs working
     for key, value in os.environ.iteritems():
         env[key] = value
     call = ['celery', 'worker', '--app=tasks', '--loglevel=info',
@@ -507,8 +510,7 @@ class Expression(ModelSQL, ModelView):
             '- "w()": Returns the week (as a string)\n'
             '- "d()": Returns the day (as a string)\n'
             '- "ym()": Returns the year-month (as a string)\n'
-            '- "ymd()": Returns the year-month-day (as a string).\n'
-        )
+            '- "ymd()": Returns the year-month-day (as a string).\n')
     ttype = fields.Selection(FIELD_TYPES, 'Field Type', required=True)
     related_model = fields.Many2One('ir.model', 'Related Model', states={
             'required': Eval('ttype') == 'many2one',
@@ -516,7 +518,6 @@ class Expression(ModelSQL, ModelView):
             }, depends=['ttype'])
     fields = fields.Function(fields.Many2Many('ir.model.field', None, None,
             'Model Fields'), 'on_change_with_fields')
-
 
     @depends('model')
     def on_change_with_fields(self, name=None):
@@ -572,8 +573,8 @@ class Report(ModelSQL, ModelView):
     def __setup__(cls):
         super(Report, cls).__setup__()
         cls._error_messages.update({
-                'no_dimensions': ('Report "%s" has no dimensions. At least one '
-                    'is needed.'),
+                'no_dimensions': ('Report "%s" has no dimensions. At least '
+                    'one is needed.'),
                 'no_measures': ('Report "%s" has no measures. At least one '
                     'is needed.'),
                 'timeout_exception': ('Report calculation exceeded timeout '
@@ -631,13 +632,13 @@ class Report(ModelSQL, ModelView):
         if default is None:
             default = {}
         default = default.copy()
-        if not 'order' in default:
+        if 'order' not in default:
             default['order'] = None
         default['actions'] = None
         default['menus'] = None
         default['executions'] = None
         default['internal_measures'] = None
-        if not 'name' in default:
+        if 'name' not in default:
             result = []
             for report in reports:
                 default['name'] = '%s (2)' % report.name
@@ -671,7 +672,7 @@ class Report(ModelSQL, ModelView):
         Action = pool.get('ir.action.wizard')
         Menu = pool.get('ir.ui.menu')
         ModelData = pool.get('ir.model.data')
-        #This action is needed for the wizard to open the data
+        # This action is needed for the wizard to open the data
         action = ActWindow()
         action.name = self.name
         action.res_model = 'babi.report'
@@ -705,7 +706,7 @@ class Report(ModelSQL, ModelView):
         Action = pool.get('ir.action.wizard')
         ModelData = pool.get('ir.model.data')
         Menu = pool.get('ir.ui.menu')
-        #This action is needed for the wizard to open the data
+        # This action is needed for the wizard to open the data
         action = ActWindow()
         action.name = self.name
         action.res_model = 'babi.report'
@@ -793,8 +794,8 @@ class Report(ModelSQL, ModelView):
 
     def get_execution_data(self):
         return {
-                'report': self.id,
-                'timeout': self.timeout,
+            'report': self.id,
+            'timeout': self.timeout,
             }
 
     @classmethod
@@ -825,7 +826,7 @@ class Report(ModelSQL, ModelView):
                     '--queue=%s' % (
                         execution.id, transaction.user, cursor.database_name))
                 if result != 0:
-                    #Fallback to concurrent mode if celery is not available
+                    # Fallback to concurrent mode if celery is not available
                     Execution.calculate([execution])
 
 
@@ -849,7 +850,7 @@ class ReportExecution(ModelSQL, ModelView):
             ('timeout', 'Timeout'),
             ('failed', 'Failed'),
             ('canceled', 'Canceled'),
-        ], 'State', required=True, readonly=True)
+            ], 'State', required=True, readonly=True)
     timeout = fields.Integer('Timeout', required=True, readonly=True,
         help='If report calculation should take more than the specified '
         'timeout (in seconds) the process will be stopped automatically.')
@@ -976,7 +977,7 @@ class ReportExecution(ModelSQL, ModelView):
             if Model:
                 cursor.execute("DROP TABLE IF EXISTS %s " % Model._table)
                 try:
-                    #SQLite doesn't have sequences
+                    # SQLite doesn't have sequences
                     cursor.execute("DROP SEQUENCE IF EXISTS %s_id_seq" %
                         Model._table)
                 except:
@@ -996,7 +997,7 @@ class ReportExecution(ModelSQL, ModelView):
             self.save()
 
         create_groups_access(model, self.report.groups)
-        #Commit transaction to avoid locks
+        # Commit transaction to avoid locks
         Transaction().cursor.commit()
 
     def timeout_exception(self):
@@ -1086,7 +1087,7 @@ class ReportExecution(ModelSQL, ModelView):
             values = {}
             for key, value in filter_data.iteritems():
                 key = '_'.join(key.split('_')[:-1])
-                if not value or not key in domain:
+                if not value or key not in domain:
                     continue
                 values[key] = value
             domain = domain.format(**values)
@@ -1126,16 +1127,16 @@ class ReportExecution(ModelSQL, ModelView):
         table = BIModel._table
         if self.report.columns:
             table = BIModel._table + '_tmp'
-            #Save data to a temporally table:
+            # Save data to a temporally table:
             cursor.execute('CREATE TEMP TABLE %s AS SELECT * FROM %s WHERE '
                 ' 0 = 1' % (table, BIModel._table))
 
-        #Process records
+        # Process records
         offset = 2000
         index = 0
 
         def sanitanize(x):
-            if (isinstance(x,  basestring) or isinstance(x, str)
+            if (isinstance(x, basestring) or isinstance(x, str)
                     or isinstance(x, unicode)):
                 x = x.replace('|', '-')
             if not isinstance(x, unicode):
@@ -1153,10 +1154,11 @@ class ReportExecution(ModelSQL, ModelView):
             to_create = ''
             # var o it's used on expression!!
             # Don't rename var
-            #chunk = records[index * offset:(index + 1) * offset]
+            # chunk = records[index * offset:(index + 1) * offset]
             for record in records:
                 if python_filter:
-                    if not babi_eval(python_filter, record, convert_none=False):
+                    if not babi_eval(python_filter, record,
+                            convert_none=False):
                         continue
                 vals = ['now()', str(uid)]
                 vals += [sanitanize(babi_eval(x[0], record, convert_none=x[1]))
@@ -1398,7 +1400,7 @@ class ReportExecution(ModelSQL, ModelView):
             child_group = current_group
             group_by_iterator.pop()
 
-        #ROOT
+        # ROOT
         measures = ",".join(['%s("%s") as %s' % (
                     x.aggregate == 'count' and aggregate or x.aggregate,
                     x.internal_name, x.internal_name) for x in
@@ -1420,21 +1422,22 @@ class OpenExecutionSelect(ModelView):
     "Open Report Execution - Select Values"
     __name__ = 'babi.report.execution.open.select'
 
-    #TODO: Add domain for validating report permisions
+    # TODO: Add domain for validating report permisions
     report = fields.Many2One('babi.report', 'Report', required=True,
         states={
-                'readonly': Bool(Eval('report_readonly')),
+            'readonly': Bool(Eval('report_readonly')),
             }, depends=['report_readonly'])
     execution = fields.Many2One('babi.report.execution', 'Execution',
         required=True, domain=[
-                ('report', '=', Eval('report')),
-                ('state', '=', 'calculated'),
-            ], states={
-                'readonly': Bool(Eval('execution_readonly')),
+            ('report', '=', Eval('report')),
+            ('state', '=', 'calculated'),
+            ],
+        states={
+            'readonly': Bool(Eval('execution_readonly')),
             }, depends=['report', 'execution_readonly'])
     view_type = fields.Selection([
-                ('tree', 'Tree'),
-                ('list', 'List'),
+            ('tree', 'Tree'),
+            ('list', 'List'),
             ], 'View type', required=True)
 
     report_readonly = fields.Boolean('Report Readonly')
@@ -1460,18 +1463,18 @@ class OpenExecutionSelect(ModelView):
                     'view_type': 'tree',
                     'report_readonly': True,
                     'execution_readonly': True,
-                })
+                    })
         elif model_name == 'ir.ui.menu':
             menu = Menu(active_id)
             result.update({
                     'report': menu.babi_report.id,
                     'view_type': 'tree',
                     'report_readonly': True,
-                })
+                    })
             if menu.babi_type == 'filtered':
                 result.update({
                         'execution_readonly': True,
-                    })
+                        })
 
         return result
 
@@ -1488,9 +1491,8 @@ class OpenExecutionFiltered(StateView):
         buttons = [
                 Button('Cancel', 'end', 'tryton-cancel'),
                 Button('Open', 'create_execution', 'tryton-ok', True),
-            ]
-        return super(OpenExecutionFiltered, self).__init__('babi.report', 0,
-            buttons)
+                ]
+        super(OpenExecutionFiltered, self).__init__('babi.report', 0, buttons)
 
     def get_view(self):
         pool = Pool()
@@ -1521,7 +1523,7 @@ class OpenExecutionFiltered(StateView):
             report_definition['readonly'] = True
             parameters = Parameter.search([('filter', '=', filter)])
         else:
-            #TODO: Report definition add domain for groups
+            # TODO: Report definition add domain for groups
             parameters = Parameter.search([
                         ('related_model.model', '=',
                             context.get('active_model'))],
@@ -1555,7 +1557,6 @@ class OpenExecutionFiltered(StateView):
                 'string': name,
                 'searchable': True,
                 'create': True,
-                'required': True,
                 'help': '',
                 'context': {},
                 'delete': True,
@@ -1572,10 +1573,10 @@ class OpenExecutionFiltered(StateView):
                             parameter2report[parameter.filter.id])),
                     'required': In(Eval('report', 0),
                         parameter2report[parameter.filter.id]),
-                }
+                    }
             else:
                 field_definition['states'] = {}
-            #Copied from Model.fields_get
+            # Copied from Model.fields_get
             for attr in ('states', 'domain', 'context', 'digits', 'size',
                     'add_remove', 'format'):
                 if attr in field_definition:
@@ -1655,8 +1656,8 @@ class OpenExecution(Wizard):
     create_execution = StateTransition()
     select = StateView('babi.report.execution.open.select',
         'babi.open_execution_select_view_form', [
-                Button('Cancel', 'end', 'tryton-cancel'),
-                Button('Open', 'open_view', 'tryton-ok', True),
+            Button('Cancel', 'end', 'tryton-cancel'),
+            Button('Open', 'open_view', 'tryton-ok', True),
             ])
     open_view = StateAction('babi.open_execution_wizard')
     update = StateTransition()
@@ -1717,7 +1718,7 @@ class OpenExecution(Wizard):
 
         data = {}
         for key, value in self.filter_values.iteritems():
-            #Fields has id of the field appendend, so it must be removed.
+            # Fields has id of the field appendend, so it must be removed.
             new_key = '_'.join(key.split('_')[:-1])
             data[new_key] = value
         report = Report(report)
@@ -1732,7 +1733,7 @@ class OpenExecution(Wizard):
         context = Transaction().context
         context.update({
                 'filtered_execution': execution.id,
-            })
+                })
         return 'open_view'
 
     def transition_update(self):
@@ -1775,7 +1776,7 @@ class OpenExecution(Wizard):
 
         execution.validate_model()
         domain = [
-                ('babi_report', '=', report.id),
+            ('babi_report', '=', report.id),
             ]
         if view_type == 'tree':
             domain.append(('context', 'ilike', "%%babi_tree_view%%"))
@@ -1803,8 +1804,8 @@ class ReportGroup(ModelSQL):
     def __setup__(cls):
         super(ReportGroup, cls).__setup__()
         cls._sql_constraints += [
-            ('report_group_uniq', 'UNIQUE (report,"group")', 'Report and Group '
-                'must be unique.'),
+            ('report_group_uniq', 'UNIQUE (report,"group")',
+                'Report and Group must be unique.'),
             ]
 
 
@@ -2060,7 +2061,7 @@ class InternalMeasure(ModelSQL, ModelView):
         cursor = Transaction().cursor
         super(InternalMeasure, cls).__register__(module_name)
 
-        #Migration from 3.0: no more relation with reports.
+        # Migration from 3.0: no more relation with reports.
         table = TableHandler(cursor, cls, module_name)
         if table.column_exist('report'):
             table.not_null_action('report', action='remove')
@@ -2143,7 +2144,7 @@ class Menu:
             ('list', 'List'),
             ('history', 'History'),
             ('wizard', 'Wizard'),
-        ], 'BABI Type', readonly=True)
+            ], 'BABI Type', readonly=True)
 
 
 class Keyword:
@@ -2230,7 +2231,7 @@ class OpenChartStart(ModelView):
 
             if not fields:
                 # If it was not found it means user clicked on 'root'
-                #babi_group
+                # babi_group
                 fields = [x.id for x in report.dimensions]
 
         return {
@@ -2268,8 +2269,8 @@ class OpenChart(Wizard):
     def __setup__(cls):
         super(OpenChart, cls).__setup__()
         cls._error_messages.update({
-                'one_measure_in_pie_charts': ('Only one measure can be used in '
-                    'pie charts.'),
+                'one_measure_in_pie_charts': ('Only one measure can be used '
+                    'in pie charts.'),
                 })
 
     def do_open_(self, action):
