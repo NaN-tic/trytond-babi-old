@@ -1,18 +1,11 @@
 #!/usr/bin/env python
-#This file is part of Tryton.  The COPYRIGHT file at the top level of
-#this repository contains the full copyright notices and license terms.
-
-import sys
-import os
-DIR = os.path.abspath(os.path.normpath(os.path.join(__file__,
-    '..', '..', '..', '..', '..', 'trytond')))
-if os.path.isdir(DIR):
-    sys.path.insert(0, os.path.dirname(DIR))
-
-import unittest
+# The COPYRIGHT file at the top level of this repository contains the full
+# copyright notices and license terms.
 import datetime
 import random
+import unittest
 from decimal import Decimal
+
 import trytond.tests.test_tryton
 from trytond.tests.test_tryton import POOL, DB_NAME, USER, CONTEXT, test_view,\
     test_depends
@@ -52,7 +45,7 @@ class BaBITestCase(unittest.TestCase):
             to_create = []
             year = datetime.date.today().year
             for month in range(1, 13):
-                #Create at least one record for each category in each month
+                # Create at least one record for each category in each month
                 num_records = int(round(random.random() * 10)) + 2
                 for x in range(0, num_records):
                     category = 'odd' if x % 2 == 0 else 'even'
@@ -99,9 +92,9 @@ class BaBITestCase(unittest.TestCase):
                         'name': 'Amount this month',
                         'model': model.id,
                         'ttype': 'numeric',
-                        'expression': 'o.amount if o.date >= '
+                        'expression': ('o.amount if o.date >= '
                             'today() - relativedelta(days=today().day - 1) '
-                            'else 0.0',
+                            'else 0.0'),
                         }])
 
             self.filter.create([{
@@ -582,7 +575,7 @@ class BaBITestCase(unittest.TestCase):
         'Test basic operations'
         with Transaction().start(DB_NAME, USER, context=CONTEXT):
             report, = self.report.search([], limit=1)
-            #Delete one dimension as SQlite test fails with two dimensions.
+            # Delete one dimension as SQlite test fails with two dimensions.
             dimension, _ = report.dimensions
             self.dimension.delete([dimension])
             measure, _ = report.measures
@@ -613,6 +606,3 @@ def suite():
     suite = trytond.tests.test_tryton.suite()
     suite.addTests(unittest.TestLoader().loadTestsFromTestCase(BaBITestCase))
     return suite
-
-if __name__ == '__main__':
-    unittest.TextTestRunner(verbosity=2).run(suite())
