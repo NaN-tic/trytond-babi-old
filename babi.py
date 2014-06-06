@@ -787,6 +787,7 @@ class Report(ModelSQL, ModelView):
             report.create_list_view_menu(menu, langs)
             report.create_update_wizard_menu(menu)
             report.create_history_menu(menu)
+        return 'reload menu'
 
     def get_dimensions(self, with_columns=False):
         dimensions = []
