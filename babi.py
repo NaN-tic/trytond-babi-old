@@ -1450,13 +1450,13 @@ class OpenExecutionSelect(ModelView):
     execution_readonly = fields.Boolean('Execution Readonly')
 
     @classmethod
-    def default_get(cls, fields, with_rec_name=True):
+    def default_get(cls, fields, with_rec_name=True, with_on_change=True):
         pool = Pool()
         Execution = pool.get('babi.report.execution')
         Menu = pool.get('ir.ui.menu')
 
         result = super(OpenExecutionSelect, cls).default_get(fields,
-            with_rec_name)
+            with_rec_name, with_on_change)
 
         active_id = Transaction().context.get('active_id')
         model_name = Transaction().context.get('active_model')
@@ -2208,7 +2208,7 @@ class OpenChartStart(ModelView):
         depends=['execution'])
 
     @classmethod
-    def default_get(cls, fields, with_rec_name=True):
+    def default_get(cls, fields, with_rec_name=True, with_on_change=True):
         pool = Pool()
         Execution = pool.get('babi.report.execution')
         model_name = Transaction().context.get('active_model')
@@ -2216,7 +2216,8 @@ class OpenChartStart(ModelView):
                 ('babi_model.model', '=', model_name),
                 ], limit=1)
 
-        result = super(OpenChartStart, cls).default_get(fields, with_rec_name)
+        result = super(OpenChartStart, cls).default_get(fields, with_rec_name,
+            with_on_change)
         if len(executions) != 1:
             return result
         execution, = executions
