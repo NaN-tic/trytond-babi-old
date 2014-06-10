@@ -6,7 +6,7 @@ from trytond.pool import Pool
 from trytond.transaction import Transaction
 
 celery = Celery()
-celery.config_from_object('trytond.modules.babi.celeryconfig')
+celery.config_from_object('celeryconfig')
 
 
 @celery.task(base=TrytonTask)

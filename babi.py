@@ -13,6 +13,7 @@ try:
     import simplejson as json
 except ImportError:
     import json
+import sys
 
 from trytond.wizard import Wizard, StateView, StateAction, StateTransition, \
     Button
@@ -91,8 +92,9 @@ def start_celery():
     # Copy environment variables in order to get virtualenvs working
     for key, value in os.environ.iteritems():
         env[key] = value
-    call = ['celery', 'worker', '--app=tasks', '--loglevel=info',
-        '--workdir=./modules/babi', '--queues=' + db,
+    call = [os.path.dirname(sys.executable) + '/celery', 'worker', '--app=tasks', '--loglevel=info',
+        '--workdir='+ os.path.dirname(os.path.abspath(__file__)),
+        '--queues=' + db,
         '--time-limit=7400',
         '--concurrency=1',
         '--hostname=' + db + '.%h',
@@ -827,11 +829,11 @@ class Report(ModelSQL, ModelView):
             executions = Execution.create([report.get_execution_data()])
             cursor.commit()
             for execution in executions:
-                result = os.system('celery call tasks.calculate_execution '
+                result = os.system('%s/celery call tasks.calculate_execution '
                     '--args=[%d,%d] '
                     '--config="trytond.modules.babi.celeryconfig" '
                     '--queue=%s' % (
-                        execution.id, transaction.user, cursor.database_name))
+                        os.path.dirname(sys.executable), execution.id, transaction.user, cursor.database_name))
                 if result != 0:
                     # Fallback to concurrent mode if celery is not available
                     Execution.calculate([execution])
