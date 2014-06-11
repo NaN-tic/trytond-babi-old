@@ -2308,6 +2308,7 @@ class OpenChart(Wizard):
         context['model_name'] = model_name
         context = json.dumps(context)
         return {
+            'id': -1,
             'name': '%s - %s Chart' % (self.start.execution.rec_name,
                 self.start.dimension.rec_name),
             'model': model_name,
