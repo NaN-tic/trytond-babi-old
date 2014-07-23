@@ -383,7 +383,7 @@ contains the full copyright notices and license terms. -->
         <record model="ir.action.act_window" id="act_babi_report_execution_form">
             <field name="name">Executions</field>
             <field name="res_model">babi.report.execution</field>
-            <field name="domain">[("id", "in", Eval('active_ids'))]</field>
+            <field name="domain">[('report', 'in', Eval('active_ids'))]</field>
         </record>
         <record model="ir.action.keyword" id="act_open_babi_report_execution_keyword1">
             <field name="keyword">form_relate</field>
