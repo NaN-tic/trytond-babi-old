@@ -12,6 +12,7 @@ from trytond.tests.test_tryton import POOL, DB_NAME, USER, CONTEXT, test_view,\
 from trytond.transaction import Transaction
 from trytond.exceptions import UserError
 from trytond.modules.babi.babi_eval import babi_eval
+from trytond.pyson import PYSONEncoder
 from dateutil.relativedelta import relativedelta
 
 
@@ -105,6 +106,12 @@ class BaBITestCase(unittest.TestCase):
                         'name': 'Even',
                         'model': model.id,
                         'domain': "[('category', '=', 'even')]",
+                         }, {
+                        'name': 'Date',
+                        'model': model.id,
+                        'domain': PYSONEncoder().encode([
+                                ('date', '>=', datetime.date(year, 6, 1)),
+                                ]),
                          }])
             trans.cursor.commit()
 
@@ -451,6 +458,49 @@ class BaBITestCase(unittest.TestCase):
                 total_amount)
             evens = ReportModel.search([(category.internal_name, '=', 'even')])
             self.assertEqual(len(evens), 0)
+
+            #Test with datetime fields as they are JSONEncoded on saved
+            #searches
+            date_filter, = self.filter.search([('name', '=', 'Date')])
+            report, = self.report.create([{
+                        'name': 'Date filter Report',
+                        'model': model.id,
+                        'parent_menu': menu.id,
+                        'filter': date_filter.id,
+                        'timeout': 30,
+                        }])
+
+            category, = self.expression.search([('name', '=', 'Category')])
+            category, = self.dimension.create([{
+                        'report': report.id,
+                        'name': 'Category',
+                        'expression': category.id,
+                        }])
+
+            amount, = self.expression.search([('name', '=', 'Amount')])
+            amount, = self.measure.create([{
+                        'report': report.id,
+                        'expression': amount.id,
+                        'name': 'Amount',
+                        'aggregate': 'sum',
+                        }])
+
+            self.report.calculate([report])
+            report = self.report(report.id)
+
+            execution, = report.executions
+
+            ReportModel = POOL.get(execution.babi_model.model)
+            DataModel = POOL.get(model.model)
+
+            year = datetime.date.today().year
+            total_amount = 0
+            for record in DataModel.search([]):
+                if record.date >= datetime.date(year, 6, 1):
+                    total_amount += record.amount
+
+            root, = ReportModel.search([('parent', '=', None)])
+            self.assertEqual(getattr(root, amount.internal_name), total_amount)
 
     def test0050_dimensions_on_columns(self):
         'Test reports with dimensions on columns'

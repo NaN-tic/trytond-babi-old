@@ -19,7 +19,7 @@ from trytond.wizard import Wizard, StateView, StateAction, StateTransition, \
     Button
 from trytond.model import ModelSQL, ModelView, fields
 from trytond.model.fields import depends
-from trytond.pyson import Eval, Bool, PYSONEncoder, In, Not
+from trytond.pyson import Eval, Bool, PYSONEncoder, In, Not, PYSONDecoder
 from trytond.pool import Pool, PoolMeta
 from trytond.transaction import Transaction
 from trytond.tools import safe_eval
@@ -1100,8 +1100,8 @@ class ReportExecution(ModelSQL, ModelView):
                     continue
                 values[key] = value
             domain = domain.format(**values)
-        domain = safe_eval(domain)
-
+        domain = PYSONDecoder().decode(PYSONEncoder().encode(safe_eval(
+                    domain)))
         start = datetime.today()
         self.update_internal_measures()
         with_columns = len(self.report.columns) > 0
