@@ -27,7 +27,7 @@ contains the full copyright notices and license terms. -->
                 <button name="remove_menus" string="Remove Menus"/>
             </group>
         </page>
-        <page id="executions" string="Executions">
+        <page name="executions" string="Executions">
             <field name="executions" colspan="4" />
         </page>
         <page id="extra" string="Extra Information">

@@ -1096,7 +1096,7 @@ msgid "open chart"
 msgstr "Diagramm öffnen"
 
 msgctxt "model:ir.action,name:open_execution_wizard"
-msgid "Bussiness Inteligence Report"
+msgid "Business Inteligence Report"
 msgstr "Business Intelligence Bericht"
 
 msgctxt "model:ir.ui.menu,name:menu_babi"

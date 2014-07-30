@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--The COPYRIGHT file at the top level of this repository
+contains the full copyright notices and license terms. -->
+<tryton>
+    <data>
+        <record model="ir.model.access" id="access_babi_cron">
+            <field name="model" search="[('model', '=', 'ir.cron')]"/>
+            <field name="group" ref="group_babi"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_delete" eval="True"/>
+        </record>
+        <record model="ir.model.access" id="access_babi_cron_admin">
+            <field name="model" search="[('model', '=', 'ir.cron')]"/>
+            <field name="group" ref="group_babi_admin"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_delete" eval="True"/>
+        </record>
+    </data>
+</tryton>

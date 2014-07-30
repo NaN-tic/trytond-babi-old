@@ -60,6 +60,14 @@ contains the full copyright notices and license terms. -->
             <field name="perm_create" eval="False"/>
             <field name="perm_delete" eval="False"/>
         </record>
+        <record model="ir.model.access" id="access_babi_dimension_babi">
+            <field name="model" search="[('model', '=', 'babi.dimension')]"/>
+            <field name="group" ref="group_babi"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_delete" eval="True"/>
+        </record>
         <record model="ir.model.access" id="access_babi_dimension_admin">
             <field name="model" search="[('model', '=', 'babi.dimension')]"/>
             <field name="group" ref="group_babi_admin"/>
@@ -101,6 +109,14 @@ contains the full copyright notices and license terms. -->
             <field name="perm_write" eval="False"/>
             <field name="perm_create" eval="False"/>
             <field name="perm_delete" eval="False"/>
+        </record>
+        <record model="ir.model.access" id="access_babi_dimension_column_babi">
+            <field name="model" search="[('model', '=', 'babi.dimension.column')]"/>
+            <field name="group" ref="group_babi"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_delete" eval="True"/>
         </record>
         <record model="ir.model.access" id="access_babi_dimension_column_admin">
             <field name="model" search="[('model', '=', 'babi.dimension.column')]"/>
@@ -186,6 +202,14 @@ contains the full copyright notices and license terms. -->
             <field name="perm_create" eval="False"/>
             <field name="perm_delete" eval="False"/>
         </record>
+        <record model="ir.model.access" id="access_babi_filter_babi">
+            <field name="model" search="[('model', '=', 'babi.filter')]"/>
+            <field name="group" ref="group_babi"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_delete" eval="True"/>
+        </record>
         <record model="ir.model.access" id="access_babi_filter_admin">
             <field name="model" search="[('model', '=', 'babi.filter')]"/>
             <field name="group" ref="group_babi_admin"/>
@@ -266,8 +290,8 @@ contains the full copyright notices and license terms. -->
         <record model="ir.model.access" id="access_babi_internal_measure">
             <field name="model" search="[('model', '=', 'babi.internal.measure')]"/>
             <field name="perm_read" eval="True"/>
-            <field name="perm_write" eval="False"/>
-            <field name="perm_create" eval="False"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
             <field name="perm_delete" eval="False"/>
         </record>
         <record model="ir.model.access" id="access_babi_internal_measure_admin">
@@ -312,6 +336,14 @@ contains the full copyright notices and license terms. -->
             <field name="perm_create" eval="False"/>
             <field name="perm_delete" eval="False"/>
         </record>
+        <record model="ir.model.access" id="access_babi_measure_babi">
+            <field name="model" search="[('model', '=', 'babi.measure')]"/>
+            <field name="group" ref="group_babi"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_delete" eval="True"/>
+        </record>
         <record model="ir.model.access" id="access_babi_measure_admin">
             <field name="model" search="[('model', '=', 'babi.measure')]"/>
             <field name="group" ref="group_babi_admin"/>
@@ -354,6 +386,14 @@ contains the full copyright notices and license terms. -->
             <field name="perm_create" eval="False"/>
             <field name="perm_delete" eval="False"/>
         </record>
+        <record model="ir.model.access" id="access_babi_order_babi">
+            <field name="model" search="[('model', '=', 'babi.order')]"/>
+            <field name="group" ref="group_babi"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_delete" eval="True"/>
+        </record>
         <record model="ir.model.access" id="access_babi_order_admin">
             <field name="model" search="[('model', '=', 'babi.order')]"/>
             <field name="group" ref="group_babi_admin"/>
@@ -390,6 +430,11 @@ contains the full copyright notices and license terms. -->
             <field name="model">babi.report,-1</field>
             <field name="action" ref="act_babi_report_execution_form"/>
         </record>
+        <record model="ir.action-res.group"
+            id="act_babi_report_execution_form-group_babi_admin">
+            <field name="action" ref="act_babi_report_execution_form"/>
+            <field name="group" ref="group_babi_admin"/>
+        </record>
         <record model="ir.action.act_window.view" id="act_babi_report_view1">
             <field name="sequence" eval="10"/>
             <field name="view" ref="babi_report_tree_view"/>
@@ -406,6 +451,14 @@ contains the full copyright notices and license terms. -->
             <field name="perm_write" eval="False"/>
             <field name="perm_create" eval="False"/>
             <field name="perm_delete" eval="False"/>
+        </record>
+        <record model="ir.model.access" id="access_babi_report_babi">
+            <field name="model" search="[('model', '=', 'babi.report')]"/>
+            <field name="group" ref="group_babi"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_delete" eval="True"/>
         </record>
         <record model="ir.model.access" id="access_babi_report_admin">
             <field name="model" search="[('model', '=', 'babi.report')]"/>
@@ -433,7 +486,7 @@ contains the full copyright notices and license terms. -->
         <record model="ir.model.access" id="access_babi_execution">
             <field name="model" search="[('model', '=', 'babi.report.execution')]"/>
             <field name="perm_read" eval="True"/>
-            <field name="perm_write" eval="False"/>
+            <field name="perm_write" eval="True"/>
             <field name="perm_create" eval="True"/>
             <field name="perm_delete" eval="False"/>
         </record>
@@ -469,7 +522,7 @@ contains the full copyright notices and license terms. -->
             <field name="name">open_execution_select_form</field>
         </record>
         <record model="ir.action.wizard" id="open_execution_wizard">
-            <field name="name">Bussiness Inteligence Report</field>
+            <field name="name">Business Inteligence Report</field>
             <field name="wiz_name">babi.report.execution.open</field>
         </record>
 
@@ -505,7 +558,23 @@ contains the full copyright notices and license terms. -->
             parent="menu_configuration" sequence="20" name="Filters"/>
         <menuitem action="act_babi_report" id="menu_babi_report"
             parent="menu_babi" sequence="20" name="Reports"/>
+        <record model="ir.ui.menu-res.group"
+            id="menu_report_group_babi">
+            <field name="menu" ref="menu_babi_report"/>
+            <field name="group" ref="group_babi"/>
+        </record>
+        <record model="ir.ui.menu-res.group"
+            id="menu_report_group_babi_admin">
+            <field name="menu" ref="menu_babi_report"/>
+            <field name="group" ref="group_babi_admin"/>
+        </record>
         <menuitem action="act_babi_execution" id="menu_babi_execution"
             parent="menu_babi_report" sequence="10" name="Executions"/>
+
+        <record model="ir.ui.menu-res.group"
+            id="menu_execution_group_babi_admin">
+            <field name="menu" ref="menu_babi_execution"/>
+            <field name="group" ref="group_babi_admin"/>
+        </record>
     </data>
 </tryton>

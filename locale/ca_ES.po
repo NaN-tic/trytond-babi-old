@@ -1066,8 +1066,8 @@ msgid "open chart"
 msgstr "Obre gràfica"
 
 msgctxt "model:ir.action,name:open_execution_wizard"
-msgid "Bussiness Inteligence Report"
-msgstr "Informe de Bussiness Inteligence"
+msgid "Business Inteligence Report"
+msgstr "Informe de Business Inteligence"
 
 msgctxt "model:ir.ui.menu,name:menu_babi"
 msgid "Business Intelligence"
@@ -1111,7 +1111,7 @@ msgstr "Business Intelligence"
 
 msgctxt "model:res.group,name:group_babi_admin"
 msgid "Business Intelligence Administration"
-msgstr "Administració Bussiness Intelligence"
+msgstr "Administració Business Intelligence"
 
 msgctxt "selection:babi.expression,ttype:"
 msgid "Boolean"
