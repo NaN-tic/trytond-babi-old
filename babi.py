@@ -19,7 +19,7 @@ from trytond.wizard import Wizard, StateView, StateAction, StateTransition, \
     Button
 from trytond.model import ModelSQL, ModelView, fields
 from trytond.model.fields import depends
-from trytond.pyson import Eval, Bool, PYSONEncoder, In, Not, PYSONDecoder
+from trytond.pyson import Eval, Bool, PYSONEncoder, Id, In, Not, PYSONDecoder
 from trytond.pool import Pool, PoolMeta
 from trytond.transaction import Transaction
 from trytond.tools import safe_eval
@@ -381,7 +381,11 @@ class Filter(ModelSQL, ModelView):
         'result is True the record will be included, it will be discarded '
         'otherwise.')
     parameters = fields.One2Many('babi.filter.parameter', 'filter',
-        'Parameters')
+        'Parameters',
+        states={
+            'invisible': Not(Eval('context', {}).get('groups', []).contains(
+                Id('babi', 'group_babi_admin'))),
+            })
     fields = fields.Function(fields.Many2Many('ir.model.field', None, None,
             'Model Fields', depends=['model']),
         'on_change_with_fields')
@@ -539,7 +543,10 @@ class Report(ModelSQL, ModelView):
         domain=[('babi_enabled', '=', True)], help='Model for data extraction')
     model_name = fields.Function(fields.Char('Model Name'),
         'on_change_with_model_name')
-    internal_name = fields.Function(fields.Char('Internal Name'),
+    internal_name = fields.Function(fields.Char('Internal Name', states={
+                'invisible': Not(Eval('context', {}).get('groups', []
+                        ).contains(Id('babi', 'group_babi_admin'))),
+                }),
         'get_internal_name')
     filter = fields.Many2One('babi.filter', 'Filter',
         domain=[('model', '=', Eval('model'))], depends=['model'])
@@ -556,16 +563,32 @@ class Report(ModelSQL, ModelView):
     parent_menu = fields.Many2One('ir.ui.menu', 'Parent Menu',
         required=True)
     menus = fields.One2Many('ir.ui.menu', 'babi_report', 'Menus',
-        readonly=True)
+        readonly=True,
+        states={
+            'invisible': Not(Eval('context', {}).get('groups', []).contains(
+                Id('babi', 'group_babi_admin'))),
+            })
     actions = fields.One2Many('ir.action.act_window', 'babi_report',
-        'Actions', readonly=True)
+        'Actions', readonly=True,
+        states={
+            'invisible': Not(Eval('context', {}).get('groups', []).contains(
+                Id('babi', 'group_babi_admin'))),
+            })
     keywords = fields.One2Many('ir.action.keyword', 'babi_report', 'Keywords',
-        readonly=True)
+        readonly=True,
+        states={
+            'invisible': Not(Eval('context', {}).get('groups', []).contains(
+                Id('babi', 'group_babi_admin'))),
+            })
     timeout = fields.Integer('Timeout', required=True, help='If report '
         'calculation should take more than the specified timeout (in seconds) '
         'the process will be stopped automatically.')
     executions = fields.One2Many('babi.report.execution', 'report',
-        'Executions', readonly=True, order=[('date', 'DESC')])
+        'Executions', readonly=True, order=[('date', 'DESC')],
+        states={
+            'invisible': Not(Eval('context', {}).get('groups', []).contains(
+                Id('babi', 'group_babi_admin'))),
+            })
     last_execution = fields.Function(fields.Many2One('babi.report.execution',
         'Last Executions', readonly=True), 'get_last_execution')
     crons = fields.One2Many('ir.cron', 'babi_report', 'Schedulers',
@@ -1032,12 +1055,14 @@ class ReportExecution(ModelSQL, ModelView):
 
     @classmethod
     def calculate(cls, executions):
+        transaction = Transaction()
         for execution in executions:
             execution.save_state(execution.id, 'in_progress')
             date = execution.create_date
-            with Transaction().set_context(_datetime=date):
+            with transaction.set_context(_datetime=date):
                 execution.validate_model()
-                execution.create_keywords()
+                with transaction.set_user(0):
+                    execution.create_keywords()
                 try:
                     execution.create_data()
                 except TimeoutException:
