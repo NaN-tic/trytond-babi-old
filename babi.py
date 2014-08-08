@@ -1784,7 +1784,8 @@ class OpenExecution(Wizard):
         Menu = pool.get('ir.ui.menu')
         Execution = pool.get('babi.report.execution')
 
-        context = Transaction().context
+        transaction = Transaction()
+        context = transaction.context
 
         model_name = context.get('active_model')
         if model_name == 'ir.ui.menu':
@@ -1808,7 +1809,8 @@ class OpenExecution(Wizard):
         if not execution:
             self.raise_user_error('no_execution', report.rec_name)
 
-        execution.validate_model()
+        with transaction.set_context(_datetime=execution.date):
+            execution.validate_model()
         domain = [
             ('babi_report', '=', report.id),
             ]
