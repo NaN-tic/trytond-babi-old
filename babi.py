@@ -1110,8 +1110,11 @@ class ReportExecution(ModelSQL, ModelView):
         if not self.report.dimensions:
             self.raise_user_error('no_dimensions', self.rec_name)
 
-        domain = self.report.filter.domain if self.report.filter else '[]'
-        if self.report.filter and len(self.report.filter.parameters) > 0:
+        domain = '[]'
+        if self.report.filter and self.report.filter.domain:
+            domain = self.report.filter.domain
+        if domain and self.report.filter and (
+                len(self.report.filter.parameters) > 0):
             if not self.filter_values:
                 self.raise_user_error('filter_parameters', self.rec_name)
             filter_data = json.loads(self.filter_values.encode('utf-8'),
@@ -1122,7 +1125,8 @@ class ReportExecution(ModelSQL, ModelView):
                 if not value or key not in domain:
                     continue
                 values[key] = value
-            domain = domain.format(**values)
+            if domain:
+                domain = domain.format(**values)
         domain = PYSONDecoder().decode(PYSONEncoder().encode(safe_eval(
                     domain)))
         start = datetime.today()
