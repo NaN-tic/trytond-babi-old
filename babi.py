@@ -56,9 +56,10 @@ AGGREGATE_TYPES = [
 
 SRC_CHARS = u""" .'"()/*-+?¿!&$[]{}@#`'^:;<>=~%,|\\"""
 DST_CHARS = u"""__________________________________"""
-celery_available = None
+CELERY_AVAILABLE = False
 try:
-    import celery as celery_available
+    import celery
+    CELERY_AVAILABLE = True
 except ImportError:
     pass
 except AttributeError:
@@ -82,7 +83,7 @@ def unaccent(text):
 
 def start_celery():
     celery_start = CONFIG.get('celery_start', True)
-    if celery_available is None or not celery_start:
+    if not CELERY_AVAILABLE or not celery_start:
         return
     db = Transaction().cursor.database_name
     env = {
@@ -849,17 +850,18 @@ class Report(ModelSQL, ModelView):
                 cls.raise_user_error('no_measures', report.rec_name)
             if not report.dimensions:
                 cls.raise_user_error('no_dimensions', report.rec_name)
-            executions = Execution.create([report.get_execution_data()])
+            execution, = Execution.create([report.get_execution_data()])
             cursor.commit()
-            for execution in executions:
-                result = os.system('%s/celery call tasks.calculate_execution '
+            if CELERY_AVAILABLE:
+                os.system('%s/celery call tasks.calculate_execution '
                     '--args=[%d,%d] '
                     '--config="trytond.modules.babi.celeryconfig" '
-                    '--queue=%s' % (
-                        os.path.dirname(sys.executable), execution.id, transaction.user, cursor.database_name))
-                if result != 0:
-                    # Fallback to concurrent mode if celery is not available
-                    Execution.calculate([execution])
+                    '--queue=%s' % (os.path.dirname(sys.executable),
+                        execution.id, transaction.user,
+                        cursor.database_name))
+            else:
+                # Fallback to synchronous mode if celery is not available
+                Execution.calculate([execution])
 
 
 class ReportExecution(ModelSQL, ModelView):
