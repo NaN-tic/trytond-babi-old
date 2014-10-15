@@ -1,6 +1,7 @@
 # encoding: utf-8
 # The COPYRIGHT file at the top level of this repository contains the full
 # copyright notices and license terms.
+import datetime as mdatetime
 from datetime import datetime
 from StringIO import StringIO
 import logging
@@ -1117,6 +1118,8 @@ class ReportExecution(ModelSQL, ModelView):
         domain = '[]'
         if self.report.filter and self.report.filter.domain:
             domain = self.report.filter.domain
+            if '__' in domain:
+                domain = str(PYSONDecoder().decode(domain))
         if domain and self.report.filter and (
                 len(self.report.filter.parameters) > 0):
             if not self.filter_values:
@@ -1131,8 +1134,7 @@ class ReportExecution(ModelSQL, ModelView):
                 values[key] = value
             if domain:
                 domain = domain.format(**values)
-        domain = PYSONDecoder().decode(PYSONEncoder().encode(safe_eval(
-                    domain)))
+        domain = safe_eval(domain, {'datetime': mdatetime})
         start = datetime.today()
         self.update_internal_measures()
         with_columns = len(self.report.columns) > 0
