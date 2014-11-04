@@ -1778,6 +1778,8 @@ class OpenExecution(Wizard):
     def transition_update(self):
         pool = Pool()
         Menu = pool.get('ir.ui.menu')
+        Report = pool.get('babi.report')
+
         menu = Menu(Transaction().context['active_id'])
         Report.calculate([menu.babi_report])
         return 'update_done'
