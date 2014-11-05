@@ -24,9 +24,9 @@ from trytond.pyson import Eval, Bool, PYSONEncoder, Id, In, Not, PYSONDecoder
 from trytond.pool import Pool, PoolMeta
 from trytond.transaction import Transaction
 from trytond.tools import safe_eval
-from trytond.config import CONFIG
+from trytond.config import config
 from trytond import backend
-from trytond.protocols.jsonrpc import object_hook, JSONEncoder
+from trytond.protocols.jsonrpc import JSONDecoder, JSONEncoder
 
 from .babi_eval import babi_eval
 
@@ -83,13 +83,14 @@ def unaccent(text):
 
 
 def start_celery():
-    celery_start = CONFIG.get('celery_start', True)
+    celery_start = config.get('celery', 'auto_start', True)
     if not CELERY_AVAILABLE or not celery_start:
         return
     db = Transaction().cursor.database_name
     env = {
         'TRYTON_DATABASE': db,
-        'TRYTON_CONFIG': CONFIG.configfile
+        # TODO: Save current config to a file and update the setting
+        'TRYTON_CONFIG': '',
     }
     # Copy environment variables in order to get virtualenvs working
     for key, value in os.environ.iteritems():
@@ -1125,7 +1126,7 @@ class ReportExecution(ModelSQL, ModelView):
             if not self.filter_values:
                 self.raise_user_error('filter_parameters', self.rec_name)
             filter_data = json.loads(self.filter_values.encode('utf-8'),
-                object_hook=object_hook)
+                object_hook=JSONDecoder())
             values = {}
             for key, value in filter_data.iteritems():
                 key = '_'.join(key.split('_')[:-1])
@@ -1486,13 +1487,13 @@ class OpenExecutionSelect(ModelView):
     execution_readonly = fields.Boolean('Execution Readonly')
 
     @classmethod
-    def default_get(cls, fields, with_rec_name=True, with_on_change=True):
+    def default_get(cls, fields, with_rec_name=True):
         pool = Pool()
         Execution = pool.get('babi.report.execution')
         Menu = pool.get('ir.ui.menu')
 
         result = super(OpenExecutionSelect, cls).default_get(fields,
-            with_rec_name, with_on_change)
+            with_rec_name)
 
         active_id = Transaction().context.get('active_id')
         model_name = Transaction().context.get('active_model')
@@ -2248,7 +2249,7 @@ class OpenChartStart(ModelView):
         depends=['execution'])
 
     @classmethod
-    def default_get(cls, fields, with_rec_name=True, with_on_change=True):
+    def default_get(cls, fields, with_rec_name=True):
         pool = Pool()
         Execution = pool.get('babi.report.execution')
         model_name = Transaction().context.get('active_model')
@@ -2256,8 +2257,7 @@ class OpenChartStart(ModelView):
                 ('babi_model.model', '=', model_name),
                 ], limit=1)
 
-        result = super(OpenChartStart, cls).default_get(fields, with_rec_name,
-            with_on_change)
+        result = super(OpenChartStart, cls).default_get(fields, with_rec_name)
         if len(executions) != 1:
             return result
         execution, = executions
