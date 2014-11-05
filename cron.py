@@ -38,10 +38,9 @@ class Cron:
         return super(Cron, cls).create(vlist)
 
     @classmethod
-    def default_get(cls, fields, with_rec_name=True, with_on_change=True):
+    def default_get(cls, fields, with_rec_name=True):
         User = Pool().get('res.user')
-        res = super(Cron, cls).default_get(fields, with_rec_name,
-            with_on_change)
+        res = super(Cron, cls).default_get(fields, with_rec_name)
         cron_user, = User.search([
                 ('active', '=', False),
                 ('login', '=', 'user_cron_trigger'),
