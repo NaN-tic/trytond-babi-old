@@ -86,10 +86,12 @@ def start_celery():
     if not CELERY_AVAILABLE or not celery_start:
         return
     db = Transaction().cursor.database_name
+    _, config_path = tempfile.mkstemp(prefix='trytond-celery-')
+    with open(config_path, 'w') as f:
+        config.write(f)
     env = {
         'TRYTON_DATABASE': db,
-        # TODO: Save current config to a file and update the setting
-        'TRYTON_CONFIG': '',
+        'TRYTON_CONFIG': config_path
     }
     # Copy environment variables in order to get virtualenvs working
     for key, value in os.environ.iteritems():
