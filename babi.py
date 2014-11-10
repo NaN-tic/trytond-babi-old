@@ -124,7 +124,12 @@ class DynamicModel(ModelSQL, ModelView):
         if not executions or len(executions) > 1:
             return
         execution, = executions
-        cls._order = execution.get_orders()
+        try:
+            cls._order = execution.get_orders()
+        except AssertionError:
+            # An exception error is raisen on tests where Execution is not
+            # properly loaded in the pool
+            pass
 
     @classmethod
     def fields_view_get(cls, view_id=None, view_type='form'):
