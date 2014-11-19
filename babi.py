@@ -83,7 +83,7 @@ def unaccent(text):
 
 
 def start_celery():
-    celery_start = config.get('celery', 'auto_start', True)
+    celery_start = config.getboolean('celery', 'auto_start', True)
     if not CELERY_AVAILABLE or not celery_start:
         return
     db = Transaction().cursor.database_name
