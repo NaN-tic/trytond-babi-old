@@ -670,9 +670,9 @@ class Report(ModelSQL, ModelView):
         if 'order' not in default:
             default['order'] = None
         default['actions'] = None
+        default['keywords'] = None
         default['menus'] = None
         default['executions'] = None
-        default['internal_measures'] = None
         if 'name' not in default:
             result = []
             for report in reports:
