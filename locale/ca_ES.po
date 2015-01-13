@@ -1395,7 +1395,7 @@ msgstr "Informe"
 
 msgctxt "view:babi.update_data.wizard.done:"
 msgid "Report Calculation Done"
-msgstr "Càlcul del informe finalitzat"
+msgstr "Càlcul de l'informe finalitzat"
 
 msgctxt "view:babi.update_data.wizard.done:"
 msgid "The data for the report has been calculated"
@@ -1407,7 +1407,7 @@ msgstr "Tingueu en compte que aquesta operació pot trigar uns minuts."
 
 msgctxt "view:babi.update_data.wizard.start:"
 msgid "Report Calculation"
-msgstr "Càlcul del informe"
+msgstr "Càlcul de l'informe"
 
 msgctxt "view:babi.update_data.wizard.start:"
 msgid "The data for the report will be calculated"
