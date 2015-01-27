@@ -1340,7 +1340,7 @@ class ReportExecution(ModelSQL, ModelView):
     def update_measures(self, checker):
         logger = logging.getLogger(self.__name__)
 
-        def query_inserts(table_name, measures, select_group, group):
+        def query_inserts(table_name, measures, select_group, group, extra=None):
             """Inserts a group record"""
             cursor = Transaction().cursor
 
@@ -1350,11 +1350,17 @@ class ReportExecution(ModelSQL, ModelView):
                 babi_group = ",MAX('%s') as babi_group" % group
             local_measures = measures + babi_group
 
+            if extra_data:
+                local_measures += ", %s" % extra_data
+
             select_query = "SELECT %s FROM %s where babi_group IS NULL" % (
                 local_measures, table_name)
 
             if select_group:
                 select_query += " GROUP BY %s" % select_group
+
+            if extra_data:
+                select_query += ", %s" % extra_data
 
             fields = []
             for measure in local_measures.split(','):
@@ -1411,6 +1417,9 @@ class ReportExecution(ModelSQL, ModelView):
         group_by = [x.internal_name for x in self.report.dimensions
             if x.group_by]
 
+        extra_data = ",".join([x.internal_name for x in self.report.dimensions
+            if not x.group_by])
+
         table_name = Pool().get(self.babi_model.model)._table
         cursor = Transaction().cursor
 
@@ -1437,7 +1446,7 @@ class ReportExecution(ModelSQL, ModelView):
             child_group = current_group
             current_group = group_by[len(group_by_iterator) - 1]
             parent_ids = query_inserts(table_name, measures, group,
-                current_group)
+                current_group, extra_data)
 
             if group_by != group_by_iterator:
                 for parent_id in parent_ids:
@@ -1446,6 +1455,7 @@ class ReportExecution(ModelSQL, ModelView):
 
             child_group = current_group
             group_by_iterator.pop()
+            extra_data = None
 
         # ROOT
         measures = ",".join(['%s("%s") as %s' % (
