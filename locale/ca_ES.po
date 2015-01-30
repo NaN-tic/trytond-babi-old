@@ -8,7 +8,7 @@ msgstr "El nom de les dimensions ha de ser únic per informe."
 
 msgctxt "error:babi.filter:"
 msgid "Parameter \"%s\" not found in Domain nor in Python Expression."
-msgstr "El paràmetre \"%s\" no s'ha trobat ni al Domini ni a l'Expressio Python."
+msgstr "El paràmetre \"%s\" no s'ha trobat ni al Domini ni a l'expressió de Python."
 
 msgctxt "error:babi.measure:"
 msgid "Measure name must be unique per report."
@@ -63,7 +63,7 @@ msgid ""
 "No parameter found for model %s.In order to view filtered data, parameter "
 "should be defined on the report filter."
 msgstr ""
-"No s'ha trobat cap parametre pel model %s. Per veure registres filtrats, "
+"No s'ha trobat cap paràmetre pel model %s. Per veure registres filtrats, "
 "s'han de definir els paràmetres al filtre de l'informe."
 
 msgctxt "error:babi.report.execution.open:"
@@ -75,8 +75,8 @@ msgid ""
 "Execution \"%s\" has filter parameters  and you did not provide any of them."
 " Please execute it  from the menu."
 msgstr ""
-"L'execució \"%s\" té paremetres de filtre i no se n'ha proporcionat cap.  "
-"Siusplau, executeu-la desde el menú. "
+"L'execució \"%s\" té paràmetres de filtre i no se n'ha proporcionat cap.  "
+"Siusplau, executeu-la des del menú. "
 
 msgctxt "error:babi.report.execution:"
 msgid "Execution \"%s\" has no dimensions. At least one is needed."
@@ -100,11 +100,11 @@ msgstr "El càlcul de l'informe ha sobrepassat el temps límit."
 
 msgctxt "field:babi.configuration,create_date:"
 msgid "Create Date"
-msgstr "Data de creació"
+msgstr "Data creació"
 
 msgctxt "field:babi.configuration,create_uid:"
 msgid "Create User"
-msgstr "Usuari de creació"
+msgstr "Usuari creació"
 
 msgctxt "field:babi.configuration,default_timeout:"
 msgid "Timeout (s)"
@@ -112,7 +112,7 @@ msgstr "Temps d'espera (s)"
 
 msgctxt "field:babi.configuration,id:"
 msgid "ID"
-msgstr "Identificador"
+msgstr "ID"
 
 msgctxt "field:babi.configuration,rec_name:"
 msgid "Name"
@@ -128,11 +128,11 @@ msgstr "Usuari modificació"
 
 msgctxt "field:babi.dimension,create_date:"
 msgid "Create Date"
-msgstr "Data de creació"
+msgstr "Data creació"
 
 msgctxt "field:babi.dimension,create_uid:"
 msgid "Create User"
-msgstr "Usuari de creació"
+msgstr "Usuari creació"
 
 msgctxt "field:babi.dimension,expression:"
 msgid "Expression"
@@ -144,7 +144,7 @@ msgstr "Agrupa per aquesta dimensió"
 
 msgctxt "field:babi.dimension,id:"
 msgid "ID"
-msgstr "Identificador"
+msgstr "ID"
 
 msgctxt "field:babi.dimension,internal_name:"
 msgid "Internal Name"
@@ -176,11 +176,11 @@ msgstr "Usuari modificació"
 
 msgctxt "field:babi.dimension.column,create_date:"
 msgid "Create Date"
-msgstr "Data de creació"
+msgstr "Data creació"
 
 msgctxt "field:babi.dimension.column,create_uid:"
 msgid "Create User"
-msgstr "Usuari de creació"
+msgstr "Usuari creació"
 
 msgctxt "field:babi.dimension.column,expression:"
 msgid "Expression"
@@ -192,7 +192,7 @@ msgstr "Agrupa per aquesta dimensió"
 
 msgctxt "field:babi.dimension.column,id:"
 msgid "ID"
-msgstr "Identificador"
+msgstr "ID"
 
 msgctxt "field:babi.dimension.column,internal_name:"
 msgid "Internal Name"
@@ -224,11 +224,11 @@ msgstr "Usuari modificació"
 
 msgctxt "field:babi.expression,create_date:"
 msgid "Create Date"
-msgstr "Data de creació"
+msgstr "Data creació"
 
 msgctxt "field:babi.expression,create_uid:"
 msgid "Create User"
-msgstr "Usuari de creació"
+msgstr "Usuari creació"
 
 msgctxt "field:babi.expression,expression:"
 msgid "Expression"
@@ -240,7 +240,7 @@ msgstr "Camps del model"
 
 msgctxt "field:babi.expression,id:"
 msgid "ID"
-msgstr "Identificador"
+msgstr "ID"
 
 msgctxt "field:babi.expression,model:"
 msgid "Model"
@@ -272,11 +272,11 @@ msgstr "Usuari modificació"
 
 msgctxt "field:babi.filter,create_date:"
 msgid "Create Date"
-msgstr "Data de creació"
+msgstr "Data creació"
 
 msgctxt "field:babi.filter,create_uid:"
 msgid "Create User"
-msgstr "Usuari de creació"
+msgstr "Usuari creació"
 
 msgctxt "field:babi.filter,domain:"
 msgid "Domain"
@@ -288,7 +288,7 @@ msgstr "Camps del model"
 
 msgctxt "field:babi.filter,id:"
 msgid "ID"
-msgstr "Identificador"
+msgstr "ID"
 
 msgctxt "field:babi.filter,model:"
 msgid "Model"
@@ -328,11 +328,11 @@ msgstr "Usuari modificació"
 
 msgctxt "field:babi.filter.parameter,create_date:"
 msgid "Create Date"
-msgstr "Data de creació"
+msgstr "Data creació"
 
 msgctxt "field:babi.filter.parameter,create_uid:"
 msgid "Create User"
-msgstr "Usuari de creació"
+msgstr "Usuari creació"
 
 msgctxt "field:babi.filter.parameter,filter:"
 msgid "Filter"
@@ -340,7 +340,7 @@ msgstr "Filtre"
 
 msgctxt "field:babi.filter.parameter,id:"
 msgid "ID"
-msgstr "Identificador"
+msgstr "ID"
 
 msgctxt "field:babi.filter.parameter,name:"
 msgid "Name"
@@ -372,11 +372,11 @@ msgstr "Agregat"
 
 msgctxt "field:babi.internal.measure,create_date:"
 msgid "Create Date"
-msgstr "Data de creació"
+msgstr "Data creació"
 
 msgctxt "field:babi.internal.measure,create_uid:"
 msgid "Create User"
-msgstr "Usuari de creació"
+msgstr "Usuari creació"
 
 msgctxt "field:babi.internal.measure,execution:"
 msgid "Report Execution"
@@ -388,7 +388,7 @@ msgstr "Expressió"
 
 msgctxt "field:babi.internal.measure,id:"
 msgid "ID"
-msgstr "Identificador"
+msgstr "ID"
 
 msgctxt "field:babi.internal.measure,internal_name:"
 msgid "Internal Name"
@@ -436,11 +436,11 @@ msgstr "Agregat"
 
 msgctxt "field:babi.measure,create_date:"
 msgid "Create Date"
-msgstr "Data de creació"
+msgstr "Data creació"
 
 msgctxt "field:babi.measure,create_uid:"
 msgid "Create User"
-msgstr "Usuari de creació"
+msgstr "Usuari creació"
 
 msgctxt "field:babi.measure,expression:"
 msgid "Expression"
@@ -448,7 +448,7 @@ msgstr "Expressió"
 
 msgctxt "field:babi.measure,id:"
 msgid "ID"
-msgstr "Identificador"
+msgstr "ID"
 
 msgctxt "field:babi.measure,internal_measures:"
 msgid "Internal Measures"
@@ -504,7 +504,7 @@ msgstr "Gràfica"
 
 msgctxt "field:babi.open_chart.start,id:"
 msgid "ID"
-msgstr "Identificador"
+msgstr "ID"
 
 msgctxt "field:babi.open_chart.start,interpolation:"
 msgid "Interpolation"
@@ -524,11 +524,11 @@ msgstr "Mostra la llegenda"
 
 msgctxt "field:babi.order,create_date:"
 msgid "Create Date"
-msgstr "Data de creació"
+msgstr "Data creació"
 
 msgctxt "field:babi.order,create_uid:"
 msgid "Create User"
-msgstr "Usuari de creació"
+msgstr "Usuari creació"
 
 msgctxt "field:babi.order,dimension:"
 msgid "Dimension"
@@ -536,7 +536,7 @@ msgstr "Dimensió"
 
 msgctxt "field:babi.order,id:"
 msgid "ID"
-msgstr "Identificador"
+msgstr "ID"
 
 msgctxt "field:babi.order,measure:"
 msgid "Measure"
@@ -576,11 +576,11 @@ msgstr "Dimensions en columnes"
 
 msgctxt "field:babi.report,create_date:"
 msgid "Create Date"
-msgstr "Data de creació"
+msgstr "Data creació"
 
 msgctxt "field:babi.report,create_uid:"
 msgid "Create User"
-msgstr "Usuari de creació"
+msgstr "Usuari creació"
 
 msgctxt "field:babi.report,dimensions:"
 msgid "Dimensions"
@@ -600,7 +600,7 @@ msgstr "Grups"
 
 msgctxt "field:babi.report,id:"
 msgid "ID"
-msgstr "Identificador"
+msgstr "ID"
 
 msgctxt "field:babi.report,internal_name:"
 msgid "Internal Name"
@@ -648,7 +648,7 @@ msgstr "Nom"
 
 msgctxt "field:babi.report,timeout:"
 msgid "Timeout"
-msgstr "Temps d'espera (s)"
+msgstr "Temps esgotat"
 
 msgctxt "field:babi.report,write_date:"
 msgid "Write Date"
@@ -660,11 +660,11 @@ msgstr "Usuari modificació"
 
 msgctxt "field:babi.report-res.group,create_date:"
 msgid "Create Date"
-msgstr "Data de creació"
+msgstr "Data creació"
 
 msgctxt "field:babi.report-res.group,create_uid:"
 msgid "Create User"
-msgstr "Usuari de creació"
+msgstr "Usuari creació"
 
 msgctxt "field:babi.report-res.group,group:"
 msgid "Group"
@@ -672,7 +672,7 @@ msgstr "Grup"
 
 msgctxt "field:babi.report-res.group,id:"
 msgid "ID"
-msgstr "Identificador"
+msgstr "ID"
 
 msgctxt "field:babi.report-res.group,rec_name:"
 msgid "Name"
@@ -696,11 +696,11 @@ msgstr "Model BI"
 
 msgctxt "field:babi.report.execution,create_date:"
 msgid "Create Date"
-msgstr "Data de creació"
+msgstr "Data creació"
 
 msgctxt "field:babi.report.execution,create_uid:"
 msgid "Create User"
-msgstr "Usuari de creació"
+msgstr "Usuari creació"
 
 msgctxt "field:babi.report.execution,date:"
 msgid "Execution Date"
@@ -720,7 +720,7 @@ msgstr "Filtrat"
 
 msgctxt "field:babi.report.execution,id:"
 msgid "ID"
-msgstr "Identificador"
+msgstr "ID"
 
 msgctxt "field:babi.report.execution,internal_measures:"
 msgid "Internal Measures"
@@ -752,7 +752,7 @@ msgstr "Estat"
 
 msgctxt "field:babi.report.execution,timeout:"
 msgid "Timeout"
-msgstr "Temps d'espera (s)"
+msgstr "Temps esgotat"
 
 msgctxt "field:babi.report.execution,write_date:"
 msgid "Write Date"
@@ -772,7 +772,7 @@ msgstr "Execució només lectura"
 
 msgctxt "field:babi.report.execution.open.select,id:"
 msgid "ID"
-msgstr "Identificador"
+msgstr "ID"
 
 msgctxt "field:babi.report.execution.open.select,report:"
 msgid "Report"
@@ -792,15 +792,15 @@ msgstr "Import"
 
 msgctxt "field:babi.test,category:"
 msgid "Category"
-msgstr "Categoría"
+msgstr "Categoria"
 
 msgctxt "field:babi.test,create_date:"
 msgid "Create Date"
-msgstr "Data de creació"
+msgstr "Data creació"
 
 msgctxt "field:babi.test,create_uid:"
 msgid "Create User"
-msgstr "Usuari de creació"
+msgstr "Usuari creació"
 
 msgctxt "field:babi.test,date:"
 msgid "Date"
@@ -808,7 +808,7 @@ msgstr "Data"
 
 msgctxt "field:babi.test,id:"
 msgid "ID"
-msgstr "Identificador"
+msgstr "ID"
 
 msgctxt "field:babi.test,rec_name:"
 msgid "Name"
@@ -824,11 +824,11 @@ msgstr "Usuari modificació"
 
 msgctxt "field:babi.update_data.wizard.done,id:"
 msgid "ID"
-msgstr "Identificador"
+msgstr "ID"
 
 msgctxt "field:babi.update_data.wizard.start,id:"
 msgid "ID"
-msgstr "Identificador"
+msgstr "ID"
 
 msgctxt "field:ir.action.act_window,babi_report:"
 msgid "BABI Report"
@@ -836,7 +836,7 @@ msgstr "Informe BABI"
 
 msgctxt "field:ir.action.keyword,babi_filter_parameter:"
 msgid "BABI Filter Parameter"
-msgstr "Parametres de filtre del BABI"
+msgstr "Paràmetres de filtre del BABI"
 
 msgctxt "field:ir.action.keyword,babi_report:"
 msgid "BABI Report"
@@ -889,7 +889,7 @@ msgid ""
 "The python expression introduced will be evaluated. If the result is True "
 "the record will be included, it will be discarded otherwise."
 msgstr ""
-"S'evaluarà l'expressió Python introduïda. Si el resultat és cert el registre"
+"S'avaluarà l'expressió Python introduïda. Si el resultat és cert el registre"
 " serà inclòs, sinó, serà descartat."
 
 msgctxt "help:babi.filter.parameter,name:"
@@ -930,7 +930,7 @@ msgstr "Nombre de segons que ha tardat la execució."
 
 msgctxt "help:babi.report.execution,filtered:"
 msgid "Used to mark executions with parameter filters evaluated"
-msgstr "Utilitzat per marcar les execucions amb filtres evaluats."
+msgstr "Utilitzat per marcar les execucions amb filtres avaluats."
 
 msgctxt "help:babi.report.execution,timeout:"
 msgid ""
@@ -1060,7 +1060,6 @@ msgctxt "model:ir.action,name:act_babi_report"
 msgid "Report"
 msgstr "Informe"
 
-#, fuzzy
 msgctxt "model:ir.action,name:open_chart_wizard"
 msgid "open chart"
 msgstr "Obre gràfica"
@@ -1099,7 +1098,7 @@ msgstr "Configuració"
 
 msgctxt "model:ir.ui.menu,name:menu_historical_data"
 msgid "View historical data"
-msgstr "Veure informació històrica"
+msgstr "Veure historial"
 
 msgctxt "model:ir.ui.menu,name:menu_update_data"
 msgid "Update data"
@@ -1259,7 +1258,7 @@ msgstr "Calcul·lat"
 
 msgctxt "selection:babi.report.execution,state:"
 msgid "Canceled"
-msgstr "Cancelado"
+msgstr "Cancelat"
 
 msgctxt "selection:babi.report.execution,state:"
 msgid "Failed"
@@ -1267,7 +1266,7 @@ msgstr "Fallada"
 
 msgctxt "selection:babi.report.execution,state:"
 msgid "In progress"
-msgstr "En progrès"
+msgstr "En progrés"
 
 msgctxt "selection:babi.report.execution,state:"
 msgid "Pending"
@@ -1275,7 +1274,7 @@ msgstr "Pendent"
 
 msgctxt "selection:babi.report.execution,state:"
 msgid "Timeout"
-msgstr "Temps d'espera (s)"
+msgstr "Temps esgotat"
 
 msgctxt "selection:babi.report.execution.open.select,view_type:"
 msgid "List"
