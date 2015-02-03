@@ -651,7 +651,7 @@ msgstr "Nombre"
 
 msgctxt "field:babi.report,timeout:"
 msgid "Timeout"
-msgstr "Tiempo agotado"
+msgstr "Tiempo de espera"
 
 msgctxt "field:babi.report,write_date:"
 msgid "Write Date"
