@@ -3,7 +3,6 @@
 import datetime
 from dateutil.relativedelta import relativedelta
 from trytond.pool import Pool
-from trytond.tools import safe_eval
 from trytond.transaction import Transaction
 
 
@@ -76,7 +75,7 @@ def babi_eval(expression, obj, convert_none='empty'):
         'today': datetime.date.today,
         'relativedelta': relativedelta,
         }
-    value = safe_eval(expression, objects)
+    value = eval(expression, objects)
     if (value is False or value is None):
         if convert_none == 'empty':
             # TODO: Make translatable
