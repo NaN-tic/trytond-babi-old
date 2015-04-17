@@ -1,6 +1,7 @@
 # The COPYRIGHT file at the top level of this repository contains the full
 # copyright notices and license terms.
 import datetime
+import math
 from dateutil.relativedelta import relativedelta
 from trytond.pool import Pool
 from trytond.transaction import Transaction
@@ -74,6 +75,7 @@ def babi_eval(expression, obj, convert_none='empty'):
         'now': datetime.datetime.now,
         'today': datetime.date.today,
         'relativedelta': relativedelta,
+        'math': math,
         }
     value = eval(expression, objects)
     if (value is False or value is None):
