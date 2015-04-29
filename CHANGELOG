@@ -1,3 +1,8 @@
+* Fix parent calculation with null values
+* Prevent error when opening executions with duplicated internal measures
+* Add label for fields on form view
+* Add missing history on report order
+
 Version 3.4.0 - 2014-11-03
 * Open history data with the correct __history values
 * Fix user permisions
