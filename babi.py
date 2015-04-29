@@ -4,6 +4,7 @@
 import datetime as mdatetime
 from datetime import datetime
 from StringIO import StringIO
+from collections import defaultdict
 import logging
 import os
 import subprocess
@@ -148,7 +149,6 @@ class DynamicModel(ModelSQL, ModelView):
         execution, = executions
         with Transaction().set_context(_datetime=execution.create_date):
             report = execution.report
-
             view_type = context.get('view_type', view_type)
 
             result = {}
@@ -156,35 +156,31 @@ class DynamicModel(ModelSQL, ModelView):
             result['view_id'] = view_id
             result['field_childs'] = None
             fields = []
-            if view_type == 'tree':
-                fields = [x.internal_name for x in report.dimensions +
-                    execution.internal_measures]
-                fields.append('children')
-                xml = '<tree string="%s" keyword_open="1">\n' % (
-                    report.model.name)
+            if view_type == 'tree' or view_type == 'form':
+                keyword = ''
+                if view_type == 'tree':
+                    keyword = 'keyword_open="1"'
+                    fields.append('children')
+                xml = '<%s string="%s" %s>\n' % (view_type, report.model.name,
+                    keyword)
                 for field in report.dimensions + execution.internal_measures:
+                    # Avoid duplicated fields
+                    if field.internal_name in fields:
+                        continue
                     widget = ''
                     if hasattr(field, 'progressbar') and field.progressbar:
                         widget = 'widget="progressbar"'
+                    if view_type == 'form':
+                        xml += '<label name="%s"/>\n' % (field.internal_name)
                     xml += '<field name="%s" %s/>\n' % (field.internal_name,
                         widget)
-                xml += '</tree>\n'
+                    fields.append(field.internal_name)
+                xml += '</%s>\n' % (view_type)
                 result['arch'] = xml
-                if context.get('babi_tree_view'):
+                if view_type == 'tree' and context.get('babi_tree_view'):
                     result['field_childs'] = 'children'
-            elif view_type == 'form':
-                fields = [x.internal_name for x in report.dimensions +
-                    execution.internal_measures]
-                xml = '<form string="%s">\n' % report.model.name
-                for field in report.dimensions + execution.internal_measures:
-                    widget = ''
-                    if 'progressbar' in field and field.progressbar:
-                        widget = 'widget="progressbar"'
-                    xml += '<field name="%s" %s/>\n' % (field.internal_name,
-                        widget)
-                xml += '</form>\n'
-                result['arch'] = xml
             elif view_type == 'graph':
+                # TODO: Remove it on 3.6 as client autogenerates it
                 colors = ['#FF0000', '#0000FF', '#008000', '#FFFF00',
                     '#800080', '#FF00FF', '#FFA500', '#C0C0C0', '#000000']
                 model_name = context.get('model_name')
@@ -651,8 +647,8 @@ class Report(ModelSQL, ModelView):
                 for report in reports:
                     if report.name != values['name']:
                         to_update.append(report)
-                if to_update:
-                    cls.remove_menus(to_update)
+        if to_update:
+            cls.remove_menus(to_update)
         return super(Report, cls).write(*args)
 
     @classmethod
@@ -1342,8 +1338,13 @@ class ReportExecution(ModelSQL, ModelView):
 
     def update_measures(self, checker):
         logger = logging.getLogger(self.__name__)
+        # Mapping from types to their null values
+        types_null = defaultdict(int)
+        types_null['bool'] = False
+        types_null['char'] = "''"
 
-        def query_inserts(table_name, measures, select_group, group, extra=None):
+        def query_inserts(table_name, measures, select_group, group,
+                extra=None):
             """Inserts a group record"""
             cursor = Transaction().cursor
 
@@ -1389,11 +1390,21 @@ class ReportExecution(ModelSQL, ModelView):
                 cursor.execute(query)
             return [x[0] for x in cursor.fetchall()]
 
-        def update_parent(table_name, parent_id, group, group_by):
+        def update_parent(table_name, parent_id, group, group_by,
+                group_by_types):
             sql_query = []
             for group_item in group_by:
-                sql_query.append('"%s"=(select %s from %s where id = %d)' %
-                    (group_item, group_item, table_name, parent_id))
+                values = {
+                    'item': group_item,
+                    'def': types_null[group_by_types[group_item]],
+                    'table': table_name,
+                    'parent_id': parent_id,
+                    }
+                # Values should be coalesce to avoid parent errors when null
+                group_query = ('Coalesce("%(item)s", %(def)s)=(select '
+                    'Coalesce("%(item)s", %(def)s) from %(table)s '
+                    'where id = %(parent_id)d)') % values
+                sql_query.append(group_query)
 
             sql_query = u' AND '.join(sql_query)
             sql_query[:-5]
@@ -1454,7 +1465,7 @@ class ReportExecution(ModelSQL, ModelView):
             if group_by != group_by_iterator:
                 for parent_id in parent_ids:
                     update_parent(table_name, parent_id, child_group,
-                        group_by_iterator)
+                        group_by_iterator, group_by_types)
 
             child_group = current_group
             group_by_iterator.pop()
@@ -1471,7 +1482,8 @@ class ReportExecution(ModelSQL, ModelView):
         if group_by_types[group_by[0]] != 'many2one':
             cursor.execute("UPDATE " + table_name + " SET \"" + group_by[0] +
                 "\"='" + '(all)' + "' WHERE id=%s" % parent_id)
-        update_parent(table_name, parent_id, child_group, group_by_iterator)
+        update_parent(table_name, parent_id, child_group, group_by_iterator,
+            group_by_types)
         delete = 'DELETE FROM %s WHERE babi_group IS NULL' % (table_name)
         cursor.execute(delete + ' and id != %s ' % parent_id)
         # Update parent_left, parent_right
@@ -1960,8 +1972,10 @@ class Dimension(ModelSQL, ModelView, DimensionMixin):
     @classmethod
     def write(cls, *args):
         actions = iter(args)
+        to_update = []
         for dimensions, _ in zip(actions, actions):
-            cls.update_order(dimensions)
+            to_update += dimensions
+        cls.update_order(to_update)
         return super(Dimension, cls).write(*args)
 
     @classmethod
@@ -2038,7 +2052,7 @@ class Measure(ModelSQL, ModelView):
                 'name': self.name,
                 'internal_name': self.internal_name,
                 'expression': self.expression,
-                'ttype': self.ttype,
+                'ttype': self.ttype if not self.progressbar else 'float',
                 'related_model': (self.related_model and
                     self.related_model.model),
                 }
@@ -2077,8 +2091,10 @@ class Measure(ModelSQL, ModelView):
     @classmethod
     def write(cls, *args):
         actions = iter(args)
+        to_update = []
         for measures, _ in zip(actions, actions):
-            cls.update_order(measures)
+            to_update += measures
+        cls.update_order(to_update)
         return super(Measure, cls).write(*args)
 
     @classmethod
@@ -2144,6 +2160,7 @@ class InternalMeasure(ModelSQL, ModelView):
 class Order(ModelSQL, ModelView):
     "Order"
     __name__ = 'babi.order'
+    _history = True
 
     report = fields.Many2One('babi.report', 'Report', required=True,
         ondelete='CASCADE')
