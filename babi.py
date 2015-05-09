@@ -639,9 +639,9 @@ class Report(ModelSQL, ModelView):
     @classmethod
     def write(cls, *args):
         actions = iter(args)
+        to_update = []
         for reports, values in zip(actions, actions):
             if 'name' in values:
-                to_update = []
                 for report in reports:
                     if report.name != values['name']:
                         to_update.append(report)
