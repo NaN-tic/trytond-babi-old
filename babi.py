@@ -992,7 +992,14 @@ class ReportExecution(ModelSQL, ModelView):
     def delete(cls, executions):
         cls.remove_data(executions)
         cls.remove_keywords(executions)
+        to_delete = set([e.internal_name for e in executions])
         super(ReportExecution, cls).delete(executions)
+        # We should remove the classes from the pool so when removing realted
+        # records it doesn't fail checking unexisting models
+        pool = Pool()
+        with pool.lock:
+            for name in to_delete:
+                del pool._pool[pool.database_name]['model'][name]
 
     @classmethod
     def remove_keywords(cls, executions):
