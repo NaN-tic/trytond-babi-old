@@ -857,7 +857,8 @@ class Report(ModelSQL, ModelView):
                 cls.raise_user_error('no_dimensions', report.rec_name)
             execution, = Execution.create([report.get_execution_data()])
             cursor.commit()
-            if CELERY_AVAILABLE:
+            celery_start = config.getboolean('celery', 'auto_start', True)
+            if CELERY_AVAILABLE and celery_start:
                 os.system('%s/celery call tasks.calculate_execution '
                     '--args=[%d,%d] '
                     '--config="trytond.modules.babi.celeryconfig" '
