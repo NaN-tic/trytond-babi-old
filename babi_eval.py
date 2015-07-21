@@ -46,7 +46,7 @@ def week(text):
     if not text:
         return None
     return datetime.datetime.strptime(year_month_day(text),
-        '%Y-%M-%d').strftime('%W')
+        '%Y-%m-%d').strftime('%W')
 
 
 def date(text):
