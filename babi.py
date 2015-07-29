@@ -53,6 +53,8 @@ AGGREGATE_TYPES = [
     ('avg', 'Average'),
     ('sum', 'Sum'),
     ('count', 'Count'),
+    ('max', 'Max'),
+    ('min', 'Min'),
     ]
 
 SRC_CHARS = u""" .'"()/*-+?¿!&$[]{}@#`'^:;<>=~%,|\\"""
