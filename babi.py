@@ -850,6 +850,7 @@ class Report(ModelSQL, ModelView):
         transaction = Transaction()
         cursor = transaction.cursor
         Execution = pool.get('babi.report.execution')
+        celery_start = config.getboolean('celery', 'auto_start', True)
         for report in reports:
             if not report.measures:
                 cls.raise_user_error('no_measures', report.rec_name)
@@ -857,7 +858,7 @@ class Report(ModelSQL, ModelView):
                 cls.raise_user_error('no_dimensions', report.rec_name)
             execution, = Execution.create([report.get_execution_data()])
             cursor.commit()
-            if CELERY_AVAILABLE:
+            if CELERY_AVAILABLE and celery_start:
                 os.system('celery call tasks.calculate_execution '
                     '--args=[%d,%d] '
                     '--config="trytond.modules.babi.celeryconfig" '
