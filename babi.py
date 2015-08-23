@@ -5,6 +5,7 @@ import datetime as mdatetime
 from datetime import datetime
 from StringIO import StringIO
 from collections import defaultdict
+from simpleeval import simple_eval
 import logging
 import os
 import subprocess
@@ -24,7 +25,6 @@ from trytond.model.fields import depends
 from trytond.pyson import Eval, Bool, PYSONEncoder, Id, In, Not, PYSONDecoder
 from trytond.pool import Pool, PoolMeta
 from trytond.transaction import Transaction
-from trytond.tools import safe_eval
 from trytond.config import config
 from trytond import backend
 from trytond.protocols.jsonrpc import JSONDecoder, JSONEncoder
@@ -86,7 +86,7 @@ def unaccent(text):
 
 
 def start_celery():
-    celery_start = config.getboolean('celery', 'auto_start', True)
+    celery_start = config.getboolean('celery', 'auto_start', default=True)
     if not CELERY_AVAILABLE or not celery_start:
         return
     db = Transaction().cursor.database_name
@@ -859,7 +859,7 @@ class Report(ModelSQL, ModelView):
                 cls.raise_user_error('no_dimensions', report.rec_name)
             execution, = Execution.create([report.get_execution_data()])
             cursor.commit()
-            celery_start = config.getboolean('celery', 'auto_start', True)
+            celery_start = config.getboolean('celery', 'auto_start', default=True)
             if CELERY_AVAILABLE and celery_start:
                 os.system('%s/celery call tasks.calculate_execution '
                     '--args=[%d,%d] '
@@ -1148,7 +1148,7 @@ class ReportExecution(ModelSQL, ModelView):
                 values[key] = value
             if domain:
                 domain = domain.format(**values)
-        domain = safe_eval(domain, {'datetime': mdatetime})
+        domain = simple_eval(domain, {'datetime': mdatetime})
         start = datetime.today()
         self.update_internal_measures()
         with_columns = len(self.report.columns) > 0
