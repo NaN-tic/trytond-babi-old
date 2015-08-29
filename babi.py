@@ -1563,8 +1563,7 @@ class OpenExecutionSelect(ModelView):
     @depends('report')
     def on_change_report(self):
         if not self.report:
-            return {'execution': None}
-        return {}
+            self.execution = None
 
 
 class OpenExecutionFiltered(StateView):
