@@ -823,6 +823,7 @@ class Report(ModelSQL, ModelView):
         for report in reports:
             if report.tree_menu:
                 menu = report.create_tree_view_menu(langs)
+                report.create_list_view_menu(menu, langs)
             else:
                 menu = report.create_list_view_menu(report.parent_menu, langs)
             report.create_update_wizard_menu(menu)
