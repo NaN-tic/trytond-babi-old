@@ -570,6 +570,8 @@ class Report(ModelSQL, ModelView):
         'Groups', help='User groups that will be able to see use this report.')
     parent_menu = fields.Many2One('ir.ui.menu', 'Parent Menu',
         required=True)
+    tree_menu = fields.Boolean('Tree Menu',
+        'Create tree/graph main menu')
     menus = fields.One2Many('ir.ui.menu', 'babi_report', 'Menus',
         readonly=True,
         states={
@@ -626,6 +628,10 @@ class Report(ModelSQL, ModelView):
         Config = Pool().get('babi.configuration')
         config = Config(1)
         return config.default_timeout
+
+    @staticmethod
+    def default_tree_menu():
+        return True
 
     @depends('model')
     def on_change_with_model_name(self, name=None):
@@ -816,8 +822,10 @@ class Report(ModelSQL, ModelView):
             ])
         cls.remove_menus(reports)
         for report in reports:
-            menu = report.create_tree_view_menu(langs)
-            report.create_list_view_menu(menu, langs)
+            if report.tree_menu:
+                menu = report.create_tree_view_menu(langs)
+            else:
+                menu = report.create_list_view_menu(report.parent_menu, langs)
             report.create_update_wizard_menu(menu)
             report.create_history_menu(menu)
         return 'reload menu'
