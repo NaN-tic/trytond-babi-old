@@ -5,7 +5,6 @@ import datetime as mdatetime
 from datetime import datetime
 from StringIO import StringIO
 from collections import defaultdict
-from simpleeval import simple_eval
 import logging
 import os
 import subprocess
@@ -715,10 +714,10 @@ class Report(ModelSQL, ModelView):
         action = ActWindow()
         action.name = self.name
         action.res_model = 'babi.report'
-        action.domain = "[('parent', '=', None)]"
+        action.domain = PYSONEncoder().encode([('parent', '=', None)])
         action.babi_report = self
         action.groups = self.groups
-        action.context = "{'babi_tree_view': True}"
+        action.context = PYSONEncoder().encode({'babi_tree_view': True})
         action.save()
         wizard = Action(ModelData.get_id('babi', 'open_execution_wizard'))
         menu = Menu()
@@ -1156,7 +1155,7 @@ class ReportExecution(ModelSQL, ModelView):
                 values[key] = value
             if domain:
                 domain = domain.format(**values)
-        domain = simple_eval(domain, {'datetime': mdatetime})
+        domain = eval(domain, {'datetime': mdatetime})
         start = datetime.today()
         self.update_internal_measures()
         with_columns = len(self.report.columns) > 0
