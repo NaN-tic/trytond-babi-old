@@ -1061,7 +1061,7 @@ class ReportExecution(ModelSQL, ModelView):
         raise TimeoutException
 
     @staticmethod
-    def save_state(execution_id, state):
+    def save_state(execution_id, state, exception=False):
         " Save state in a new transaction"
         DatabaseOperationalError = backend.get('DatabaseOperationalError')
         Transaction().cursor.rollback()
@@ -1069,11 +1069,15 @@ class ReportExecution(ModelSQL, ModelView):
             try:
                 pool = Pool()
                 Execution = pool.get('babi.report.execution')
+                Model = pool.get('ir.model')
                 new_instances = Execution.browse([execution_id])
                 to_write = {'state': state}
                 if state == 'in_progress':
                     to_write['pid'] = os.getpid()
                 Execution.write(new_instances, to_write)
+                if exception:
+                    Execution.remove_data(new_instances)
+                    Model.delete([e.babi_model for e in new_instances])
                 new_transaction.cursor.commit()
             except DatabaseOperationalError:
                 new_transaction.cursor.rollback()
@@ -1091,10 +1095,12 @@ class ReportExecution(ModelSQL, ModelView):
                 try:
                     execution.create_data()
                 except TimeoutException:
-                    execution.save_state(execution.id, 'timeout')
+                    execution.save_state(execution.id, 'timeout',
+                        exception=True)
                     cls.raise_user_error('timeout_exception')
                 except Exception:
-                    execution.save_state(execution.id, 'failed')
+                    execution.save_state(execution.id, 'failed',
+                        exception=True)
                     execution.save()
                     raise
 
