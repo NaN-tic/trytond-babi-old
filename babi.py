@@ -501,6 +501,7 @@ class FilterParameter(ModelSQL, ModelView):
         Keyword.delete(Keyword.search([
                     ('babi_filter_parameter', 'in', [f.id for f in filters]),
                 ]))
+        super(FilterParameter, cls).delete(filters)
 
 
 class Expression(ModelSQL, ModelView):
