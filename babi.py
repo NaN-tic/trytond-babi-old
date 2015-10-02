@@ -1152,7 +1152,11 @@ class ReportExecution(ModelSQL, ModelView):
                 values[key] = value
             if domain:
                 domain = domain.format(**values)
-        domain = safe_eval(domain, {'datetime': mdatetime})
+        domain = safe_eval(domain, {
+                'datetime': mdatetime,
+                'false': False,
+                'true': True,
+                })
         start = datetime.today()
         self.update_internal_measures()
         with_columns = len(self.report.columns) > 0
