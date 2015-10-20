@@ -1,3 +1,4 @@
+* Remove progressbar option on measures
 * Fix parent calculation with null values
 * Prevent error when opening executions with duplicated internal measures
 * Add label for fields on form view

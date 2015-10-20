@@ -12,8 +12,6 @@ contains the full copyright notices and license terms. -->
     <field name="measure"/>
     <label name="name"/>
     <field name="name"/>
-    <label name="progressbar"/>
-    <field name="progressbar"/>
     <label name="related_model"/>
     <field name="related_model"/>
     <label name="execution"/>

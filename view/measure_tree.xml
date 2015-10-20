@@ -6,6 +6,5 @@ contains the full copyright notices and license terms. -->
      <field name="expression"/>
      <field name="name"/>
      <field name="aggregate"/>
-     <field name="progressbar"/>
      <field name="sequence" tree_invisible="1"/>
 </tree>

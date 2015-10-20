@@ -10,6 +10,4 @@ contains the full copyright notices and license terms. -->
     <field name="name"/>
     <label name="aggregate"/>
     <field name="aggregate"/>
-    <label name="progressbar"/>
-    <field name="progressbar"/>
 </form>

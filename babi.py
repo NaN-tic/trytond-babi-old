@@ -167,13 +167,9 @@ class DynamicModel(ModelSQL, ModelView):
                     # Avoid duplicated fields
                     if field.internal_name in fields:
                         continue
-                    widget = ''
-                    if hasattr(field, 'progressbar') and field.progressbar:
-                        widget = 'widget="progressbar"'
                     if view_type == 'form':
                         xml += '<label name="%s"/>\n' % (field.internal_name)
-                    xml += '<field name="%s" %s/>\n' % (field.internal_name,
-                        widget)
+                    xml += '<field name="%s"/>\n' % (field.internal_name)
                     fields.append(field.internal_name)
                 xml += '</%s>\n' % (view_type)
                 result['arch'] = xml
@@ -1349,7 +1345,6 @@ class ReportExecution(ModelSQL, ModelView):
                         'expression': expression,
                         'ttype': measure.expression.ttype,
                         'related_model': related_model_id,
-                        'progressbar': measure.progressbar,
                         })
         if to_create:
             InternalMeasure.create(to_create)
@@ -2037,8 +2032,6 @@ class Measure(ModelSQL, ModelView):
     aggregate = fields.Selection(AGGREGATE_TYPES, 'Aggregate', required=True)
     internal_measures = fields.One2Many('babi.internal.measure',
         'measure', 'Internal Measures')
-    progressbar = fields.Boolean('Progress Bar',
-        help='Display a progress bar instead of a number.')
 
     @classmethod
     def __setup__(cls):
@@ -2070,7 +2063,7 @@ class Measure(ModelSQL, ModelView):
                 'name': self.name,
                 'internal_name': self.internal_name,
                 'expression': self.expression,
-                'ttype': self.ttype if not self.progressbar else 'float',
+                'ttype': self.ttype,
                 'related_model': (self.related_model and
                     self.related_model.model),
                 }
@@ -2146,7 +2139,6 @@ class InternalMeasure(ModelSQL, ModelView):
     ttype = fields.Selection(FIELD_TYPES, 'Field Type',
         required=True)
     related_model = fields.Many2One('ir.model', 'Related Model')
-    progressbar = fields.Boolean('Progress Bar')
 
     @classmethod
     def __setup__(cls):
