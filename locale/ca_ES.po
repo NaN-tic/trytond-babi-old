@@ -8,7 +8,8 @@ msgstr "El nom de les dimensions ha de ser únic per informe."
 
 msgctxt "error:babi.filter:"
 msgid "Parameter \"%s\" not found in Domain nor in Python Expression."
-msgstr "El paràmetre \"%s\" no s'ha trobat ni al Domini ni a l'expressió de Python."
+msgstr ""
+"El paràmetre \"%s\" no s'ha trobat ni al Domini ni a l'expressió de Python."
 
 msgctxt "error:babi.measure:"
 msgid "Measure name must be unique per report."
@@ -402,10 +403,6 @@ msgctxt "field:babi.internal.measure,name:"
 msgid "Name"
 msgstr "Nom"
 
-msgctxt "field:babi.internal.measure,progressbar:"
-msgid "Progress Bar"
-msgstr "Barra de progrés"
-
 msgctxt "field:babi.internal.measure,rec_name:"
 msgid "Name"
 msgstr "Nom"
@@ -461,10 +458,6 @@ msgstr "Nom intern"
 msgctxt "field:babi.measure,name:"
 msgid "Name"
 msgstr "Nom"
-
-msgctxt "field:babi.measure,progressbar:"
-msgid "Progress Bar"
-msgstr "Barra de progrés"
 
 msgctxt "field:babi.measure,rec_name:"
 msgid "Name"
@@ -581,6 +574,10 @@ msgstr "Data creació"
 msgctxt "field:babi.report,create_uid:"
 msgid "Create User"
 msgstr "Usuari creació"
+
+msgctxt "field:babi.report,crons:"
+msgid "Schedulers"
+msgstr "Programacions"
 
 msgctxt "field:babi.report,dimensions:"
 msgid "Dimensions"
@@ -842,6 +839,10 @@ msgctxt "field:ir.action.keyword,babi_report:"
 msgid "BABI Report"
 msgstr "Informe BABI"
 
+msgctxt "field:ir.cron,babi_report:"
+msgid "Babi Report"
+msgstr "Informe Babi"
+
 msgctxt "field:ir.model,babi_enabled:"
 msgid "BI Enabled"
 msgstr "Habilitat per BI"
@@ -895,10 +896,6 @@ msgstr ""
 msgctxt "help:babi.filter.parameter,name:"
 msgid "Name used on the domain substitution"
 msgstr "Nom utilitzat a la substitució del domini"
-
-msgctxt "help:babi.measure,progressbar:"
-msgid "Display a progress bar instead of a number."
-msgstr "Mostra una barra de progrés enlloc d'un número."
 
 msgctxt "help:babi.report,groups:"
 msgid "User groups that will be able to see use this report."
@@ -1060,6 +1057,10 @@ msgctxt "model:ir.action,name:act_babi_report"
 msgid "Report"
 msgstr "Informe"
 
+msgctxt "model:ir.action,name:act_babi_report_execution_form"
+msgid "Executions"
+msgstr "Execucions"
+
 msgctxt "model:ir.action,name:open_chart_wizard"
 msgid "open chart"
 msgstr "Obre gràfica"
@@ -1173,6 +1174,14 @@ msgid "Count"
 msgstr "Comptador"
 
 msgctxt "selection:babi.internal.measure,aggregate:"
+msgid "Max"
+msgstr "Màxim"
+
+msgctxt "selection:babi.internal.measure,aggregate:"
+msgid "Min"
+msgstr "Mínim"
+
+msgctxt "selection:babi.internal.measure,aggregate:"
 msgid "Sum"
 msgstr "Suma"
 
@@ -1207,6 +1216,14 @@ msgstr "Mitjana"
 msgctxt "selection:babi.measure,aggregate:"
 msgid "Count"
 msgstr "Comptador"
+
+msgctxt "selection:babi.measure,aggregate:"
+msgid "Max"
+msgstr "Màxim"
+
+msgctxt "selection:babi.measure,aggregate:"
+msgid "Min"
+msgstr "Mínim"
 
 msgctxt "selection:babi.measure,aggregate:"
 msgid "Sum"
@@ -1284,9 +1301,10 @@ msgctxt "selection:babi.report.execution.open.select,view_type:"
 msgid "Tree"
 msgstr "Arbre"
 
+#, fuzzy
 msgctxt "selection:ir.ui.menu,babi_type:"
 msgid ""
-msgstr ""
+msgstr " "
 
 msgctxt "selection:ir.ui.menu,babi_type:"
 msgid "History"
@@ -1391,6 +1409,10 @@ msgstr "Elimina menús"
 msgctxt "view:babi.report:"
 msgid "Report"
 msgstr "Informe"
+
+msgctxt "view:babi.report:"
+msgid "Schedulers"
+msgstr "Programacions"
 
 msgctxt "view:babi.update_data.wizard.done:"
 msgid "Report Calculation Done"

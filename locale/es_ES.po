@@ -405,10 +405,6 @@ msgctxt "field:babi.internal.measure,name:"
 msgid "Name"
 msgstr "Nombre"
 
-msgctxt "field:babi.internal.measure,progressbar:"
-msgid "Progress Bar"
-msgstr "Barra de progreso"
-
 msgctxt "field:babi.internal.measure,rec_name:"
 msgid "Name"
 msgstr "Nombre"
@@ -464,10 +460,6 @@ msgstr "Nombre interno"
 msgctxt "field:babi.measure,name:"
 msgid "Name"
 msgstr "Nombre"
-
-msgctxt "field:babi.measure,progressbar:"
-msgid "Progress Bar"
-msgstr "Barra de progreso"
 
 msgctxt "field:babi.measure,rec_name:"
 msgid "Name"
@@ -584,6 +576,10 @@ msgstr "Fecha creación"
 msgctxt "field:babi.report,create_uid:"
 msgid "Create User"
 msgstr "Usuario creación"
+
+msgctxt "field:babi.report,crons:"
+msgid "Schedulers"
+msgstr "Programaciones"
 
 msgctxt "field:babi.report,dimensions:"
 msgid "Dimensions"
@@ -845,6 +841,10 @@ msgctxt "field:ir.action.keyword,babi_report:"
 msgid "BABI Report"
 msgstr "Informe BABI"
 
+msgctxt "field:ir.cron,babi_report:"
+msgid "Babi Report"
+msgstr "Informe BABI"
+
 msgctxt "field:ir.model,babi_enabled:"
 msgid "BI Enabled"
 msgstr "Habilitado para BI"
@@ -899,10 +899,6 @@ msgctxt "help:babi.filter.parameter,name:"
 msgid "Name used on the domain substitution"
 msgstr "Nombre utilizado en la sustitución del dominio."
 
-msgctxt "help:babi.measure,progressbar:"
-msgid "Display a progress bar instead of a number."
-msgstr "Mostrar una barra de progreso en lugar de un número."
-
 msgctxt "help:babi.report,groups:"
 msgid "User groups that will be able to see use this report."
 msgstr "Grupos de usuarios que podrán ver este informe."
@@ -933,8 +929,7 @@ msgstr "Número de segundos que ha tardado la ejecución."
 
 msgctxt "help:babi.report.execution,filtered:"
 msgid "Used to mark executions with parameter filters evaluated"
-msgstr ""
-"Utilizada para marcar ejecuciones con parámetros de filtro evaluados."
+msgstr "Utilizada para marcar ejecuciones con parámetros de filtro evaluados."
 
 msgctxt "help:babi.report.execution,timeout:"
 msgid ""
@@ -1064,6 +1059,10 @@ msgctxt "model:ir.action,name:act_babi_report"
 msgid "Report"
 msgstr "Informe"
 
+msgctxt "model:ir.action,name:act_babi_report_execution_form"
+msgid "Executions"
+msgstr "Ejecuciónes"
+
 msgctxt "model:ir.action,name:open_chart_wizard"
 msgid "open chart"
 msgstr "Abrir gráfico"
@@ -1177,6 +1176,14 @@ msgid "Count"
 msgstr "Contador"
 
 msgctxt "selection:babi.internal.measure,aggregate:"
+msgid "Max"
+msgstr "Máximo"
+
+msgctxt "selection:babi.internal.measure,aggregate:"
+msgid "Min"
+msgstr "Mínimo"
+
+msgctxt "selection:babi.internal.measure,aggregate:"
 msgid "Sum"
 msgstr "Suma"
 
@@ -1211,6 +1218,14 @@ msgstr "Promedio"
 msgctxt "selection:babi.measure,aggregate:"
 msgid "Count"
 msgstr "Contador"
+
+msgctxt "selection:babi.measure,aggregate:"
+msgid "Max"
+msgstr "Máximo"
+
+msgctxt "selection:babi.measure,aggregate:"
+msgid "Min"
+msgstr "Mínimo"
 
 msgctxt "selection:babi.measure,aggregate:"
 msgid "Sum"
@@ -1395,6 +1410,10 @@ msgstr "Borrar menús"
 msgctxt "view:babi.report:"
 msgid "Report"
 msgstr "Informe"
+
+msgctxt "view:babi.report:"
+msgid "Schedulers"
+msgstr "Programaciones"
 
 msgctxt "view:babi.update_data.wizard.done:"
 msgid "Report Calculation Done"
