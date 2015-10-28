@@ -1303,7 +1303,7 @@ class ReportExecution(ModelSQL, ModelView):
             sequence += 1
             related_model_id = None
             if measure.expression.ttype == 'many2one':
-                related_model_id = measure.expression.relate_model.id
+                related_model_id = measure.expression.related_model.id
             if distincts:
                 iterator = DimensionIterator(distincts)
             else:
