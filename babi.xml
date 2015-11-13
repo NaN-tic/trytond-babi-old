@@ -571,7 +571,7 @@ contains the full copyright notices and license terms. -->
         <!-- ir.model -->
         <record model="ir.ui.view" id="model_form_view">
             <field name="model">ir.model</field>
-            <field name="type">form</field>
+            <field name="type" eval="None"/>
             <field name="inherit" ref="ir.model_view_form"/>
             <field name="name">model_form</field>
         </record>
