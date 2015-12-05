@@ -7,8 +7,8 @@ import unittest
 from decimal import Decimal
 
 import trytond.tests.test_tryton
-from trytond.tests.test_tryton import POOL, DB_NAME, USER, CONTEXT, test_view,\
-    test_depends
+from trytond.tests.test_tryton import ModuleTestCase
+from trytond.tests.test_tryton import POOL, DB_NAME, USER, CONTEXT
 from trytond.transaction import Transaction
 from trytond.exceptions import UserError
 from trytond.modules.babi.babi_eval import babi_eval
@@ -16,13 +16,14 @@ from trytond.pyson import PYSONEncoder
 from dateutil.relativedelta import relativedelta
 
 
-class BaBITestCase(unittest.TestCase):
+class BaBITestCase(ModuleTestCase):
     '''
     Test BaBI module.
     '''
+    module = 'babi'
 
     def setUp(self):
-        trytond.tests.test_tryton.install_module('babi')
+        super(BaBITestCase, self).setUp()
         self.test_model = POOL.get('babi.test')
         self.report = POOL.get('babi.report')
         self.expression = POOL.get('babi.expression')
@@ -32,14 +33,6 @@ class BaBITestCase(unittest.TestCase):
         self.filter = POOL.get('babi.filter')
         self.model = POOL.get('ir.model')
         self.menu = POOL.get('ir.ui.menu')
-
-    def test0005views(self):
-        'Test views'
-        test_view('babi')
-
-    def test0006depends(self):
-        'Test depends'
-        test_depends()
 
     def test0009_create_data(self):
         with Transaction().start(DB_NAME, USER, context=CONTEXT) as trans:
