@@ -1,3 +1,4 @@
+Version 3.8.0 - 2015-12-05
 * Remove progressbar option on measures
 * Fix parent calculation with null values
 * Prevent error when opening executions with duplicated internal measures
