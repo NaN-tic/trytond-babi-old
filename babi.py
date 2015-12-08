@@ -7,6 +7,8 @@ from StringIO import StringIO
 from collections import defaultdict
 import logging
 import os
+from sql import Null
+from sql.operators import Or
 import subprocess
 import tempfile
 import time
@@ -19,7 +21,7 @@ import sys
 
 from trytond.wizard import Wizard, StateView, StateAction, StateTransition, \
     Button
-from trytond.model import ModelSQL, ModelView, fields
+from trytond.model import ModelSQL, ModelView, fields, Unique, Check
 from trytond.model.fields import depends
 from trytond.pyson import Eval, Bool, PYSONEncoder, Id, In, Not, PYSONDecoder
 from trytond.pool import Pool, PoolMeta
@@ -710,14 +712,15 @@ class Report(ModelSQL, ModelView):
         Action = pool.get('ir.action.wizard')
         Menu = pool.get('ir.ui.menu')
         ModelData = pool.get('ir.model.data')
+        encoder = PYSONEncoder()
         # This action is needed for the wizard to open the data
         action = ActWindow()
         action.name = self.name
         action.res_model = 'babi.report'
-        action.domain = PYSONEncoder().encode([('parent', '=', None)])
+        action.domain = encoder.encode([('parent', '=', None)])
         action.babi_report = self
         action.groups = self.groups
-        action.context = PYSONEncoder().encode({'babi_tree_view': True})
+        action.context = encoder.encode({'babi_tree_view': True})
         action.save()
         wizard = Action(ModelData.get_id('babi', 'open_execution_wizard'))
         menu = Menu()
@@ -1162,7 +1165,12 @@ class ReportExecution(ModelSQL, ModelView):
                 values[key] = value
             if domain:
                 domain = domain.format(**values)
-        domain = eval(domain, {'datetime': mdatetime})
+        # TODO: Use a PYSON domain?
+        domain = eval(domain, {
+                'datetime': mdatetime,
+                'false': False,
+                'true': True,
+                })
         start = datetime.today()
         self.update_internal_measures()
         with_columns = len(self.report.columns) > 0
@@ -1902,8 +1910,9 @@ class ReportGroup(ModelSQL):
     @classmethod
     def __setup__(cls):
         super(ReportGroup, cls).__setup__()
+        t = cls.__table__()
         cls._sql_constraints += [
-            ('report_group_uniq', 'UNIQUE (report,"group")',
+            ('report_group_uniq', Unique(t, t.report, t.group),
                 'Report and Group must be unique.'),
             ]
 
@@ -1957,9 +1966,10 @@ class Dimension(ModelSQL, ModelView, DimensionMixin):
     @classmethod
     def __setup__(cls):
         super(Dimension, cls).__setup__()
+        t = cls.__table__()
         cls._order.insert(0, ('sequence', 'ASC'))
         cls._sql_constraints += [
-            ('report_and_name_unique', 'unique(report, name)',
+            ('report_and_name_unique', Unique(t, t.report, t.name),
                 'Dimension name must be unique per report.'),
             ]
 
@@ -2048,9 +2058,10 @@ class Measure(ModelSQL, ModelView):
     @classmethod
     def __setup__(cls):
         super(Measure, cls).__setup__()
+        t = cls.__table__()
         cls._order.insert(0, ('sequence', 'ASC'))
         cls._sql_constraints += [
-            ('report_and_name_unique', 'unique(report, name)',
+            ('report_and_name_unique', Unique(t, t.report, t.name),
                 'Measure name must be unique per report.'),
             ]
 
@@ -2202,6 +2213,7 @@ class Order(ModelSQL, ModelView):
     @classmethod
     def __setup__(cls):
         super(Order, cls).__setup__()
+        t = cls.__table__()
         cls._order.insert(0, ('sequence', 'ASC'))
         cls._error_messages.update({
                 'cannot_create_order_entry': ('Order entries are created '
@@ -2210,12 +2222,14 @@ class Order(ModelSQL, ModelView):
                     'automatically'),
                 })
         cls._sql_constraints += [
-            ('report_and_dimension_unique', 'UNIQUE(report, dimension)',
+            ('report_and_dimension_unique', Unique(t, t.report, t.dimension),
                 'Dimension must be unique per report.'),
-            ('report_and_measure_unique', 'UNIQUE(report, measure)',
+            ('report_and_measure_unique', Unique(t, t.report, t.measure),
                 'Measure must be unique per report.'),
-            ('dimension_or_measure', 'CHECK((dimension IS NULL AND measure '
-                'IS NOT NULL) OR (dimension IS NOT NULL AND measure IS NULL))',
+            ('dimension_or_measure', Check(t, Or((
+                            (t.dimension == Null) & (t.measure != Null),
+                            (t.dimension != Null) & (t.measure == Null)
+                            ))),
                 'Only dimension or measure can be set.'),
             ]
 
