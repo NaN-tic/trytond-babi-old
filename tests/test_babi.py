@@ -25,6 +25,7 @@ class BaBITestCase(unittest.TestCase):
         trytond.tests.test_tryton.install_module('babi')
         self.test_model = POOL.get('babi.test')
         self.report = POOL.get('babi.report')
+        self.execution = POOL.get('babi.report.execution')
         self.expression = POOL.get('babi.expression')
         self.dimension = POOL.get('babi.dimension')
         self.column = POOL.get('babi.dimension.column')
@@ -650,6 +651,12 @@ class BaBITestCase(unittest.TestCase):
                     ('parent', '=', report.parent_menu),
                     ])
             self.assertEqual(len(menus), 0)
+            executions = self.execution.search([])
+            self.assertGreater(len(executions), 0)
+            date = datetime.date.today() + datetime.timedelta(days=1)
+            self.execution.clean(date=date)
+            executions = self.execution.search([])
+            self.assertEqual(len(executions), 0)
 
 
 def suite():

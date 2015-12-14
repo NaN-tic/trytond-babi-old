@@ -2,7 +2,7 @@
 # The COPYRIGHT file at the top level of this repository contains the full
 # copyright notices and license terms.
 import datetime as mdatetime
-from datetime import datetime
+from datetime import datetime, timedelta
 from StringIO import StringIO
 from collections import defaultdict
 import logging
@@ -36,7 +36,7 @@ __all__ = ['Filter', 'Expression', 'Report', 'ReportGroup', 'Dimension',
     'Menu', 'Keyword', 'Model', 'OpenChartStart', 'OpenChart',
     'ReportExecution', 'OpenExecutionSelect', 'OpenExecution',
     'UpdateDataWizardStart', 'UpdateDataWizardUpdated', 'UpdateDataWizard',
-    'FilterParameter']
+    'FilterParameter', 'CleanExecutionsStart', 'CleanExecutions']
 __metaclass__ = PoolMeta
 
 
@@ -1011,6 +1011,19 @@ class ReportExecution(ModelSQL, ModelView):
         Keyword.delete(keywords)
 
     @classmethod
+    def clean(cls, date=None):
+        pool = Pool()
+        Date = pool.get('ir.date')
+        if date is None:
+            days = config.getint('babi', 'retention_days', default=30)
+            date = Date.today() - timedelta(days=days)
+
+        date = datetime.combine(date, mdatetime.time.min)
+        executions = cls.search([('date', '<', date)])
+        cls.delete(executions)
+        return True
+
+    @classmethod
     def remove_data(cls, executions):
         pool = Pool()
         cursor = Transaction().cursor
@@ -1205,7 +1218,7 @@ class ReportExecution(ModelSQL, ModelView):
                 return unicode(x)
 
         with transaction.set_context(_datetime=None):
-            records = Model.search(domain, offset=index*offset, limit=offset)
+            records = Model.search(domain, offset=index * offset, limit=offset)
         while records:
             checker.check()
             logger.info('Calculated %s,  %s records in %s seconds'
@@ -2403,3 +2416,27 @@ class OpenChart(Wizard):
             'pyson_search_value': '[]',
             'domains': [],
             }, {}
+
+
+class CleanExecutionsStart(ModelView):
+    'Clean Execution Start'
+    __name__ = 'babi.clean_executions.start'
+
+    date = fields.Date('Date', required=True)
+
+
+class CleanExecutions(Wizard):
+    'Clean Executions'
+    __name__ = 'babi.clean_executions'
+    start = StateView('babi.clean_executions.start',
+        'babi.clean_executions_start_form_view', [
+            Button('Cancel', 'end', 'tryton-cancel'),
+            Button('Ok', 'clean', 'tryton-ok', default=True),
+            ])
+    clean = StateTransition()
+
+    def transition_clean(self):
+        pool = Pool()
+        Execution = pool.get('babi.report.execution')
+        Execution.clean(self.start.date)
+        return 'end'
