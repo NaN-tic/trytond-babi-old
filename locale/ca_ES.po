@@ -98,6 +98,14 @@ msgctxt "error:babi.report:"
 msgid "Report calculation exceeded timeout limit."
 msgstr "El càlcul de l'informe ha sobrepassat el temps límit."
 
+msgctxt "field:babi.clean_executions.start,date:"
+msgid "Date"
+msgstr "Data"
+
+msgctxt "field:babi.clean_executions.start,id:"
+msgid "ID"
+msgstr "Identificador"
+
 msgctxt "field:babi.configuration,create_date:"
 msgid "Create Date"
 msgstr "Data creació"
@@ -582,6 +590,10 @@ msgctxt "field:babi.report,create_uid:"
 msgid "Create User"
 msgstr "Usuari creació"
 
+msgctxt "field:babi.report,crons:"
+msgid "Schedulers"
+msgstr "Programacions"
+
 msgctxt "field:babi.report,dimensions:"
 msgid "Dimensions"
 msgstr "Dimensions"
@@ -842,6 +854,10 @@ msgctxt "field:ir.action.keyword,babi_report:"
 msgid "BABI Report"
 msgstr "Informe BABI"
 
+msgctxt "field:ir.cron,babi_report:"
+msgid "Babi Report"
+msgstr "Informe Babi"
+
 msgctxt "field:ir.model,babi_enabled:"
 msgid "BI Enabled"
 msgstr "Habilitat per BI"
@@ -947,6 +963,10 @@ msgid ""
 msgstr ""
 "Marqueu-ho si voleu que aquest model estigui disponible pels informes "
 "Business Intelligence."
+
+msgctxt "model:babi.clean_executions.start,name:"
+msgid "Clean Execution Start"
+msgstr "Inici Eliminar Execucions"
 
 msgctxt "model:babi.configuration,name:"
 msgid "Business Intelligence Configuration"
@@ -1060,6 +1080,14 @@ msgctxt "model:ir.action,name:act_babi_report"
 msgid "Report"
 msgstr "Informe"
 
+msgctxt "model:ir.action,name:act_babi_report_execution_form"
+msgid "Executions"
+msgstr "Execucions"
+
+msgctxt "model:ir.action,name:clear_executions_wizard"
+msgid "Clean Executions"
+msgstr "Eliminar Execucions"
+
 msgctxt "model:ir.action,name:open_chart_wizard"
 msgid "open chart"
 msgstr "Obre gràfica"
@@ -1068,9 +1096,17 @@ msgctxt "model:ir.action,name:open_execution_wizard"
 msgid "Business Inteligence Report"
 msgstr "Informe de Business Inteligence"
 
+msgctxt "model:ir.cron,name:cron_clean_executions"
+msgid "Cron Clean Executions"
+msgstr "Eliminar Execucions"
+
 msgctxt "model:ir.ui.menu,name:menu_babi"
 msgid "Business Intelligence"
 msgstr "Business Intelligence"
+
+msgctxt "model:ir.ui.menu,name:menu_babi_clean_execution"
+msgid "Clean Executions"
+msgstr "Eliminar Execucions"
 
 msgctxt "model:ir.ui.menu,name:menu_babi_configuration"
 msgid "Business Intelligence Configuration"
@@ -1173,6 +1209,14 @@ msgid "Count"
 msgstr "Comptador"
 
 msgctxt "selection:babi.internal.measure,aggregate:"
+msgid "Max"
+msgstr "Màxim"
+
+msgctxt "selection:babi.internal.measure,aggregate:"
+msgid "Min"
+msgstr "Mínim"
+
+msgctxt "selection:babi.internal.measure,aggregate:"
 msgid "Sum"
 msgstr "Suma"
 
@@ -1207,6 +1251,14 @@ msgstr "Mitjana"
 msgctxt "selection:babi.measure,aggregate:"
 msgid "Count"
 msgstr "Comptador"
+
+msgctxt "selection:babi.measure,aggregate:"
+msgid "Max"
+msgstr "Màxim"
+
+msgctxt "selection:babi.measure,aggregate:"
+msgid "Min"
+msgstr "Mínim"
 
 msgctxt "selection:babi.measure,aggregate:"
 msgid "Sum"
@@ -1284,9 +1336,10 @@ msgctxt "selection:babi.report.execution.open.select,view_type:"
 msgid "Tree"
 msgstr "Arbre"
 
+#, fuzzy
 msgctxt "selection:ir.ui.menu,babi_type:"
 msgid ""
-msgstr ""
+msgstr " "
 
 msgctxt "selection:ir.ui.menu,babi_type:"
 msgid "History"
@@ -1303,6 +1356,14 @@ msgstr "Arbre"
 msgctxt "selection:ir.ui.menu,babi_type:"
 msgid "Wizard"
 msgstr "Assistent"
+
+msgctxt "view:babi.clean_executions.start:"
+msgid "Clean Executions"
+msgstr "Eliminar Execucions"
+
+msgctxt "view:babi.clean_executions.start:"
+msgid "Clean babi execution data until"
+msgstr "Eliminar la informació de les execucions fins a "
 
 msgctxt "view:babi.configuration:"
 msgid "Business Intelligence Configuration"
@@ -1392,6 +1453,10 @@ msgctxt "view:babi.report:"
 msgid "Report"
 msgstr "Informe"
 
+msgctxt "view:babi.report:"
+msgid "Schedulers"
+msgstr "Programacions"
+
 msgctxt "view:babi.update_data.wizard.done:"
 msgid "Report Calculation Done"
 msgstr "Càlcul de l'informe finalitzat"
@@ -1411,6 +1476,14 @@ msgstr "Càlcul de l'informe"
 msgctxt "view:babi.update_data.wizard.start:"
 msgid "The data for the report will be calculated"
 msgstr "Es calcularà la informació d'aquest informe."
+
+msgctxt "wizard_button:babi.clean_executions,start,clean:"
+msgid "Ok"
+msgstr "D'acord"
+
+msgctxt "wizard_button:babi.clean_executions,start,end:"
+msgid "Cancel"
+msgstr "Cancel·lat"
 
 msgctxt "wizard_button:babi.open_chart,start,end:"
 msgid "Cancel"

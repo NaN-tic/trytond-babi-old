@@ -101,6 +101,14 @@ msgctxt "error:babi.report:"
 msgid "Report calculation exceeded timeout limit."
 msgstr "El cálculo del informe ha accedido el tiempo máximo"
 
+msgctxt "field:babi.clean_executions.start,date:"
+msgid "Date"
+msgstr "Fecha"
+
+msgctxt "field:babi.clean_executions.start,id:"
+msgid "ID"
+msgstr "Identificador"
+
 msgctxt "field:babi.configuration,create_date:"
 msgid "Create Date"
 msgstr "Fecha creación"
@@ -585,6 +593,10 @@ msgctxt "field:babi.report,create_uid:"
 msgid "Create User"
 msgstr "Usuario creación"
 
+msgctxt "field:babi.report,crons:"
+msgid "Schedulers"
+msgstr "Programaciones"
+
 msgctxt "field:babi.report,dimensions:"
 msgid "Dimensions"
 msgstr "Dimensiones"
@@ -845,6 +857,10 @@ msgctxt "field:ir.action.keyword,babi_report:"
 msgid "BABI Report"
 msgstr "Informe BABI"
 
+msgctxt "field:ir.cron,babi_report:"
+msgid "Babi Report"
+msgstr "Informe BABI"
+
 msgctxt "field:ir.model,babi_enabled:"
 msgid "BI Enabled"
 msgstr "Habilitado para BI"
@@ -933,8 +949,7 @@ msgstr "Número de segundos que ha tardado la ejecución."
 
 msgctxt "help:babi.report.execution,filtered:"
 msgid "Used to mark executions with parameter filters evaluated"
-msgstr ""
-"Utilizada para marcar ejecuciones con parámetros de filtro evaluados."
+msgstr "Utilizada para marcar ejecuciones con parámetros de filtro evaluados."
 
 msgctxt "help:babi.report.execution,timeout:"
 msgid ""
@@ -951,6 +966,10 @@ msgid ""
 msgstr ""
 "Márquelo si quiere que el modelo esté disponible para informes Business "
 "Intelligence"
+
+msgctxt "model:babi.clean_executions.start,name:"
+msgid "Clean Execution Start"
+msgstr "Inicio eliminar ejecuciones"
 
 msgctxt "model:babi.configuration,name:"
 msgid "Business Intelligence Configuration"
@@ -1064,6 +1083,14 @@ msgctxt "model:ir.action,name:act_babi_report"
 msgid "Report"
 msgstr "Informe"
 
+msgctxt "model:ir.action,name:act_babi_report_execution_form"
+msgid "Executions"
+msgstr "Ejecuciónes"
+
+msgctxt "model:ir.action,name:clear_executions_wizard"
+msgid "Clean Executions"
+msgstr "Eliminar ejecuciones"
+
 msgctxt "model:ir.action,name:open_chart_wizard"
 msgid "open chart"
 msgstr "Abrir gráfico"
@@ -1072,9 +1099,17 @@ msgctxt "model:ir.action,name:open_execution_wizard"
 msgid "Business Inteligence Report"
 msgstr "Informe de Business Inteligence"
 
+msgctxt "model:ir.cron,name:cron_clean_executions"
+msgid "Cron Clean Executions"
+msgstr "Eliminar ejecuciones"
+
 msgctxt "model:ir.ui.menu,name:menu_babi"
 msgid "Business Intelligence"
 msgstr "Business Intelligence"
+
+msgctxt "model:ir.ui.menu,name:menu_babi_clean_execution"
+msgid "Clean Executions"
+msgstr "Eliminar ejecuciones"
 
 msgctxt "model:ir.ui.menu,name:menu_babi_configuration"
 msgid "Business Intelligence Configuration"
@@ -1177,6 +1212,14 @@ msgid "Count"
 msgstr "Contador"
 
 msgctxt "selection:babi.internal.measure,aggregate:"
+msgid "Max"
+msgstr "Máximo"
+
+msgctxt "selection:babi.internal.measure,aggregate:"
+msgid "Min"
+msgstr "Mínimo"
+
+msgctxt "selection:babi.internal.measure,aggregate:"
 msgid "Sum"
 msgstr "Suma"
 
@@ -1211,6 +1254,14 @@ msgstr "Promedio"
 msgctxt "selection:babi.measure,aggregate:"
 msgid "Count"
 msgstr "Contador"
+
+msgctxt "selection:babi.measure,aggregate:"
+msgid "Max"
+msgstr "Máximo"
+
+msgctxt "selection:babi.measure,aggregate:"
+msgid "Min"
+msgstr "Mínimo"
 
 msgctxt "selection:babi.measure,aggregate:"
 msgid "Sum"
@@ -1396,6 +1447,10 @@ msgctxt "view:babi.report:"
 msgid "Report"
 msgstr "Informe"
 
+msgctxt "view:babi.report:"
+msgid "Schedulers"
+msgstr "Programaciones"
+
 msgctxt "view:babi.update_data.wizard.done:"
 msgid "Report Calculation Done"
 msgstr "Cálculo de informe"
@@ -1415,6 +1470,14 @@ msgstr "Cálculo de informe"
 msgctxt "view:babi.update_data.wizard.start:"
 msgid "The data for the report will be calculated"
 msgstr "Se calculara la información para este informe."
+
+msgctxt "wizard_button:babi.clean_executions,start,clean:"
+msgid "Ok"
+msgstr "Aceptar"
+
+msgctxt "wizard_button:babi.clean_executions,start,end:"
+msgid "Cancel"
+msgstr "Cancelar"
 
 msgctxt "wizard_button:babi.open_chart,start,end:"
 msgid "Cancel"
