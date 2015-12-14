@@ -30,10 +30,12 @@ def register():
         OpenExecutionSelect,
         UpdateDataWizardStart,
         UpdateDataWizardUpdated,
+        CleanExecutionsStart,
         TestBabiModel,
         module='babi', type_='model')
     Pool.register(
         OpenChart,
         OpenExecution,
         UpdateDataWizard,
+        CleanExecutions,
         module='babi', type_='wizard')
