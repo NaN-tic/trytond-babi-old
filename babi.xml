@@ -609,6 +609,40 @@ contains the full copyright notices and license terms. -->
             <field name="name">update_data_wizard_done</field>
         </record>
 
+        <record model="ir.ui.view" id="clean_executions_start_form_view">
+            <field name="model">babi.clean_executions.start</field>
+            <field name="type">form</field>
+            <field name="name">clean_executions_start_form</field>
+        </record>
+        <record model="ir.action.wizard" id="clear_executions_wizard">
+            <field name="name">Clean Executions</field>
+            <field name="wiz_name">babi.clean_executions</field>
+        </record>
+        <record model="res.user" id="user_clean_executions">
+            <field name="login">user_clean_executions</field>
+            <field name="name">Cron Clean Babi Executions</field>
+            <field name="signature"></field>
+            <field name="active" eval="False"/>
+        </record>
+        <record model="res.user-res.group"
+                id="user_clean_execution_group_babi_admin">
+            <field name="user" ref="user_clean_executions"/>
+            <field name="group" ref="group_babi_admin"/>
+        </record>
+
+        <record model="ir.cron" id="cron_clean_executions">
+            <field name="name">Cron Clean Executions</field>
+            <field name="request_user" ref="res.user_admin"/>
+            <field name="user" ref="user_clean_executions"/>
+            <field name="active" eval="True"/>
+            <field name="interval_number" eval="1"/>
+            <field name="interval_type">days</field>
+            <field name="number_calls" eval="-1"/>
+            <field name="repeat_missed" eval="False"/>
+            <field name="model">babi.report.execution</field>
+            <field name="function">clean</field>
+        </record>
+
         <!-- Menus -->
         <menuitem id="menu_babi" name="Business Intelligence" sequence="1" />
         <menuitem id="menu_configuration" name="Configuration"
@@ -648,6 +682,9 @@ contains the full copyright notices and license terms. -->
         </record>
         <menuitem action="act_babi_execution" id="menu_babi_execution"
             parent="menu_babi_report" sequence="10" name="Executions"/>
+        <menuitem action="clear_executions_wizard"
+            id="menu_babi_clean_execution" parent="menu_babi_report"
+            sequence="20" name="Clean Executions"/>
 
         <record model="ir.ui.menu-res.group"
             id="menu_execution_group_babi_admin">

@@ -99,6 +99,14 @@ msgctxt "error:babi.report:"
 msgid "Report calculation exceeded timeout limit."
 msgstr "El càlcul de l'informe ha sobrepassat el temps límit."
 
+msgctxt "field:babi.clean_executions.start,date:"
+msgid "Date"
+msgstr "Data"
+
+msgctxt "field:babi.clean_executions.start,id:"
+msgid "ID"
+msgstr "Identificador"
+
 msgctxt "field:babi.configuration,create_date:"
 msgid "Create Date"
 msgstr "Data creació"
@@ -945,6 +953,10 @@ msgstr ""
 "Marqueu-ho si voleu que aquest model estigui disponible pels informes "
 "Business Intelligence."
 
+msgctxt "model:babi.clean_executions.start,name:"
+msgid "Clean Execution Start"
+msgstr "Inici Eliminar Execucions"
+
 msgctxt "model:babi.configuration,name:"
 msgid "Business Intelligence Configuration"
 msgstr "Configuració Business Intelligence"
@@ -1061,6 +1073,10 @@ msgctxt "model:ir.action,name:act_babi_report_execution_form"
 msgid "Executions"
 msgstr "Execucions"
 
+msgctxt "model:ir.action,name:clear_executions_wizard"
+msgid "Clean Executions"
+msgstr "Eliminar Execucions"
+
 msgctxt "model:ir.action,name:open_chart_wizard"
 msgid "open chart"
 msgstr "Obre gràfica"
@@ -1069,9 +1085,17 @@ msgctxt "model:ir.action,name:open_execution_wizard"
 msgid "Business Inteligence Report"
 msgstr "Informe de Business Inteligence"
 
+msgctxt "model:ir.cron,name:cron_clean_executions"
+msgid "Cron Clean Executions"
+msgstr "Eliminar Execucions"
+
 msgctxt "model:ir.ui.menu,name:menu_babi"
 msgid "Business Intelligence"
 msgstr "Business Intelligence"
+
+msgctxt "model:ir.ui.menu,name:menu_babi_clean_execution"
+msgid "Clean Executions"
+msgstr "Eliminar Execucions"
 
 msgctxt "model:ir.ui.menu,name:menu_babi_configuration"
 msgid "Business Intelligence Configuration"
@@ -1112,6 +1136,10 @@ msgstr "Business Intelligence"
 msgctxt "model:res.group,name:group_babi_admin"
 msgid "Business Intelligence Administration"
 msgstr "Administració Business Intelligence"
+
+msgctxt "model:res.user,name:user_clean_executions"
+msgid "Cron Clean Babi Executions"
+msgstr "Planificació Eliminar Execucions Babi"
 
 msgctxt "selection:babi.expression,ttype:"
 msgid "Boolean"
@@ -1322,6 +1350,14 @@ msgctxt "selection:ir.ui.menu,babi_type:"
 msgid "Wizard"
 msgstr "Assistent"
 
+msgctxt "view:babi.clean_executions.start:"
+msgid "Clean Executions"
+msgstr "Eliminar Execucions"
+
+msgctxt "view:babi.clean_executions.start:"
+msgid "Clean babi execution data until"
+msgstr "Eliminar la informació de les execucions fins a "
+
 msgctxt "view:babi.configuration:"
 msgid "Business Intelligence Configuration"
 msgstr "Configuració Business Intelligence"
@@ -1433,6 +1469,14 @@ msgstr "Càlcul de l'informe"
 msgctxt "view:babi.update_data.wizard.start:"
 msgid "The data for the report will be calculated"
 msgstr "Es calcularà la informació d'aquest informe."
+
+msgctxt "wizard_button:babi.clean_executions,start,clean:"
+msgid "Ok"
+msgstr "D'acord"
+
+msgctxt "wizard_button:babi.clean_executions,start,end:"
+msgid "Cancel"
+msgstr "Cancel·lat"
 
 msgctxt "wizard_button:babi.open_chart,start,end:"
 msgid "Cancel"
