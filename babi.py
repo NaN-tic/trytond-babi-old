@@ -25,6 +25,7 @@ from trytond.model.fields import depends
 from trytond.pyson import Eval, Bool, PYSONEncoder, Id, In, Not, PYSONDecoder
 from trytond.pool import Pool, PoolMeta
 from trytond.transaction import Transaction
+from trytond.tools grouped_slice
 from trytond.config import config
 from trytond import backend
 from trytond.protocols.jsonrpc import JSONDecoder, JSONEncoder
@@ -1001,7 +1002,11 @@ class ReportExecution(ModelSQL, ModelView):
         pool = Pool()
         with pool.lock:
             for name in to_delete:
-                del pool._pool[pool.database_name]['model'][name]
+                try:
+                    del pool._pool[pool.database_name]['model'][name]
+                except KeyError:
+                    # The model may not be registered on the pool
+                    continue
 
     @classmethod
     def remove_keywords(cls, executions):
@@ -1027,19 +1032,26 @@ class ReportExecution(ModelSQL, ModelView):
 
     @classmethod
     def remove_data(cls, executions):
-        pool = Pool()
-        cursor = Transaction().cursor
-        for execution in executions:
-            execution.validate_model()
-            Model = pool.get(execution.babi_model.model)
-            if Model:
-                cursor.execute("DROP TABLE IF EXISTS %s " % Model._table)
+        TableHandler = backend.get('TableHandler')
+        # Add a transaction for each 200 executions otherwise locks are not
+        # released on Postgresql and a exception is raised about too many locks
+        for sub_executions in grouped_slice(executions, 200):
+            cursor = Transaction().cursor
+            for execution in sub_executions:
+                table = execution.internal_name
+                if not TableHandler.table_exist(cursor, table):
+                    continue
+                # Table and model are the same.
+                TableHandler.drop_table(cursor, table, table)
+                # There is no method to remove sequence in table
+                # handler, so we must remove them manually
                 try:
                     # SQLite doesn't have sequences
-                    cursor.execute("DROP SEQUENCE IF EXISTS %s_id_seq" %
-                        Model._table)
+                    cursor.execute("DROP SEQUENCE IF EXISTS %s_id_seq"
+                        % table)
                 except:
                     pass
+            cursor.commit()
 
     def validate_model(self, with_columns=False):
         "makes model available on Tryton and pool instance"
