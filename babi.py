@@ -26,6 +26,7 @@ from trytond.model.fields import depends
 from trytond.pyson import Eval, Bool, PYSONEncoder, Id, In, Not, PYSONDecoder
 from trytond.pool import Pool, PoolMeta
 from trytond.transaction import Transaction
+from trytond.tools import grouped_slice
 from trytond.config import config
 from trytond import backend
 from trytond.protocols.jsonrpc import JSONDecoder, JSONEncoder
@@ -175,8 +176,7 @@ class DynamicModel(ModelSQL, ModelView):
                         widget = 'widget="progressbar"'
                     if view_type == 'form':
                         xml += '<label name="%s"/>\n' % (field.internal_name)
-                    xml += '<field name="%s" %s/>\n' % (field.internal_name,
-                        widget)
+                    xml += '<field name="%s"/>\n' % (field.internal_name)
                     fields.append(field.internal_name)
                 xml += '</%s>\n' % (view_type)
                 result['arch'] = xml
@@ -504,6 +504,7 @@ class FilterParameter(ModelSQL, ModelView):
         Keyword.delete(Keyword.search([
                     ('babi_filter_parameter', 'in', [f.id for f in filters]),
                 ]))
+        super(FilterParameter, cls).delete(filters)
 
 
 class Expression(ModelSQL, ModelView):
@@ -863,6 +864,7 @@ class Report(ModelSQL, ModelView):
         transaction = Transaction()
         cursor = transaction.cursor
         Execution = pool.get('babi.report.execution')
+        celery_start = config.getboolean('celery', 'auto_start', True)
         for report in reports:
             if not report.measures:
                 cls.raise_user_error('no_measures', report.rec_name)
@@ -870,7 +872,6 @@ class Report(ModelSQL, ModelView):
                 cls.raise_user_error('no_dimensions', report.rec_name)
             execution, = Execution.create([report.get_execution_data()])
             cursor.commit()
-            celery_start = config.getboolean('celery', 'auto_start', default=True)
             if CELERY_AVAILABLE and celery_start:
                 os.system('%s/celery call tasks.calculate_execution '
                     '--args=[%d,%d] '
