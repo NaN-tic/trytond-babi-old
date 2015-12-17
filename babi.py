@@ -26,7 +26,7 @@ from trytond.model.fields import depends
 from trytond.pyson import Eval, Bool, PYSONEncoder, Id, In, Not, PYSONDecoder
 from trytond.pool import Pool, PoolMeta
 from trytond.transaction import Transaction
-from trytond.tools import safe_eval, grouped_slice
+from trytond.tools import grouped_slice
 from trytond.config import config
 from trytond import backend
 from trytond.protocols.jsonrpc import JSONDecoder, JSONEncoder
