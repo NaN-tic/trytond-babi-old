@@ -864,7 +864,7 @@ class Report(ModelSQL, ModelView):
         transaction = Transaction()
         cursor = transaction.cursor
         Execution = pool.get('babi.report.execution')
-        celery_start = config.getboolean('celery', 'auto_start', True)
+        celery_start = config.getboolean('celery', 'auto_start', default=True)
         for report in reports:
             if not report.measures:
                 cls.raise_user_error('no_measures', report.rec_name)
