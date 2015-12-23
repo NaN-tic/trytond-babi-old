@@ -1202,18 +1202,22 @@ class ReportExecution(ModelSQL, ModelView):
         self.validate_model(with_columns=with_columns)
 
         dimension_names = [x.internal_name for x in self.report.dimensions]
+        dimension_expressions = [(compile(x.expression.expression, '<string>',
+                    'eval'), '' if x.expression.ttype == 'many2one' else
+                'empty') for x in self.report.dimensions]
         dimension_expressions = [(x.expression.expression,
                         '' if x.expression.ttype == 'many2one'
                         else 'empty') for x in
             self.report.dimensions]
         measure_names = [x.internal_name for x in
             self.internal_measures]
-        measure_expressions = [x.expression for x in
-            self.internal_measures]
+        measure_expressions = [compile(x.expression, '<string>', 'eval') for x
+            in self.internal_measures]
         if self.report.columns:
             dimension_names.extend([x.internal_name for x in
                     self.report.columns])
-            dimension_expressions.extend([(x.expression.expression,
+            dimension_expressions.extend([(compile(x.expression.expression,
+                            '<string>', 'eval'),
                         '' if x.expression.ttype == 'many2one'
                         else 'empty') for x in self.report.columns])
 
@@ -1226,6 +1230,8 @@ class ReportExecution(ModelSQL, ModelView):
 
         uid = transaction.user
         python_filter = self.get_python_filter()
+        if python_filter:
+            python_filter = compile(python_filter, '<string>', 'eval')
 
         table = BIModel._table
         if self.report.columns:
