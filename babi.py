@@ -1205,10 +1205,6 @@ class ReportExecution(ModelSQL, ModelView):
         dimension_expressions = [(compile(x.expression.expression, '<string>',
                     'eval'), '' if x.expression.ttype == 'many2one' else
                 'empty') for x in self.report.dimensions]
-        dimension_expressions = [(x.expression.expression,
-                        '' if x.expression.ttype == 'many2one'
-                        else 'empty') for x in
-            self.report.dimensions]
         measure_names = [x.internal_name for x in
             self.internal_measures]
         measure_expressions = [compile(x.expression, '<string>', 'eval') for x
