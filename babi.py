@@ -410,8 +410,9 @@ class Filter(ModelSQL, ModelView):
     def check_dinamic_filters(self):
         for filter in self.parameters:
             placeholder = '{%s}' % filter.name
-            if placeholder not in self.domain and \
-                    placeholder not in self.python_expression:
+            if ((self.domain and placeholder not in self.domain) or
+                    (self.python_expression and
+                        placeholder not in self.python_expression)):
                 self.raise_user_error('parameter_not_found', filter.name)
 
     @depends('model')
@@ -1167,12 +1168,14 @@ class ReportExecution(ModelSQL, ModelView):
                 self.raise_user_error('filter_parameters', self.rec_name)
             filter_data = json.loads(self.filter_values.encode('utf-8'),
                 object_hook=JSONDecoder())
+            parameters = dict((p.id, p.name)
+                for p in self.report.filter.parameters)
             values = {}
             for key, value in filter_data.iteritems():
-                key = '_'.join(key.split('_')[:-1])
-                if not value or key not in domain:
+                filter_name = parameters[int(key.split('_')[-1:][0])]
+                if not value or filter_name not in domain:
                     continue
-                values[key] = value
+                values[filter_name] = value
             if domain:
                 domain = domain.format(**values)
         # TODO: Use a PYSON domain?
@@ -1662,17 +1665,19 @@ class OpenExecutionFiltered(StateView):
         encoder = PYSONEncoder()
         xml += '<group id="filters" string="Filters" colspan="4">\n'
         for parameter in parameters:
-            name = parameter.name
+            # The wizard breaks with non unicode data
+            name = 'filter_parameter_%d' % parameter.id
             field_definition = {
                 'loading': 'eager',
                 'name': name,
-                'string': name,
+                'string': parameter.name,
                 'searchable': True,
                 'create': True,
                 'help': '',
                 'context': {},
                 'delete': True,
-                'type': parameter.ttype,
+                'type': ('integer' if parameter.ttype == 'int'
+                    else parameter.ttype),
                 'select': False,
                 'readonly': False,
                 'required': True,
@@ -1695,7 +1700,6 @@ class OpenExecutionFiltered(StateView):
                     field_definition[attr] = encoder.encode(
                         field_definition[attr])
 
-            name = '%s_%d' % (name, parameter.id)
             if parameter.ttype == 'many2many':
                 xml += '<field name="%s" colspan="4"/>\n' % (name)
             else:
