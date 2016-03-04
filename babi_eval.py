@@ -1,5 +1,6 @@
 # The COPYRIGHT file at the top level of this repository contains the full
 # copyright notices and license terms.
+from decimal import Decimal
 import datetime
 import math
 from dateutil.relativedelta import relativedelta
@@ -76,6 +77,8 @@ def babi_eval(expression, obj, convert_none='empty'):
         'today': datetime.date.today,
         'relativedelta': relativedelta,
         'math': math,
+        'Decimal': Decimal,
+        'str': str,
         }
     value = eval(expression, objects)
     if (value is False or value is None):
