@@ -605,6 +605,9 @@ class BaBITestCase(unittest.TestCase):
             ('today()', None, datetime.date.today()),
             ('o - relativedelta(days=1)', date, datetime.date(2014, 10, 9)),
             ('o - relativedelta(months=1)', date, datetime.date(2014, 9, 10)),
+            ('str(o)', 3.14, '3.14'),
+            ('Decimal(o)', 3.14, Decimal(3.14)),
+            ('Decimal(0)', None, Decimal(0)),
         ]
         with Transaction().start(DB_NAME, USER, context=CONTEXT) as trans:
             models = self.model.search([('model', '=', 'babi.test')])
