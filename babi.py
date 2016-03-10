@@ -91,7 +91,7 @@ def start_celery():
     celery_start = config.getboolean('celery', 'auto_start', default=True)
     if not CELERY_AVAILABLE or not celery_start:
         return
-    db = Transaction().cursor.database_name
+    db = Transaction().database.name
     _, config_path = tempfile.mkstemp(prefix='trytond-celery-')
     with open(config_path, 'w') as f:
         config.write(f)
@@ -861,7 +861,7 @@ class Report(ModelSQL, ModelView):
     def calculate(cls, reports):
         pool = Pool()
         transaction = Transaction()
-        cursor = transaction.cursor
+        cursor = transaction.connection.cursor
         Execution = pool.get('babi.report.execution')
         celery_start = config.getboolean('celery', 'auto_start', default=True)
         for report in reports:
@@ -1050,10 +1050,10 @@ class ReportExecution(ModelSQL, ModelView):
         # Add a transaction for each 200 executions otherwise locks are not
         # released on Postgresql and a exception is raised about too many locks
         for sub_executions in grouped_slice(executions, 200):
-            cursor = Transaction().cursor
+            cursor = Transaction().connection.cursor()
             for execution in sub_executions:
                 table = execution.internal_name
-                if not TableHandler.table_exist(cursor, table):
+                if not TableHandler.table_exist(table):
                     continue
                 # Table and model are the same.
                 TableHandler.drop_table(cursor, table, table)
@@ -1155,7 +1155,7 @@ class ReportExecution(ModelSQL, ModelView):
         pool = Pool()
         Model = pool.get(self.report.model.model)
         transaction = Transaction()
-        cursor = transaction.cursor
+        cursor = transaction.connection.cursor
 
         BIModel = pool.get(self.babi_model.model)
         checker = TimeoutChecker(self.timeout, self.timeout_exception)
@@ -1406,7 +1406,7 @@ class ReportExecution(ModelSQL, ModelView):
         def query_inserts(table_name, measures, select_group, group,
                 extra=None):
             """Inserts a group record"""
-            cursor = Transaction().cursor
+            cursor = Transaction().connection.cursor()
 
             babi_group = ""
 
@@ -1495,7 +1495,7 @@ class ReportExecution(ModelSQL, ModelView):
             if not x.group_by])
 
         table_name = Pool().get(self.babi_model.model)._table
-        cursor = Transaction().cursor
+        cursor = Transaction().connection.cursor()
 
         group_by_iterator = group_by[:]
 
@@ -2005,7 +2005,7 @@ class Dimension(ModelSQL, ModelView, DimensionMixin):
     @classmethod
     def update_order(cls, dimensions):
         Order = Pool().get('babi.order')
-        cursor = Transaction().cursor
+        cursor = Transaction().connection.cursor()
         dimension_ids = [x.id for x in dimensions if x.group_by]
         orders = Order.search([
                 ('dimension', 'in', dimension_ids),
@@ -2123,7 +2123,7 @@ class Measure(ModelSQL, ModelView):
     @classmethod
     def update_order(cls, measures):
         Order = Pool().get('babi.order')
-        cursor = Transaction().cursor
+        cursor = Transaction().connection.cursor()
 
         measure_ids = [x.id for x in measures]
         orders = Order.search([
@@ -2201,11 +2201,10 @@ class InternalMeasure(ModelSQL, ModelView):
     @classmethod
     def __register__(cls, module_name):
         TableHandler = backend.get('TableHandler')
-        cursor = Transaction().cursor
         super(InternalMeasure, cls).__register__(module_name)
 
         # Migration from 3.0: no more relation with reports.
-        table = TableHandler(cursor, cls, module_name)
+        table = TableHandler(cls, module_name)
         if table.column_exist('report'):
             table.not_null_action('report', action='remove')
 
