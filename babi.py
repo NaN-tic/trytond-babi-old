@@ -1082,7 +1082,7 @@ class ReportExecution(ModelSQL, ModelView):
 
         create_groups_access(model, self.report.groups)
         # Commit transaction to avoid locks
-        Transaction().cursor.commit()
+        Transaction().commit()
 
     def timeout_exception(self):
         raise TimeoutException
@@ -1859,7 +1859,7 @@ class OpenExecution(Wizard):
         execution['filter_values'] = data
         execution['filtered'] = True
         execution, = Execution.create([execution])
-        Transaction().cursor.commit()
+        Transaction().commit()
         Execution.calculate([execution])
 
         context = Transaction().context
