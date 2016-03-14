@@ -1105,7 +1105,7 @@ class ReportExecution(ModelSQL, ModelView):
                 if exception:
                     Execution.remove_data(new_instances)
                     Model.delete([e.babi_model for e in new_instances])
-                new_transaction.cursor.commit()
+                new_transaction.commit()
             except DatabaseOperationalError:
                 new_transaction.cursor.rollback()
 
