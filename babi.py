@@ -861,7 +861,7 @@ class Report(ModelSQL, ModelView):
     def calculate(cls, reports):
         pool = Pool()
         transaction = Transaction()
-        cursor = transaction.connection.cursor
+        cursor = transaction.connection.cursor()
         Execution = pool.get('babi.report.execution')
         celery_start = config.getboolean('celery', 'auto_start', default=True)
         for report in reports:
@@ -1155,7 +1155,7 @@ class ReportExecution(ModelSQL, ModelView):
         pool = Pool()
         Model = pool.get(self.report.model.model)
         transaction = Transaction()
-        cursor = transaction.connection.cursor
+        cursor = transaction.connection.cursor()
 
         BIModel = pool.get(self.babi_model.model)
         checker = TimeoutChecker(self.timeout, self.timeout_exception)
