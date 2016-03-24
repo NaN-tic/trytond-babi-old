@@ -1012,7 +1012,8 @@ class ReportExecution(ModelSQL, ModelView):
         pool = Pool()
         Keyword = pool.get('ir.action.keyword')
 
-        models = ['%s,-1' % e.babi_model.model for e in executions]
+        models = ['%s,-1' % e.babi_model.model for e in executions
+            if e.babi_model]
         keywords = Keyword.search([('model', 'in', models)])
         Keyword.delete(keywords)
 
