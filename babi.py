@@ -40,7 +40,6 @@ __all__ = ['Filter', 'Expression', 'Report', 'ReportGroup', 'Dimension',
     'ReportExecution', 'OpenExecutionSelect', 'OpenExecution',
     'UpdateDataWizardStart', 'UpdateDataWizardUpdated', 'UpdateDataWizard',
     'FilterParameter', 'CleanExecutionsStart', 'CleanExecutions']
-__metaclass__ = PoolMeta
 
 
 FIELD_TYPES = [
@@ -2275,12 +2274,14 @@ class Order(ModelSQL, ModelView):
 
 
 class ActWindow:
+    __metaclass__ = PoolMeta
     __name__ = 'ir.action.act_window'
 
     babi_report = fields.Many2One('babi.report', 'BABI Report')
 
 
 class Menu:
+    __metaclass__ = PoolMeta
     __name__ = 'ir.ui.menu'
 
     babi_report = fields.Many2One('babi.report', 'BABI Report')
@@ -2294,6 +2295,7 @@ class Menu:
 
 
 class Keyword:
+    __metaclass__ = PoolMeta
     __name__ = 'ir.action.keyword'
 
     babi_report = fields.Many2One('babi.report', 'BABI Report')

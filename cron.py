@@ -6,10 +6,10 @@ from trytond.pyson import Eval, Bool
 from trytond.transaction import Transaction
 
 __all__ = ['Cron']
-__metaclass__ = PoolMeta
 
 
 class Cron:
+    __metaclass__ = PoolMeta
     __name__ = "ir.cron"
     babi_report = fields.Many2One('babi.report', 'Babi Report')
 
