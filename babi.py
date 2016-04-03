@@ -3,7 +3,7 @@
 # copyright notices and license terms.
 import datetime as mdatetime
 from datetime import datetime, timedelta
-from StringIO import StringIO
+from io import StringIO
 from collections import defaultdict
 import logging
 import os
