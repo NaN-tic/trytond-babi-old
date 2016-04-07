@@ -1090,7 +1090,7 @@ class ReportExecution(ModelSQL, ModelView):
     def save_state(execution_id, state, exception=False):
         " Save state in a new transaction"
         DatabaseOperationalError = backend.get('DatabaseOperationalError')
-        Transaction().cursor.rollback()
+        Transaction().rollback()
         with Transaction().new_cursor() as new_transaction:
             try:
                 pool = Pool()
