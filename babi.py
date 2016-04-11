@@ -869,14 +869,14 @@ class Report(ModelSQL, ModelView):
             if not report.dimensions:
                 cls.raise_user_error('no_dimensions', report.rec_name)
             execution, = Execution.create([report.get_execution_data()])
-            cursor.commit()
+            transaction.commit()
             if CELERY_AVAILABLE and celery_start:
                 os.system('%s/celery call tasks.calculate_execution '
                     '--args=[%d,%d] '
                     '--config="trytond.modules.babi.celeryconfig" '
                     '--queue=%s' % (os.path.dirname(sys.executable),
                         execution.id, transaction.user,
-                        cursor.database_name))
+                        transaction.database.name))
             else:
                 # Fallback to synchronous mode if celery is not available
                 Execution.calculate([execution])
@@ -1046,16 +1046,17 @@ class ReportExecution(ModelSQL, ModelView):
     @classmethod
     def remove_data(cls, executions):
         TableHandler = backend.get('TableHandler')
+        transaction = Transaction()
         # Add a transaction for each 200 executions otherwise locks are not
         # released on Postgresql and a exception is raised about too many locks
         for sub_executions in grouped_slice(executions, 200):
-            cursor = Transaction().connection.cursor()
+            cursor = transaction.connection.cursor()
             for execution in sub_executions:
                 table = execution.internal_name
                 if not TableHandler.table_exist(table):
                     continue
                 # Table and model are the same.
-                TableHandler.drop_table(cursor, table, table)
+                TableHandler.drop_table(table, table)
                 # There is no method to remove sequence in table
                 # handler, so we must remove them manually
                 try:
@@ -1064,7 +1065,7 @@ class ReportExecution(ModelSQL, ModelView):
                         % table)
                 except:
                     pass
-            cursor.commit()
+            transaction.commit()
 
     def validate_model(self, with_columns=False):
         "makes model available on Tryton and pool instance"
@@ -1091,7 +1092,7 @@ class ReportExecution(ModelSQL, ModelView):
         " Save state in a new transaction"
         DatabaseOperationalError = backend.get('DatabaseOperationalError')
         Transaction().rollback()
-        with Transaction().new_cursor() as new_transaction:
+        with Transaction().new_transaction() as new_transaction:
             try:
                 pool = Pool()
                 Execution = pool.get('babi.report.execution')
@@ -1106,7 +1107,7 @@ class ReportExecution(ModelSQL, ModelView):
                     Model.delete([e.babi_model for e in new_instances])
                 new_transaction.commit()
             except DatabaseOperationalError:
-                new_transaction.cursor.rollback()
+                new_transaction.rollback()
 
     @classmethod
     def calculate(cls, executions):
@@ -1434,7 +1435,8 @@ class ReportExecution(ModelSQL, ModelView):
 
             query = "INSERT INTO %s(%s)" % (table_name, ','.join(fields))
 
-            if not cursor.has_returning():
+            if (not hasattr(cursor, 'has_returning')
+                    or not cursor.has_returning()):
                 previous_id = 0
                 cursor.execute('SELECT MAX(id) FROM %s' % table_name)
                 row = cursor.fetchone()
