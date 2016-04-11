@@ -90,7 +90,7 @@ def start_celery():
     celery_start = config.getboolean('celery', 'auto_start', default=True)
     if not CELERY_AVAILABLE or not celery_start:
         return
-    db = Transaction().cursor.database_name
+    db = Transaction().database.name
     _, config_path = tempfile.mkstemp(prefix='trytond-celery-')
     with open(config_path, 'w') as f:
         config.write(f)
@@ -847,7 +847,6 @@ class Report(ModelSQL, ModelView):
     def calculate(cls, reports):
         pool = Pool()
         transaction = Transaction()
-        cursor = transaction.cursor
         Execution = pool.get('babi.report.execution')
         celery_start = config.getboolean('celery', 'auto_start', default=True)
         for report in reports:
@@ -856,13 +855,13 @@ class Report(ModelSQL, ModelView):
             if not report.dimensions:
                 cls.raise_user_error('no_dimensions', report.rec_name)
             execution, = Execution.create([report.get_execution_data()])
-            cursor.commit()
+            transaction.commit()
             if CELERY_AVAILABLE and celery_start:
                 os.system('celery call tasks.calculate_execution '
                     '--args=[%d,%d] '
                     '--config="trytond.modules.babi.celeryconfig" '
                     '--queue=%s' % (execution.id, transaction.user,
-                        cursor.database_name))
+                        transaction.database.name))
             else:
                 # Fallback to synchronous mode if celery is not available
                 Execution.calculate([execution])
@@ -1032,16 +1031,17 @@ class ReportExecution(ModelSQL, ModelView):
     @classmethod
     def remove_data(cls, executions):
         TableHandler = backend.get('TableHandler')
+        transaction = Transaction()
         # Add a transaction for each 200 executions otherwise locks are not
         # released on Postgresql and a exception is raised about too many locks
         for sub_executions in grouped_slice(executions, 200):
-            cursor = Transaction().cursor
+            cursor = transaction.connection.cursor()
             for execution in sub_executions:
                 table = execution.internal_name
-                if not TableHandler.table_exist(cursor, table):
+                if not TableHandler.table_exist(table):
                     continue
                 # Table and model are the same.
-                TableHandler.drop_table(cursor, table, table)
+                TableHandler.drop_table(table, table)
                 # There is no method to remove sequence in table
                 # handler, so we must remove them manually
                 try:
@@ -1050,7 +1050,7 @@ class ReportExecution(ModelSQL, ModelView):
                         % table)
                 except:
                     pass
-            cursor.commit()
+            transaction.commit()
 
     def validate_model(self, with_columns=False):
         "makes model available on Tryton and pool instance"
@@ -1067,7 +1067,7 @@ class ReportExecution(ModelSQL, ModelView):
 
         create_groups_access(model, self.report.groups)
         # Commit transaction to avoid locks
-        Transaction().cursor.commit()
+        Transaction().commit()
 
     def timeout_exception(self):
         raise TimeoutException
@@ -1076,8 +1076,8 @@ class ReportExecution(ModelSQL, ModelView):
     def save_state(execution_id, state, exception=False):
         " Save state in a new transaction"
         DatabaseOperationalError = backend.get('DatabaseOperationalError')
-        Transaction().cursor.rollback()
-        with Transaction().new_cursor() as new_transaction:
+        Transaction().rollback()
+        with Transaction().new_transaction() as new_transaction:
             try:
                 pool = Pool()
                 Execution = pool.get('babi.report.execution')
@@ -1090,9 +1090,9 @@ class ReportExecution(ModelSQL, ModelView):
                 if exception:
                     Execution.remove_data(new_instances)
                     Model.delete([e.babi_model for e in new_instances])
-                new_transaction.cursor.commit()
+                new_transaction.commit()
             except DatabaseOperationalError:
-                new_transaction.cursor.rollback()
+                new_transaction.rollback()
 
     @classmethod
     def calculate(cls, executions):
@@ -1140,7 +1140,7 @@ class ReportExecution(ModelSQL, ModelView):
         pool = Pool()
         Model = pool.get(self.report.model.model)
         transaction = Transaction()
-        cursor = transaction.cursor
+        cursor = transaction.connection.cursor()
 
         BIModel = pool.get(self.babi_model.model)
         checker = TimeoutChecker(self.timeout, self.timeout_exception)
@@ -1390,7 +1390,7 @@ class ReportExecution(ModelSQL, ModelView):
         def query_inserts(table_name, measures, select_group, group,
                 extra=None):
             """Inserts a group record"""
-            cursor = Transaction().cursor
+            cursor = Transaction().connection.cursor()
 
             babi_group = ""
 
@@ -1419,7 +1419,8 @@ class ReportExecution(ModelSQL, ModelView):
 
             query = "INSERT INTO %s(%s)" % (table_name, ','.join(fields))
 
-            if not cursor.has_returning():
+            if (not hasattr(cursor, 'has_returning')
+                    or not cursor.has_returning()):
                 previous_id = 0
                 cursor.execute('SELECT MAX(id) FROM %s' % table_name)
                 row = cursor.fetchone()
@@ -1479,7 +1480,7 @@ class ReportExecution(ModelSQL, ModelView):
             if not x.group_by])
 
         table_name = Pool().get(self.babi_model.model)._table
-        cursor = Transaction().cursor
+        cursor = Transaction().connection.cursor()
 
         group_by_iterator = group_by[:]
 
@@ -1843,7 +1844,7 @@ class OpenExecution(Wizard):
         execution['filter_values'] = data
         execution['filtered'] = True
         execution, = Execution.create([execution])
-        Transaction().cursor.commit()
+        Transaction().commit()
         Execution.calculate([execution])
 
         context = Transaction().context
@@ -1989,7 +1990,7 @@ class Dimension(ModelSQL, ModelView, DimensionMixin):
     @classmethod
     def update_order(cls, dimensions):
         Order = Pool().get('babi.order')
-        cursor = Transaction().cursor
+        cursor = Transaction().connection.cursor()
         dimension_ids = [x.id for x in dimensions if x.group_by]
         orders = Order.search([
                 ('dimension', 'in', dimension_ids),
@@ -2105,7 +2106,7 @@ class Measure(ModelSQL, ModelView):
     @classmethod
     def update_order(cls, measures):
         Order = Pool().get('babi.order')
-        cursor = Transaction().cursor
+        cursor = Transaction().connection.cursor()
 
         measure_ids = [x.id for x in measures]
         orders = Order.search([
@@ -2182,11 +2183,10 @@ class InternalMeasure(ModelSQL, ModelView):
     @classmethod
     def __register__(cls, module_name):
         TableHandler = backend.get('TableHandler')
-        cursor = Transaction().cursor
         super(InternalMeasure, cls).__register__(module_name)
 
         # Migration from 3.0: no more relation with reports.
-        table = TableHandler(cursor, cls, module_name)
+        table = TableHandler(cls, module_name)
         if table.column_exist('report'):
             table.not_null_action('report', action='remove')
 
