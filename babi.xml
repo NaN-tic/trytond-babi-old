@@ -643,7 +643,8 @@ contains the full copyright notices and license terms. -->
         </record>
 
         <!-- Menus -->
-        <menuitem id="menu_babi" name="Business Intelligence" sequence="1" />
+        <menuitem id="menu_babi" name="Business Intelligence" sequence="1"
+            icon="tryton-graph"/>
         <menuitem id="menu_configuration" name="Configuration"
             parent="menu_babi" sequence="10" icon="tryton-preferences"/>
         <menuitem id="menu_update_data" name="Update data"
