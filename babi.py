@@ -45,6 +45,7 @@ __metaclass__ = PoolMeta
 FIELD_TYPES = [
     ('char', 'Char'),
     ('int', 'Integer'),
+    ('integer', 'Integer'),
     ('float', 'Float'),
     ('numeric', 'Numeric'),
     ('bool', 'Boolean'),
